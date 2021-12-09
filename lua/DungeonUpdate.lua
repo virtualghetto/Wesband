@@ -3,7 +3,7 @@ local function process_entries(tname)
 	local tstart, tcount
 	for i = tlength - 1, 0, -1 do
 		tstart = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].start_level", tname, i))
-		if dungeon_level.current < tstart then break else
+		if wml.variables['dungeon_level.current'] < tstart then break else
 			tcount = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].up_count", tname, i))
 			if tcount > 0 then
 				wesnoth.wml_actions.set_prob({

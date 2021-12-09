@@ -33,82 +33,82 @@ end
 local function place_random_chamber(x, y)
 	local mask_name
 	W.set_variable { name = "r_temp", rand = "1..35" }
-	if r_temp == 35 then
+	if wml.variables['r_temp'] == 35 then
 		W.set_variable { name = "r_temp", rand = "33..35" }
 	end
-	if r_temp == 1 then
+	if wml.variables['r_temp'] == 1 then
 		mask_name = "diamond_large_upper"
-	elseif r_temp == 2 then
+	elseif wml.variables['r_temp'] == 2 then
 		mask_name = "diamond_large_lower"
-	elseif r_temp == 3 then
+	elseif wml.variables['r_temp'] == 3 then
 		mask_name = "diamond_long_upper"
-	elseif r_temp == 4 then
+	elseif wml.variables['r_temp'] == 4 then
 		mask_name = "diamond_long_lower"
-	elseif r_temp == 5 then
+	elseif wml.variables['r_temp'] == 5 then
 		mask_name = "diamond_long2_upper"
-	elseif r_temp == 6 then
+	elseif wml.variables['r_temp'] == 6 then
 		mask_name = "diamond_long2_lower"
-	elseif r_temp == 7 then
+	elseif wml.variables['r_temp'] == 7 then
 		mask_name = "diamond_large_center"
-	elseif r_temp == 8 then
+	elseif wml.variables['r_temp'] == 8 then
 		mask_name = "diamond_small_center"
-	elseif r_temp == 9 then
+	elseif wml.variables['r_temp'] == 9 then
 		mask_name = "diamond_large2_center"
-	elseif r_temp == 10 then
+	elseif wml.variables['r_temp'] == 10 then
 		mask_name = "diamond_columns"
-	elseif r_temp == 11 then
+	elseif wml.variables['r_temp'] == 11 then
 		mask_name = "diamond_s"
-	elseif r_temp == 12 then
+	elseif wml.variables['r_temp'] == 12 then
 		mask_name = "diamond_irreg"
-	elseif r_temp == 13 then
+	elseif wml.variables['r_temp'] == 13 then
 		mask_name = "diamond_irreg2"
-	elseif r_temp == 14 then
+	elseif wml.variables['r_temp'] == 14 then
 		mask_name = "diamond_irreg3"
-	elseif r_temp == 15 then
+	elseif wml.variables['r_temp'] == 15 then
 		mask_name = "diamond_columns2"
-	elseif r_temp == 16 then
+	elseif wml.variables['r_temp'] == 16 then
 		mask_name = "diamond_large_pool"
-	elseif r_temp == 17 then
+	elseif wml.variables['r_temp'] == 17 then
 		mask_name = "diamond_star_pool"
-	elseif r_temp == 18 then
+	elseif wml.variables['r_temp'] == 18 then
 		mask_name = "diamond_hex_pool"
-	elseif r_temp == 19 then
+	elseif wml.variables['r_temp'] == 19 then
 		mask_name = "diamond_hex"
-	elseif r_temp == 20 then
+	elseif wml.variables['r_temp'] == 20 then
 		mask_name = "diamond_star"
-	elseif r_temp == 21 then
+	elseif wml.variables['r_temp'] == 21 then
 		mask_name = "diamond_star2"
-	elseif r_temp == 22 then
+	elseif wml.variables['r_temp'] == 22 then
 		mask_name = "diamond_columns3"
-	elseif r_temp == 23 then
+	elseif wml.variables['r_temp'] == 23 then
 		mask_name = "diamond_columns4"
-	elseif r_temp == 24 then
+	elseif wml.variables['r_temp'] == 24 then
 		mask_name = "diamond_large3_center"
-	elseif r_temp == 25 then
+	elseif wml.variables['r_temp'] == 25 then
 		mask_name = "diamond_large4_center"
-	elseif r_temp == 26 then
+	elseif wml.variables['r_temp'] == 26 then
 		mask_name = "diamond_large5_center"
-	elseif r_temp == 27 then
+	elseif wml.variables['r_temp'] == 27 then
 		mask_name = "diamond_large6_center"
-	elseif r_temp == 28 then
+	elseif wml.variables['r_temp'] == 28 then
 		mask_name = "diamond_large7_center"
-	elseif r_temp == 29 then
+	elseif wml.variables['r_temp'] == 29 then
 		mask_name = "diamond_large3_pool_center"
-	elseif r_temp == 30 then
+	elseif wml.variables['r_temp'] == 30 then
 		mask_name = "diamond_large4_pool_center"
-	elseif r_temp == 31 then
+	elseif wml.variables['r_temp'] == 31 then
 		mask_name = "diamond_large5_pool_center"
-	elseif r_temp == 32 then
+	elseif wml.variables['r_temp'] == 32 then
 		mask_name = "diamond_large6_pool_center"
-	elseif r_temp == 33 then
+	elseif wml.variables['r_temp'] == 33 then
 		mask_name = "diamond_large7_pool_center"
-	elseif r_temp == 34 then
+	elseif wml.variables['r_temp'] == 34 then
 		mask_name = "diamond_large8_pool_center"
 	else
 		W.set_variable { name = "r_temp", rand = "0..2" }
-		if r_temp == 0 then
+		if wml.variables['r_temp'] == 0 then
 			mask_name = "diamond_huge_columns"
-		elseif r_temp == 1 then
+		elseif wml.variables['r_temp'] == 1 then
 			mask_name = "diamond_huge_columns2"
 		else
 			mask_name = "diamond_huge_maze"

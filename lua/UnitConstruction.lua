@@ -92,6 +92,10 @@ local function get_p(parsed, relative)
 	end
 	return v or t
 end
+local function get_n(parsed, relative)
+        local n = get_p(parsed, relative)
+        return tonumber(n) or 0
+end
 local function clear_p(parsed, relative)
 	if type(relative) ~= "nil" then
 		local p, n, np = string.match(relative, "^([%a%d_]+)%[(%d+)%]%.([%a%d%[%]%._]+)$")
@@ -322,7 +326,7 @@ local function get_attack_basics(unit, equipment, weapon)
 	end
 	return attack, weapon_class
 end
-wesnoth.register_wml_action("calculate_weapon_display", function(args)
+function wesnoth.wml_actions.calculate_weapon_display(args)
 	local unit_var = args.unit_variable or H.wml_error("[calculate_weapon_display] requires a unit_variable= key")
 	local weapon_var = args.weapon_variable or H.wml_error("[calculate_weapon_display] requires a unit_variable= key")
 	local unit = parse_container(wesnoth.get_variable(unit_var))
@@ -331,7 +335,7 @@ wesnoth.register_wml_action("calculate_weapon_display", function(args)
 	local attack = get_attack_basics(unit, equipment, weapon)
 	wesnoth.set_variable("display_damage", attack.damage)
 	wesnoth.set_variable("display_number", attack.number)
-end)
+end
 
 local function find_npc_value(unit, params)
 	params = params or {}
@@ -720,7 +724,7 @@ local function find_equipment_value(unit)
 	return total_type_value("weapons.melee") + total_type_value("weapons.ranged") + total_type_value("armor.head") + total_type_value("armor.torso") + total_type_value("armor.legs") + total_type_value("armor.shield")
 end
 
-function construct_unit(var, unstore)
+local function constructUnit(var, unstore)
 	local unit = parse_container(wesnoth.get_variable(var))
 	local player = get_p(unit, "side") <= wesnoth.get_variable("const.max_player_count") and get_p(unit, "canrecruit")
 
@@ -1330,7 +1334,7 @@ Adjacent friendly units of lower level will do more damage in battle. When a uni
 This unit's ability to teach battle skills gives each adjacent allied unit a +1 to experience earned in battle."
 			} })
 		end
-		if (get_p(unit, "npc_init.abilities.skeletal") or 0) == 1 then
+		if (get_p(unit, "variables.npc_init.abilities.skeletal") or 0) == 1 then
 			table.insert(abilities, { "hides", {
 				id = "submerge",
 				name = "submerge",
@@ -2741,5 +2745,15 @@ function wesnoth.wml_actions.construct_unit(cfg)
 	else
 		unstore = cfg.unstore
 	end
-	construct_unit(var, unstore)
+	constructUnit(var, unstore)
+end
+function wesnoth.wml_actions.unit_npc_init(cfg)
+       local t = cfg.type or H.wml_error("[unit_npc_init] requires a type= key")
+       local u = cfg.variable or H.wml_error("[unit_npc_init] requires a variable= key")
+       --std_print("Unit = " .. u .. " Type = " .. t)
+       local tcfg = wesnoth.unit_types[string.format("%s", t)].__cfg
+       --w_pt(tcfg)
+       local npc_init = H.get_child(tcfg, "npc_init")
+       wesnoth.set_variable(string.format("%s.variables.npc_init", u), nil) -- clear it
+       wesnoth.set_variable(string.format("%s.variables.npc_init", u), npc_init)
 end

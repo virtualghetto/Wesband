@@ -5,7 +5,7 @@ unit = setmetatable({}, { __newindex = function(t, k, v) modu(k, v) end })
 -- Define your global constants here.
 
 
-H.set_wml_var_metatable(_G)
+--H.set_wml_var_metatable(_G)
 
 -- Define your global functions here.
 
@@ -51,7 +51,8 @@ end
 function wesnoth.wml_actions.store_shroud(cfg)
 	local team_num = cfg.side or H.wml_error("[store_shroud] expects a side= attribute.")
 	local var = cfg.variable or H.wml_error("[store_shroud] expects a variable= attribute.")
-	local team = wesnoth.get_side(team_num)
+	--local team = wesnoth.get_side(team_num)
+	local team = wesnoth.sides[team_num]
 	local current_shroud = team.__cfg.shroud_data
 	wesnoth.set_variable(var, current_shroud)
 end

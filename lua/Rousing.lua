@@ -1,10 +1,10 @@
-function checkSafety(x, y)
+local function checkSafety(x, y)
 	local rouse_list = wesnoth.get_variable("rouse_list")
 	local safety
 	if rouse_list then
 		safety = not wesnoth.eval_conditional {
 			{ "have_unit", {
-				side = const.enemy_sides,
+				side = wml.variables['const.enemy_sides'],
 				{ "filter_location", { x = x, y = y, radius = 12 } },
 				{ "and", {
 					{ "not", {
@@ -21,7 +21,7 @@ function checkSafety(x, y)
 	else
 		safety = not wesnoth.eval_conditional {
 			{ "have_unit", {
-				side = const.enemy_sides,
+				side = wml.variables['const.enemy_sides'],
 				{ "filter_location", { x = x, y = y, radius = 12 } },
 				{ "not", {
 					{ "filter_wml", {
@@ -99,7 +99,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		}
 		if rouse_list then
 			rouse_enemies = wesnoth.get_units( {
-					side = const.enemy_sides,
+					side = wml.variables['const.enemy_sides'],
 					{ "filter_location", { find_in = "rouse_temp_locs" } },
 					{ "filter_wml", {
 						{ "status", { guardian = "yes" } }
@@ -110,7 +110,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 				} )
 		else
 			rouse_enemies = wesnoth.get_units( {
-					side = const.enemy_sides,
+					side = wml.variables['const.enemy_sides'],
 					{ "filter_location", { find_in = "rouse_temp_locs" } },
 					{ "filter_wml", {
 						{ "status", { guardian = "yes" } }
@@ -185,7 +185,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		wesnoth.set_variable("rouse_list", rouse_list)
 		local visible = wesnoth.get_units( {
 				id = rouse_enemies[min_index].id,
-				{ "filter_vision", { viewing_side = side_number } }
+				{ "filter_vision", { viewing_side = wml.variables['side_number'] } }
 			} )
 		if visible[1] then
 			wesnoth.fire_event("spot", x, y, visible[1].x, visible[1].y)
@@ -196,4 +196,15 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		u.moves = u.max_moves
 	end
 	wesnoth.set_variable("rouse_temp_locs")
+end
+
+function wesnoth.wml_actions.check_safety(cfg)
+	local x = cfg.x or H.wml_error("[check_safety] expects an x= attribute")
+	local y = cfg.y or H.wml_error("[check_safety] expects a y= attribute")
+	local v = cfg.variable or H.wml_error("[check_safety] requires a variable= key")
+
+	local safety = checkSafety(x, y)
+	if not safety then
+		wesnoth.set_variable(v, 0)
+	end
 end

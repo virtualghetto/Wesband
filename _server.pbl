@@ -1,0 +1,18 @@
+author="Ken Oh,Exasperation,Dovolente,TL"
+description="Wesnoth hack and slash MP.
+
+This is a beta release for testing purposes.
+Please report any bugs or errors to the forum.
+This upload is part of vghetto port project.
+"
+email=
+icon="scenery/dwarven-doors-closed.png"
+passphrase=
+tags="WBD"
+title="Wesband"
+translate=true
+type="campaign_mp"
+version="0.8.2-1"
+[feedback]
+	topic_id=21234
+[/feedback]

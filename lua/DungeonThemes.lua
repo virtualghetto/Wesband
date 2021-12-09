@@ -1,27 +1,27 @@
 W.set_variable { name = "dungeon_creation.temp.flow_type", rand = "1..25" }
-dungeon_creation.temp.pool_flavor = "Ww"
+wml.variables['dungeon_creation.temp.pool_flavor'] = "Ww"
 W.set_variable { name = "r_temp", rand = "0..6" }
-if r_temp < dungeon_level.current then
+if wml.variables['r_temp'] < wml.variables['dungeon_level.current'] then
 	W.set_variable { name = "r_temp", rand = "0..2" }
-	if r_temp ~= 0 then
-		dungeon_creation.temp.pool_flavor = "Ss"
+	if wml.variables['r_temp'] ~= 0 then
+		wml.variables['dungeon_creation.temp.pool_flavor'] = "Ss"
 	end
 end
 W.set_variable { name = "r_temp", rand = "6..14" }
-if r_temp < dungeon_level.current then
+if wml.variables['r_temp'] < wml.variables['dungeon_level.current'] then
 	W.set_variable { name = "r_temp", rand = "0..2" }
-	if r_temp == 1 then
-		dungeon_creation.temp.pool_flavor = "Ql"
-	elseif r_tmep == 2 then
-		dungeon_creation.temp.pool_flavor = "Qlf"
+	if wml.variables['r_temp'] == 1 then
+		wml.variables['dungeon_creation.temp.pool_flavor'] = "Ql"
+	elseif wml.variables['r_temp'] == 2 then
+		wml.variables['dungeon_creation.temp.pool_flavor'] = "Qlf"
 	end
 end
-dungeon_creation.temp.flow_flavor = dungeon_creation.temp.pool_flavor
+wml.variables['dungeon_creation.temp.flow_flavor'] = wml.variables['dungeon_creation.temp.pool_flavor']
 W.set_variable { name = "r_temp", rand = "4..9" }
-if r_temp < dungeon_level.current then
+if wml.variables['r_temp'] < wml.variables['dungeon_level.current'] then
 	W.set_variable { name = "r_temp", rand = "0..2" }
-	if r_temp == 0 then
-		dungeon_creation.temp.flow_flavor = "Qxu"
+	if wml.variables['r_temp'] == 0 then
+		wml.variables['dungeon_creation.temp.flow_flavor'] = "Qxu"
 	end
 end
 W.set_variable { name = "dungeon_creation.temp.wall_flavor", rand = "Xu,Xu,Xos" }
@@ -39,12 +39,12 @@ W.set_variables {
 		to_variable = "dungeon_creation.loner_themes"
 	}
 W.set_variable { name = "dungeon_creation.temp.crawly_theme", rand = "cave,slime" }
-if dungeon_creation.temp.terrain_variation == "Wwf" then
-	if dungeon_creation.water_level_counter < 2 then
-		dungeon_creation.water_level_counter = dungeon_creation.water_level_counter + 1
-		dungeon_creation.temp.terrain_variation = "Ur"
+if wml.variables['dungeon_creation.temp.terrain_variation'] == "Wwf" then
+	if wml.variables['dungeon_creation.water_level_counter'] < 2 then
+		wml.variables['dungeon_creation.water_level_counter'] = wml.variables['dungeon_creation.water_level_counter'] + 1
+		wml.variables['dungeon_creation.temp.terrain_variation'] = "Ur"
 	else
-		dungeon_creation.temp.crawly_theme = "water"
+		wml.variables['dungeon_creation.temp.crawly_theme'] = "water"
 		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.loner_themes",
 			item = "water",
@@ -75,9 +75,9 @@ if dungeon_creation.temp.terrain_variation == "Wwf" then
 			weight = 800,
 			op = "set"
 		})
-		dungeon_creation.water_level_counter = 0
+		wml.variables['dungeon_creation.water_level_counter'] = 0
 	end
-elseif dungeon_creation.temp.terrain_variation == "Rd" or dungeon_creation.temp.terrain_variation == "Re" or dungeon_creation.temp.terrain_variation == "Ryc" then
+elseif wml.variables['dungeon_creation.temp.terrain_variation'] == "Rd" or wml.variables['dungeon_creation.temp.terrain_variation'] == "Re" or wml.variables['dungeon_creation.temp.terrain_variation'] == "Ryc" then
 	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.prob_list",
 		item = "outlaws",
@@ -92,13 +92,13 @@ wesnoth.wml_actions.get_prob({
 })
 wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
-	item = dungeon_creation.temp.creep_themes[0].theme,
+	item = wml.variables['dungeon_creation.temp.creep_themes[0].theme'],
 	op = "clear"
 })
-if dungeon_creation.temp.creep_themes[0].theme ~= dungeon_creation.temp.crawly_theme then
+if wml.variables['dungeon_creation.temp.creep_themes[0].theme'] ~= wml.variables['dungeon_creation.temp.crawly_theme'] then
 	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.prob_list",
-		item = dungeon_creation.temp.crawly_theme,
+		item = wml.variables['dungeon_creation.temp.crawly_theme'],
 		weight = 300,
 		op = "scale"
 	})
@@ -115,27 +115,28 @@ W.set_variables {
 	}
 wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
-	item = dungeon_creation.temp.creep_themes[0].theme,
+	item = wml.variables['dungeon_creation.temp.creep_themes[0].theme'],
 	op = "clear"
 })
 wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
-	item = dungeon_creation.temp.creep_themes[1].theme,
+	item = wml.variables['dungeon_creation.temp.creep_themes[1].theme'],
 	op = "clear"
 })
-dungeon_creation.temp.water_theme_position = -1
-if dungeon_creation.temp.creep_themes[0].theme == "water" then
-	dungeon_creation.temp.water_theme_position = 0
-elseif dungeon_creation.temp.creep_themes[1].theme == "water" then
-	dungeon_creation.temp.water_theme_position = 1
+wml.variables['dungeon_creation.temp.water_theme_position'] = -1
+if wml.variables['dungeon_creation.temp.creep_themes[0].theme'] == "water" then
+	wml.variables['dungeon_creation.temp.water_theme_position'] = 0
+elseif wml.variables['dungeon_creation.temp.creep_themes[1].theme'] == "water" then
+	wml.variables['dungeon_creation.temp.water_theme_position'] = 1
 else
 	W.clear_variable { name = "terrain_match" }
 	W.store_locations {
 			terrain = "Ai",
 			variable = "terrain_match"
 		}
-	if dungeon_creation.temp.terrain_variation == "Wwf" or (dungeon_creation.temp.flow_flavor == "" and dungeon_creation.temp.flow_type < 11) or terrain_match then
-		W.set_variable { name = "dungeon_creation.temp.water_theme_position", rand = "2..$($const.max_enemy_count-1)" }
+	if wml.variables['dungeon_creation.temp.terrain_variation'] == "Wwf" or (wml.variables['dungeon_creation.temp.flow_flavor'] == "" and wml.variables['dungeon_creation.temp.flow_type'] < 11) or wml.variables['terrain_match'] then
+		--W.set_variable { name = "dungeon_creation.temp.water_theme_position", rand = "2..$($const.max_enemy_count-1)" }
+		W.set_variable { name = "dungeon_creation.temp.water_theme_position", rand = string.format("2..%d", wml.variables['const.max_enemy_count'] -1) }
 		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
 			item = "water",
@@ -144,15 +145,15 @@ else
 		W.clear_variable { name = "terrain_match" }
 	end
 end
-for i = 2, const.max_enemy_count - 1 do
-	if i == dungeon_creation.temp.water_theme_position then
+for i = 2, wml.variables['const.max_enemy_count'] - 1 do
+	if i == wml.variables['dungeon_creation.temp.water_theme_position'] then
 		wesnoth.set_variable(string.format("dungeon_creation.temp.creep_themes[%i].theme", i), "water")
-	elseif dungeon_creation.temp.prob_list.total_count == 0 then
-		if i < dungeon_creation.temp.water_theme_position then
+	elseif wml.variables['dungeon_creation.temp.prob_list.total_count'] == 0 then
+		if i < wml.variables['dungeon_creation.temp.water_theme_position'] then
 			wesnoth.set_variable(string.format("dungeon_creation.temp.creep_themes[%i].theme", i), "water")
-			dungeon_creation.temp.water_theme_position = i
+			wml.variables['dungeon_creation.temp.water_theme_position'] = i
 		else
-			dungeon_creation.temp.creep_themes[i].theme = string.format("nullTheme%i", i)
+			wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] = string.format("nullTheme%i", i)
 		end
 	else
 		wesnoth.wml_actions.get_prob({
@@ -162,82 +163,82 @@ for i = 2, const.max_enemy_count - 1 do
 		})
 		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
-			item = dungeon_creation.temp.creep_themes[i].theme,
+			item = wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)],
 			op = "clear"
 		})
 	end
 end
-dungeon_creation.temp.water_theme_position = dungeon_creation.temp.water_theme_position + 1 + const.max_player_count
-for i = 0, const.max_enemy_count - 1 do
-	wesnoth.set_variable(string.format("dungeon_creation.active_themes[%i].theme", i), dungeon_creation.temp.creep_themes[i].theme)
-	if dungeon_creation.temp.creep_themes[i].theme == "water" then
+ wml.variables['dungeon_creation.temp.water_theme_position'] =  wml.variables['dungeon_creation.temp.water_theme_position'] + 1 +  wml.variables['const.max_player_count']
+for i = 0,  wml.variables['const.max_enemy_count'] - 1 do
+	wesnoth.set_variable(string.format("dungeon_creation.active_themes[%i].theme", i),  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)])
+	if  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "water" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.water,
+				side = i + 1 +  wml.variables['const.max_player_count'],
+				team_name =  wml.variables['dungeon_creation.alliances.water'],
 				user_team_name = _ "Water Dwellers"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "orcs" then
+	elseif  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "orcs" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.orcs,
+				side = i + 1 +  wml.variables['const.max_player_count'],
+				team_name =  wml.variables['dungeon_creation.alliances.orcs'],
 				user_team_name = _ "Orcish Tribes"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "outlaws" then
+	elseif  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "outlaws" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.outlaws,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.outlaws'],
 				user_team_name = _ "Outlaw Band"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "undead" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "undead" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.undead,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.undead'],
 				user_team_name = _ "Undead Hordes"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "planar" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "planar" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.planar,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.planar'],
 				user_team_name = _ "Planar Beings"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "cave" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "cave" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.cave,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.cave'],
 				user_team_name = _ "Cavern Dwellers"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "dark" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "dark" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.dark,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.dark'],
 				user_team_name = _ "Dwellers in Darkness"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "slime" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "slime" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.slime,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.slime'],
 				user_team_name = _ "Creeping Ooze"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "naga" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "naga" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.naga,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.naga'],
 				user_team_name = _ "Naga Warriors"
 			}
-	elseif dungeon_creation.temp.creep_themes[i].theme == "saurian" then
+	elseif wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "saurian" then
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
-				team_name = dungeon_creation.alliances.saurian,
+				side = i + 1 + wml.variables['const.max_player_count'],
+				team_name = wml.variables['dungeon_creation.alliances.saurian'],
 				user_team_name = _ "Saurian Tribes"
 			}
 	else
 		W.modify_side {
-				side = i + 1 + const.max_player_count,
+				side = i + 1 + wml.variables['const.max_player_count'],
 				user_team_name = _ "None"
 			}
 	end
 end
-if dungeon_creation.temp.loner_themes.total_weight > 0 and dungeon_creation.temp.prob_list.total_weight > 0 then
+if wml.variables['dungeon_creation.temp.loner_themes.total_weight'] > 0 and wml.variables['dungeon_creation.temp.prob_list.total_weight'] > 0 then
 	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.loner_themes",
 		with_list = "dungeon_creation.temp.prob_list",

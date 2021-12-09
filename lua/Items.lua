@@ -24,7 +24,7 @@ local function cappend(st1, st2)
 	return sappend(st1, ", ", st2)
 end
 
-function adjustWeaponDescription(wt)
+local function adjustWeaponDescription(wt)
 	if wt.evade_adjust and wt.evade_adjust < 0 then
 		wt.evade_description = string.format(", Evade Adjust: %d", wt.evade_adjust)
 	end
@@ -136,12 +136,12 @@ function adjustWeaponDescription(wt)
 	wt.special = st1
 	return wt
 end
-wesnoth.register_wml_action("adjust_weapon_description", function(args)
+function wesnoth.wml_actions.adjust_weapon_description(args)
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_weapon_description] requires a variable= key")
 	wesnoth.set_variable(var, adjustWeaponDescription(wesnoth.get_variable(var)))
-end)
+end
 
-function adjustArmorDescription(at)
+local function adjustArmorDescription(at)
 	at.special = ""
 	if at.block_wield then
 		if at.block_wield == 1 then
@@ -159,15 +159,15 @@ function adjustArmorDescription(at)
 	end
 	return at
 end
-wesnoth.register_wml_action("adjust_armor_description", function(args)
-	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_weapon_description] requires a variable= key")
+function wesnoth.wml_actions.adjust_armor_description(args)
+	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_armor_description] requires a variable= key")
 	wesnoth.set_variable(var, adjustArmorDescription(wesnoth.get_variable(var)))
-end)
+end
 
-function createWeapon(wtype, rank, attr, var)
+local function createWeapon(wtype, rank, attr, var)
 	if attr == "random" then
 		W.set_variable { name = "r_temp", rand = "rusty,unbalanced,none,none,none,none,none,none,heavy,sharp,light,balanced" }
-		attr = r_temp
+		attr = wml.variables['r_temp']
 		W.clear_variable { name = "r_temp" }
 	end
 
@@ -1098,19 +1098,19 @@ function createWeapon(wtype, rank, attr, var)
 	end
 	wesnoth.set_variable(var, finalAdjust(weapon))
 end
-wesnoth.register_wml_action("create_weapon", function(args)
+function wesnoth.wml_actions.create_weapon(args)
 	local wtype = string.match(args.type, "[^%s]+") or H.wml_error("[create_weapon] requires a type= key")
 	local rank = args.rank or 0
 	local attr = string.match(args.attribute or "none", "[^%s]+")
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[create_weapon] requires a variable= key")
 
 	createWeapon(wtype, rank, attr, var)
-end)
+end
 
 local function createArmor(atype, rank, attr, var)
 	if attr == "random" then
 		W.set_variable { name = "r_temp", rand = "thick,light,polished,rusty,new,battered,none,none,none,none,none,none" }
-		attr = r_temp
+		attr = wml.variables['r_temp']
 		W.clear_variable { name = "r_temp" }
 	end
 
@@ -1217,9 +1217,9 @@ local function createArmor(atype, rank, attr, var)
 
 		local function adjustResists(rt)
 			W.set_variable { name = "r_temp", rand = "0..3" }
-			if r_temp == 0 then
+			if wml.variables['r_temp'] == 0 then
 				W.set_variable { name = "r_temp", rand = "arcane,blade,cold,fire,impact,pierce" }
-				rt[r_temp] = (rt[r_temp] or 0) + rank
+				rt[wml.variables['r_temp']] = (rt[wml.variables['r_temp']] or 0) + rank
 			else
 				r_mult = r_mult * rank_frac
 			end
@@ -1686,14 +1686,15 @@ local function createArmor(atype, rank, attr, var)
 	end
 	wesnoth.set_variable(var, finalAdjust(armor))
 end
-wesnoth.register_wml_action("create_armor", function(args)
+
+function wesnoth.wml_actions.create_armor(args)
 	local atype = string.match(args.type, "[^%s]+") or H.wml_error("[create_armor] requires a type= key")
 	local rank = args.rank or 0
 	local attr = string.match(args.attribute or "none", "[^%s]+")
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[create_armor] requires a variable= key")
 
 	createArmor(atype, rank, attr, var)
-end)
+end
 
 function wesnoth.wml_actions.drop_item(cfg)
 	local x = cfg.x or H.wml_error("[drop_item] requires an x= key")
@@ -1710,6 +1711,8 @@ function wesnoth.wml_actions.drop_item(cfg)
 	if not item_data.undroppable or item_data.undroppable ~= 1 then
 		local i = wesnoth.get_variable(string.format("ground.x%d.y%d.items.length", x, y))
 		if item_data.category == "gold" then
+		item_data.amount = tonumber(item_data.amount) or 0
+		if item_data.amount > 0 then
 			for j = 0, i - 1 do
 				if wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].category", x, y, j)) == "gold" then
 					local old_image = wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].ground_icon", x, y, j))
@@ -1734,6 +1737,7 @@ function wesnoth.wml_actions.drop_item(cfg)
 				item_data.icon = "icons/gold-large"
 			end
 			item_data.description = string.format("%d gold", item_data.amount)
+		end
 		end
 		if item_data.ground_icon then
 			W.item {
@@ -1773,7 +1777,7 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 		}
 	end
 	local g = wesnoth.get_variable(string.format("ground.x%d.y%d", x, y))
-	if g[1] then
+	if g and g[1] then
 		for i = 1, #g do
 			if g[i][1] == "items" and g[i][2].ground_icon then
 				W.item {
@@ -1785,10 +1789,10 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 			end
 		end
 	else
-		wesnoth.set_variable(string.format("ground.x%d.y%d", x, y))
+		wesnoth.set_variable(string.format("ground.x%d.y%d", x, y), nil)
 		g = wesnoth.get_variable(string.format("ground.x%d", x))
-		if not g[1] then
-			wesnoth.set_variable(string.format("ground.x%d", x))
+		if g and not g[1] then
+			wesnoth.set_variable(string.format("ground.x%d", x), nil)
 		end
 	end
 end

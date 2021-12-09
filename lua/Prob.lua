@@ -178,7 +178,9 @@ function wesnoth.wml_actions.get_prob(cfg)
 	local var, list, id
 	local function probRand()
 		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
-		local r_val = H.rand(string.format("1..$%s.total_weight", list))
+		local total_weight = wesnoth.get_variable(string.format("%s.total_weight", list)) or 0
+		--local r_val = H.rand(string.format("1..$%s.total_weight", list))
+		local r_val = H.rand(string.format("1..%d", total_weight))
 		for i = 0, item_count - 1 do
 			r_val = r_val - wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i))
 			if r_val <= 0 then

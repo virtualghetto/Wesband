@@ -1,13 +1,13 @@
 border_size=0
 usage=mask
 
-Gg^Vo       , Gg          , Gg          , Gg          , Gg          , Gg          , _f          , Gg          , _f          , _f          
+Gg^Vh0      , Gg          , Gg          , Gg          , Gg          , Gg          , _f          , Gg          , _f          , _f          
 Gg          , Gg          , Rd          , Rd          , Gg          , Ce          , Gg          , Gg          , _f          , _f          
-Gg          , Gg          , Rd          , Rd          , Ce          , Gg^Vo       , Ce          , Ce          , Gg          , Gg          
-Gg          , Ce          , Ce          , Rd          , Rd          , Rd          , Gs^Fp       , Gg^Vo       , Ce          , Gg          
-Gg          , Ce          , Gg^Vo       , Rd          , Rd          , Gg^Veo      , Rd          , Rd          , Ce          , Gg          
-Gg          , Ce          , Rd          , Rd          , Rd          , Rd          , Rd          , Gg^Vo       , Ce          , Gg          
-Gg          , Ce          , Gg^Vo       , Gs^Fp       , Rd          , Rd          , Rd          , Ce          , Ce          , Gg          
-Gg          , Gg          , Ce          , Ce          , Gg^Vo       , Ce          , Rd          , Rd          , Gg          , _f          
-Gg          , Gg          , Gg          , Gg          , Ce          , Gg          , Rd          , Rd          , Gg          , Gg^Vo       
+Gg          , Gg          , Rd          , Rd          , Ce          , Gg^Vh0      , Ce          , Ce          , Gg          , Gg          
+Gg          , Ce          , Ce          , Rd          , Rd          , Rd          , Gs^Fp       , Gg^Vh0      , Ce          , Gg          
+Gg          , Ce          , Gg^Vh0      , Rd          , Rd          , Gg^Ve0      , Rd          , Rd          , Ce          , Gg          
+Gg          , Ce          , Rd          , Rd          , Rd          , Rd          , Rd          , Gg^Vh0      , Ce          , Gg          
+Gg          , Ce          , Gg^Vh0      , Gs^Fp       , Rd          , Rd          , Rd          , Ce          , Ce          , Gg          
+Gg          , Gg          , Ce          , Ce          , Gg^Vh0      , Ce          , Rd          , Rd          , Gg          , _f          
+Gg          , Gg          , Gg          , Gg          , Ce          , Gg          , Rd          , Rd          , Gg          , Gg^Vh0      
 _f          , _f          , _f          , _f          , Gg          , _f          , Gg          , Gg          , Gg          , Gg          

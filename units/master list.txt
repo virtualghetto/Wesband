@@ -1,0 +1,426 @@
+Lawful Humans:
+
+WBD Initiate
+WBD Nobleman
+WBD Civilian
+
+WBD Peasant
+WBD Spearman
+WBD Pikeman
+WBD Halberdier
+WBD Javelineer
+
+WBD Swordsman
+WBD Royal Guard
+
+WBD Bowman
+WBD Longbowman
+WBD Master Bowman
+
+WBD Fencer
+WBD Duelist
+WBD Master at Arms
+
+WBD Sergeant
+WBD Lieutenant
+WBD General
+WBD Grand Marshal
+
+WBD Heavy Infantryman
+WBD Shock Trooper
+WBD Iron Mauler
+
+WBD Royal Warrior
+
+WBD Mage
+WBD Red Mage
+WBD White Mage
+WBD Arch Mage
+WBD Great Mage
+WBD Mage of Light
+
+
+
+Elves:
+
+WBD She Elf
+WBD Elf
+
+WBD Elvish Fighter
+WBD Elvish Hero
+WBD Elvish Champion
+
+WBD Elvish Captain
+WBD Elvish Marshal
+
+WBD Elvish Archer
+WBD Elvish Ranger
+WBD Elvish Avenger
+
+WBD Elvish Marksman
+WBD Elvish Sharpshooter
+
+WBD Elvish Shaman
+WBD Elvish Druid
+WBD Elvish Shyde
+WBD Elvish Sorceress
+WBD Elvish Enchantress
+WBD Elvish Sylph
+
+
+
+Dwarves:
+
+WBD Dwarvish Fighter
+WBD Dwarvish Steelclad
+WBD Dwarvish Lord
+
+WBD Dwarvish Guardsman
+WBD Dwarvish Stalwart
+WBD Dwarvish Sentinel
+
+WBD Dwarvish Ulfserker
+WBD Dwarvish Berserker
+
+WBD Dwarvish Thunderer
+WBD Dwarvish Thunderguard
+WBD Dwarvish Dragonguard
+
+
+
+Crims:
+
+WBD Cunning Woman
+WBD Outlaw Maiden
+WBD Witch
+
+WBD Brute
+WBD Ruffian
+WBD Thug
+WBD Bandit
+WBD Highwayman
+
+WBD Footpad
+WBD Outlaw
+WBD Fugitive
+
+WBD Thief
+WBD Rogue
+WBD Assassin
+
+WBD Woodsman
+WBD Poacher
+WBD Trapper
+WBD Huntsman
+WBD Ranger
+
+
+
+Goblins:
+WBD Goblin Tamer
+WBD Goblin Slave
+
+WBD Goblin Rouser
+WBD Goblin Spearman
+WBD Goblin Impaler
+
+
+
+Orcs:
+WBD Orcish Berserker
+
+WBD South Orc
+WBD Orcish Barbarian
+WBD Great Orcish Barbarian
+WBD Orcish Barbarian King
+
+WBD Orcish Shaman
+WBD Orcish Councilman
+WBD Orcish Elder
+
+WBD Orcish Grunt
+WBD Orcish Warrior
+WBD Orcish Warlord
+
+WBD Orcish Assassin
+WBD Orcish Slayer
+
+WBD Orcish Archer
+WBD Orcish Crossbowman
+WBD Orcish Slurbow
+
+WBD Orcish Leader
+WBD Orcish Ruler
+WBD Orcish Sovereign
+
+
+
+Monsters:
+
+WBD Cyclop
+WBD Red Cyclop
+WBD Fire Cyclop
+WBD Mighty Cyclop
+WBD Mad Cyclop
+WBD Ancient Cyclop
+
+WBD Giant Ant
+
+WBD Spider
+WBD Tarantula
+WBD Giant Spider
+
+WBD Young Cuttle Fish
+WBD Cuttle Fish
+WBD Armored Cuttle Fish
+
+WBD Troglodyte Spawn
+WBD Troglodyte
+
+WBD Toxic Slime
+WBD Giant Toxic Slime
+WBD Huge Toxic Slime
+
+WBD Hydra
+WBD Deep Hydra
+WBD Chaos Hydra
+
+WBD Rat Swarm
+
+WBD Metal Slime
+WBD Giant Metal Slime
+WBD Huge Metal Slime
+
+WBD Mudcrawler
+WBD Giant Mudcrawler
+WBD Huge Mudcrawler
+
+WBD Tentacle of the Deep
+
+WBD Water Serpent
+
+WBD Sea Serpent
+
+WBD Vampire Bat
+WBD Blood Bat
+WBD Dread Bat
+
+WBD Wolf
+WBD Direwolf
+
+WBD Wolf Rider
+WBD Goblin Knight
+WBD Goblin Pillager
+WBD Direwolf Rider
+
+WBD Giant Scorpion
+
+WBD Sporeling
+WBD Fungoid
+WBD Giantstool
+
+
+
+Elementals:
+WBD Tempest Spirit
+WBD Ice Shell
+WBD Undine
+WBD Ice Crab
+WBD Tidal
+WBD Spout
+
+WBD Stone Titan
+WBD Rock Golem
+WBD Animated Rock
+WBD Rolling Stones
+
+WBD Djinn
+WBD Zephyr
+WBD Thunderbird
+WBD Wind Herder
+WBD Razorbird
+WBD Wind Servant
+
+WBD Lava Beast
+WBD Fire Ghost
+WBD Living Furnace
+WBD Fire Wisp
+WBD Brazier Creation
+WBD Fire Spirit
+
+
+
+Saurians:
+
+WBD Saurian Husk
+WBD Saurian Lurker
+
+WBD Saurian Skirmisher
+WBD Saurian Ambusher
+WBD Saurian Flanker
+
+WBD Saurian Augur
+WBD Saurian Oracle
+WBD Saurian Soothsayer
+
+WBD Saurian Sage
+WBD Saurian Mystic
+
+WBD Saurian Trainee
+
+WBD Saurian Warrior
+WBD Saurian Hero
+
+WBD Saurian Knife Thrower
+WBD Saurian Skulker
+WBD Saurian Assassin
+
+WBD Swamp Saurian
+WBD Swamp Guard
+WBD Swamp Margrave
+WBD Swamp Fighter
+WBD Swamp Warrior
+
+
+
+Dark Elves:
+
+WBD Sworddancer
+WBD Bladedancer
+WBD Blademaster
+WBD Dark Warrior
+WBD Dark Slayer
+WBD Great Hunter
+WBD Dark Hunter
+WBD Dark Assassin
+
+WBD Dark Commander
+WBD Dark Commander in chief
+WBD Master of War
+
+WBD Dark Witch
+WBD Shadow Witch
+WBD Cold Matriarch
+WBD Matriarch of Emptiness
+WBD Matriarch of Darkness
+
+WBD Dark Disciple
+WBD Dark Wizard
+WBD Great Warlock
+WBD Master of Darkness
+
+
+
+Devlings:
+
+WBD Devling Sneak
+WBD Devling Lurker
+
+WBD Devling Flappers
+WBD Devling Flyers
+WBD Devling Attackers
+
+WBD Devling Nailers
+WBD Devling Spikers
+WBD Devling Staplers
+
+WBD Overgrown Devling
+WBD Devling Soldier
+WBD Devling Warrior
+WBD Devling Chief
+WBD Devling Hero
+
+WBD Devling Cursers
+WBD Devling Blasphemists
+WBD Devling Offenders
+WBD Devling Abusers
+
+
+
+Minotaurs:
+
+WBD Minotaur Behemoth
+WBD Minotaur Ancient Behemoth
+
+WBD Minotaur Cutthroat
+WBD Minotaur Slayer
+WBD Minotaur Executioner
+
+WBD Minotaur Gore
+WBD Minotaur Savage
+WBD Minotaur Rouser
+WBD Minotaur Overlord
+
+WBD Minotaur Shaman
+WBD Minotaur Warlock
+WBD Minotaur Elder
+WBD Minotaur Mystic
+
+
+
+Trolls:
+
+WBD Troll Whelp
+WBD Troll Rocklobber
+WBD Troll
+WBD Troll Warrior
+WBD Troll Hero
+WBD Great Troll
+WBD Siege Troll
+
+WBD Troll Shaman
+
+
+
+Ogres:
+
+WBD Young Ogre
+WBD Ogre
+
+
+
+Naga:
+
+WBD Naga Fighter
+WBD Naga Warrior
+WBD Naga Myrmidon
+
+
+
+Undead:
+
+WBD Spirit
+WBD Ghost
+WBD Wraith
+WBD Spectre
+WBD Shadow
+WBD Nightgaunt
+
+WBD Ghoul
+WBD Necrophage
+
+WBD Walking Bones
+WBD Skeleton
+WBD Revenant
+WBD Draug
+WBD Deathblade
+
+WBD Skeleton Archer
+WBD Bone Shooter
+WBD Banebow
+
+WBD Death Squire
+WBD Death Knight
+
+WBD Skeleton Rider
+WBD Bone Knight
+
+WBD Dark Adept
+WBD Dark Sorcerer
+WBD Necromancer
+WBD Lich
+WBD Ancient Lich
+WBD Archaic Lich
+
+WBD Skeletal Dragon
+WBD Chocobone

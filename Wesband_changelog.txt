@@ -1,3 +1,143 @@
+0.7.5
+-fixed UPGRADE_MAGIC_WHITE_METAL_TO_ARCANE_CONDITION macro
+-added female elf and human PCs (art by Shinobody) 
+
+0.7.4
+-fixed default attributes of neutral elves' wooden weapons
+-improved error reporting for invalid weapon attributes in create_weapon
+-fixed skirmisher evade requirement to match description in upgrade menu
+-fixed errors in weapon special evaluation in find_npc_value
+-fixed missing icon entries for cuttlefish ink weapons
+-fixed typos in "abilities" that were causing errors
+
+0.7.3
+-fixed display of adjusted evade and moves lost in manage/view equipment screen
+-fixed application  of casting power/speed to spells/touch attacks
+-fixed thunderstick tinker's starting thunderstick
+-fixed construction of cruelty skill
+
+0.7.2
+-fix to processing of unstore argument to [construct_unit]
+-replaced object adding standing animation w/ halo with direct manipulation of unit.halo
+-fixed description of heals ability for npcs
+-fixed display of magic penalty in manage/view equipment screen
+-fixed typo in code to add ambush skill
+
+0.7.1
+-converted unit construction to Lua; many associated file changes (and several file deletions), bugfixes, etc.
+
+0.7.0
+-converted create_weapon event to Lua [create_weapon] tag, removed old event & associated macros
+-converted create_armor event to Lua [create_armor] tag, removed old event & associated macros
+-converted unit inventories to use variables.equipment_slots.<slot> syntax
+-added missing shield equipment_slot to CREATE_BASE
+-new experimental dungeon generator with more randomness & more possible floor layouts
+-improved speed of new dungeon generator, reduced extra_path_chance to 40%
+-improved dungeon generator to (theoretically) allow handling of arbitrary (30+ x 30+) map sizes; maps with dimensions below 40 or above 60 will require additional changes to masks and/or 50x50 map start positions
+-dungeon levels now have 60% chance of being 50x50, 20% 60x40, 20% 40x60
+-fixed bug with ranged weapon showing in manage equipment while being blocked by shield
+-moved spellcasting animations for PCs from object at unit creation into unit variations to get red of object updating on construction
+-fixed point&pike to work as advertised
+
+0.6.2
+-fixed issue w/ display of mana cost for protection from poison when gained through upgrade during game
+-capped max resistance in construction to avoid overflow issues
+-changed some overlooked VARIABLE_OP foo random occurences to VARIABLE_OP foo rand
+-improvements to dungeon generation code
+-backported fix to management of blocked ranged weapons from 0.7.0
+-fixed protection from fire applying to all damage types
+
+0.6.1
+-fixed issue w/ dual/triple wield and shields
+-fixed potions/scrolls sold to magic shop not being available to buy back
+-fixed display of movement loss rate due to evade penalty in inventory screen
+-fixed issues w/ some weapons' prereqs due to screwy formula operator precedence
+-fixed calculation for damage of weapons w/ mind prereqs that are not met
+-bugfixes, tweaking, and cleanup of weapon generation code
+
+0.6.0
+-removed <s from gold drop/transfer prompts
+-fixed issue with move refresh on same side turn as rousing
+-fixed issue with rousing a unit when standing at the edge of their movement range on terrain they can't move onto (ie just at edge of water with tentacle of the deep inside)
+-fixed clearing of unpoisonable_flag/unslowable_flag on protection spells expiration
+-fixed resurrecting henches
+-fixed characters entering town with less than max moves
+-fixed the issue where enemies would sometimes do nothing on the first turn after re-entering an old dungeon level from town (related to the above issue)
+-fixed the item fog visibility issues
+-added missing 'W' in Brutal Assault description in upgrade menu
+-more level change unit restoration fixes
+-fixed missing .variables in EXPEND_CASTING_ACTION
+-fixed ineffective MENU_ABILITY_RAGE macro (thanks to zaimoni for catching this!)
+-added missing mana_cost to detect units gained through upgrade menu
+-fixed issues w/ trapped spirit v. rousing
+-put in new elf+female and elf-head images
+-fixed Saurian Lurker likes_gold value
+-fixed missing $s in SILVER_TELEPORT_EFFECT
+-fixed displayed name of Deep Hydra ("Hydra Hydra" -> "Deep Hydra")
+-improved attack spell damage calculation
+-item variation and leveling on mob creation
+-updated themes to allow for auto-leveling on mob placement
+-evade adjust modified by light/heavy/balanced/unbalanced, taken into account for weapon pricing
+-cleanup/tweaking of armor/weapon pricing
+-changed prob lists from event-based to lua-defined tags ([prob_list], [set_prob], [get_prob])
+-adjusted prices for selling to stores so they never go below 1
+-minor cleanup of item prereq code
+-new inventory menu
+-minor cleanup of rousing code
+-improved checkSafety function slightly; also removed line ensuring compatibility of Rousing.lua with saved games from pre-0.4.3 since 0.6.0 breaks compatibility with those saves for other reasons
+-removed PC's health potion that was accidentally given to dark elves, devlings and ogres
+-beefed goblin PC choice
+-added protection from fire spell and potion, metal to drain spell and scroll
+
+0.4.4
+-fixed LEVEL_NPC_ALIGN_ABILITY macro (was always resetting ability values regardless of current values), this fixes the mages losing magic issue
+-added a clear_variable call to the randomization of base terrain
+-added missing dark theme update to DungeonUpdate.lua
+fixed round shields blocking dual wield
+-added ranged adjust to damage calc
+-flat +5 hp to all starting PCs
+-some fixes and display changes to character selection, hopefully making it easier to read
+
+0.4.3
+-fixed bug that caused infinite loops when NPCs level
+-pricing tweaked
+-fixed remaining errors that menus give
+-silver magi removed from tavern
+
+0.4.2
+-gave undead units without variables.abilities container an empty ability and mobility=1 to fix plagued units not working with rousing
+-found a missing .variables that made entrance into nightgaunt line a free upgrade
+
+
+0.4.1
+-fixed unstore issue with dividers in character choice, replaced get all show_if
+-taught WML to tell whether a game has been loaded or not, and deal with the bug when necessary; you should do some testing of this and upload it if you don't find any obvious problems with it
+-fixed personal gold display after save/load+level change
+-issues with player side gaps should be fixed now
+-issues with player side gaps caused by player death should be fixed now, I hope
+-removed side 10 from dungeon
+-troll fist showing evade adjust
+-fixed PCs not gaining actual level, missing .variables
+-a couple of display fixes (leftover * and @)
+-small fix to marksman upgrade display
+
+0.4.0
+-Lua-aided dungeon creation and events
+-faster dungeon generation
+-rousing of enemies works a lot better. enemies have to spot you to cause your units to stop refreshing moves
+-chat output for when a unit first notices a player
+-changes to make compatible with Wesnoth 1.8.x (Pango mark-up and other tags)
+-item and enemy frequencies based on intricate probability algorithms
+-enemies spaced out more sensibly
+-max players upped to 4
+-shroud kept when players revisit a level
+-NPCs set to system that mirrors PCs, NPCs contain actual item for every item they should have. 
+-NPCs are much more varied and can now level past their normal max level, gaining stats and abilities in the process
+-[end_level] now able to be within the change level command
+-hundreds of lines of other small changes
+
+
+
 0.2.2
 -mana & casting actions framework
 -playable saurians, goblins, orcs

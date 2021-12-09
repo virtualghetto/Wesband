@@ -6,7 +6,7 @@ local function process_entries(tname)
 		if dungeon_level.current < tstart then break else
 			tcount = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].up_count", tname, i))
 			if tcount > 0 then
-				setProb({
+				wesnoth.wml_actions.set_prob({
 					name = string.format("dungeon_creation.%s", tname),
 					item = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].type", tname, i)),
 					weight = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].up_rate", tname, i)),
@@ -19,7 +19,7 @@ local function process_entries(tname)
 			else
 				tcount = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].down_count", tname, i))
 				if tcount > 0 then
-					setProb({
+					wesnoth.wml_actions.set_prob({
 						name = string.format("dungeon_creation.%s", tname),
 						item = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].type", tname, i)),
 						weight = wesnoth.get_variable(string.format("dungeon_creation.updates.%s[%i].down_rate", tname, i)),

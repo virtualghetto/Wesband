@@ -1,13 +1,13 @@
 local function randomize_terrain(base, variations)
 	W.store_locations {
 			terrain = base,
-			variable = "temp_rand_terrain"
+			variable = "dungeon_creation.temp.rand_terrain"
 		}
 	W.set_variable { name = "r_temp", rand = "0,0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6" }
 	local rand_count = r_temp
-	while rand_count < temp_rand_terrain.length do
+	while rand_count < dungeon_creation.temp.rand_terrain.length do
 		W.set_variable { name = "r_temp", rand = variations }
-		wesnoth.set_terrain(temp_rand_terrain[rand_count].x, temp_rand_terrain[rand_count].y, r_temp)
+		wesnoth.set_terrain(dungeon_creation.temp.rand_terrain[rand_count].x, dungeon_creation.temp.rand_terrain[rand_count].y, r_temp)
 		W.set_variable { name = "r_temp", rand = "1,2,2,3,3,3,4,4,4,4" }
 		rand_count = rand_count + r_temp
 	end
@@ -33,31 +33,41 @@ else
 	randomize_terrain("Re,Aa", "Ryf^Wel,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Ryf^Dr,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uh,Uu,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf,Uu^Uf")
 end
 
-W.set_variable { name = "r_temp", rand = "0..$($chamber_terrain.length-1)" }
-trapdoor_up.x, trapdoor_up.y = chamber_terrain[r_temp].x, chamber_terrain[r_temp].y
-W.set_variable { name = "r_temp", rand = "0..$($chamber_terrain.length-1)" }
-trapdoor_down.x, trapdoor_down.y = chamber_terrain[r_temp].x, chamber_terrain[r_temp].y
-while H.distance_between(trapdoor_up.x, trapdoor_up.y, trapdoor_down.x, trapdoor_down.y) < 35 do
-	W.set_variable { name = "r_temp", rand = "0..$($chamber_terrain.length-1)" }
-	trapdoor_up.x, trapdoor_up.y = chamber_terrain[r_temp].x, chamber_terrain[r_temp].y
-	if H.distance_between(trapdoor_up.x, trapdoor_up.y, trapdoor_down.x, trapdoor_down.y) < 35 then
-		W.set_variable { name = "r_temp", rand = "0..$($chamber_terrain.length-1)" }
-		trapdoor_down.x, trapdoor_down.y = chamber_terrain[r_temp].x, chamber_terrain[r_temp].y
+local trapdoor_data = {}
+local function select_trapdoor_location(dir)
+	local loc_index = H.rand("0..$($chamber_terrain.hexes.length-1)")
+	trapdoor_data[dir] = wesnoth.get_variable(string.format("chamber_terrain.hexes[%d]", loc_index))
+end
+local function invalid_trapdoor_placement()
+	return H.distance_between(trapdoor_data.up.x, trapdoor_data.up.y, trapdoor_data.down.x, trapdoor_data.down.y) < 35
+end
+
+select_trapdoor_location("up")
+select_trapdoor_location("down")
+while invalid_trapdoor_placement() do
+	select_trapdoor_location("up")
+	if invalid_trapdoor_placement() then
+		select_trapdoor_location("down")
 	end
 end
-wesnoth.set_terrain(trapdoor_down.x, trapdoor_down.y, "Re")
-W.item {
-	x = trapdoor_up.x,
-	y = trapdoor_up.y,
-	image = "stairs-up.png",
-	visible_in_fog = "yes"
+
+wesnoth.set_variable("dungeon_exit.x", trapdoor_data.up.x)
+wesnoth.set_variable("dungeon_exit.y", trapdoor_data.up.y)
+wesnoth.set_terrain(trapdoor_data.down.x, trapdoor_data.down.y, "Re")
+wesnoth.set_terrain(trapdoor_data.up.x, trapdoor_data.up.y, "Re")
+W.create_exit {
+	x = trapdoor_data.down.x,
+	y = trapdoor_data.down.y,
+	destination = "Dungeon",
+	label = string.format("Down to level %d", wesnoth.get_variable("dungeon_level.current") + 1),
+	image = "scenery/trapdoor-open.png"
 }
-wesnoth.set_terrain(trapdoor_up.x, trapdoor_up.y, "Re")
-W.item {
-	x = trapdoor_down.x,
-	y = trapdoor_down.y,
-	image = "scenery/trapdoor-open.png",
-	visible_in_fog = "yes"
+W.create_exit {
+	x = trapdoor_data.up.x,
+	y = trapdoor_data.up.y,
+	destination = "Town",
+	label = "To Overworld",
+	image = "stairs-up.png"
 }
 
 local mapData

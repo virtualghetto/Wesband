@@ -1,3 +1,62 @@
+0.8.2
+-converted several variable operations in spellcasting setup to formulas (fixes rounding problems)
+-converted DROP_ITEM and DROP_GOLD macros into [drop_item] tag, fixing bug preventing item dropping
+-additional cleanup of [rouse_units], fixing refresh bug
+-removed no-longer-necessary [filter] subtags from [unpetrify] tags
+-converted a couple of overlooked unit_description -> description
+-added missing hex attack description
+-converted map saving/loading to Lua & made exit code more generalized
+-converted ground_<x-value>_<y-value> variables to ground.x<x-value>.y<y-value>
+-continued cleanup of map saving/loading
+-cleaned up ground data more thoroughly after items are picked up (gets rid of empty ground.x#.y# containers)
+-cleaned up menu item filters to hopefully be more efficient
+-inverted a bunch of combined location radius filters/unit filters to hopefully be more efficient
+
+0.8.1
+-bugfixes and general cleanup of dungeon population code
+-allowed unit construction to handle negative defense values (such as feral units)
+
+0.8.0
+-conversion to 1.9/1.10
+	-colour -> color (still get some deprecation messages from auto-stored .colours, nothing to be done about those)
+	-AMLA_TOUGH -> AMLA_DEFAULT
+	-expanded ON_PRESTART and SET_LABEL_PERSISTENT macros
+	-[removeitem] -> [remove_item]
+	-fixed no-income villages to correctly reference the new overlay-only villages
+	-changed various AMLA exp requirements to 50*level
+-symbol_image=well-tile (was Well-tile)
+-added replay_save=no to level change
+-fixed potential sources of unreachable areas in diamond_large6_pool_center, diamond_large7_pool_center, and diamond_large8_pool_center masks
+-fixed lich touch calling itself faerie touch in UnitConstruction.lua
+-fixed initialization of magic adjusts for skeletal fist inventory items
+-converted shop description generation to Lua
+-removed extra e from value=dextrous
+-updated spellcasting animations to deal with female PCs
+-fixed damage type of shadow wave in description of dark magic upgrade
+-fixed visibility condition for plague & illuminates upgrades
+-made upgrade description stats <-> actual combat spell stats more consistent
+-fixed display of mana cost for phoenix fire & healing spells
+-cleanup of some array names to make inspect easier to use & make sure some temporary values don't stick around longer than is necessary
+-converted level change from macro to fired event
+-replaced a few {UNREACHABLE} macros with 99s
+-changed capitalization of overworld scenario filename to match other scenarios
+-changed id of overworld scenario to match filename
+-moved experience_modifier for Wesband_Main inside of generator/scenario tags
+-adjusted base experience requirements for PCs to compensate for experience modifier change
+-adjusted npc talentpoint gain/experience ratio to compensate for experience modifier change
+-converted some lua tag definitions from wesnoth.register_wml_action to wesnoth.wml_actions syntax
+-improved efficiency of checkSafety and rouseUnits functions, as well as a related side turn event
+-converted rouseUnits into [rouse_units]
+-added [rouse_units] to silver teleport effect
+-cleaned up functions in Prob.lua
+-added short url of Wesband forum thread to Wesband help
+-toned down number of level-ups mobs get at creation
+-toned down mob starting exp
+
+0.7.6
+-fix a few bugs in unit construction reported by zaimoni
+-capped evaluation penalty for high movement costs so move 99 doesn't confuse the AI when it upgrades units
+
 0.7.5
 -fixed UPGRADE_MAGIC_WHITE_METAL_TO_ARCANE_CONDITION macro
 -added female elf and human PCs (art by Shinobody) 
@@ -12,7 +71,7 @@
 
 0.7.3
 -fixed display of adjusted evade and moves lost in manage/view equipment screen
--fixed application  of casting power/speed to spells/touch attacks
+-fixed application of casting power/speed to spells/touch attacks
 -fixed thunderstick tinker's starting thunderstick
 -fixed construction of cruelty skill
 

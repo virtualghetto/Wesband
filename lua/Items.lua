@@ -1096,12 +1096,7 @@ function createWeapon(wtype, rank, attr, var)
 	else
 		H.wml_error(string.format("invalid type= key in [create_weapon] (%s)", wtype))
 	end
-
-	W.set_variables {
-		name = var,
-		mode = "replace",
-		{ "literal", finalAdjust(weapon) }
-	}
+	wesnoth.set_variable(var, finalAdjust(weapon))
 end
 wesnoth.register_wml_action("create_weapon", function(args)
 	local wtype = string.match(args.type, "[^%s]+") or H.wml_error("[create_weapon] requires a type= key")
@@ -1689,12 +1684,7 @@ local function createArmor(atype, rank, attr, var)
 	else
 		H.wml_error(string.format("invalid type= key in [create_armor] (%s)", atype))
 	end
-
-	W.set_variables {
-		name = var,
-		mode = "replace",
-		{ "literal", finalAdjust(armor) }
-	}
+	wesnoth.set_variable(var, finalAdjust(armor))
 end
 wesnoth.register_wml_action("create_armor", function(args)
 	local atype = string.match(args.type, "[^%s]+") or H.wml_error("[create_armor] requires a type= key")
@@ -1704,3 +1694,101 @@ wesnoth.register_wml_action("create_armor", function(args)
 
 	createArmor(atype, rank, attr, var)
 end)
+
+function wesnoth.wml_actions.drop_item(cfg)
+	local x = cfg.x or H.wml_error("[drop_item] requires an x= key")
+	local y = cfg.y or H.wml_error("[drop_item] requires a y= key")
+	local var = cfg.from_variable
+	local item_data
+	if var then
+		item_data = wesnoth.get_variable(var)
+	else
+		item_data = H.get_child(cfg, "item") or H.wml_error("[drop_item] requires either a from_variable= key or an [item] subtag")
+		item_data = item_data.__shallow_parsed
+	end
+
+	if not item_data.undroppable or item_data.undroppable ~= 1 then
+		local i = wesnoth.get_variable(string.format("ground.x%d.y%d.items.length", x, y))
+		if item_data.category == "gold" then
+			for j = 0, i - 1 do
+				if wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].category", x, y, j)) == "gold" then
+					local old_image = wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].ground_icon", x, y, j))
+					item_data.amount = item_data.amount + wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].amount", x, y, j))
+					W.remove_item {
+						x = x,
+						y = y,
+						image = string.format("items/%s.png", old_image)
+					}
+					wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, j))
+					break
+				end
+			end
+			if item_data.amount < 26 then
+				item_data.ground_icon = "gold-coins-small"
+				item_data.icon = "icons/gold-small"
+			elseif item_data.amount < 76 then
+				item_data.ground_icon = "gold-coins-medium"
+				item_data.icon = "icons/gold-medium"
+			else
+				item_data.ground_icon = "gold-coins-large"
+				item_data.icon = "icons/gold-large"
+			end
+			item_data.description = string.format("%d gold", item_data.amount)
+		end
+		if item_data.ground_icon then
+			W.item {
+				x = x,
+				y = y,
+				image = string.format("items/%s.png", item_data.ground_icon),
+				visible_in_fog = "no"
+			}
+			wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, i), item_data)
+		end
+	end
+end
+
+function wesnoth.wml_actions.item_cleanup(cfg)
+	local x = cfg.x or H.wml_error("[item_cleanup] requires an x= key")
+	local y = cfg.y or H.wml_error("[item_cleanup] requires a y= key")
+	local ix = cfg.index
+	if type(ix) ~= "number" then
+		ix = -1
+	end
+	if ix == -1 then
+		wesnoth.set_variable(string.format("ground.x%d.y%d.items", x, y))
+	else
+		wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, ix))
+	end
+	W.remove_item {
+		x = x,
+		y = y
+	}
+	local e = wesnoth.get_variable(string.format("ground.x%d.y%d.exit.image", x, y))
+	if e then
+		W.item {
+			x = x,
+			y = y,
+			image = e,
+			visible_in_fog = "yes"
+		}
+	end
+	local g = wesnoth.get_variable(string.format("ground.x%d.y%d", x, y))
+	if g[1] then
+		for i = 1, #g do
+			if g[i][1] == "items" and g[i][2].ground_icon then
+				W.item {
+					x = x,
+					y = y,
+					image = string.format("items/%s.png", g[i][2].ground_icon),
+					visible_in_fog = "no"
+				}
+			end
+		end
+	else
+		wesnoth.set_variable(string.format("ground.x%d.y%d", x, y))
+		g = wesnoth.get_variable(string.format("ground.x%d", x))
+		if not g[1] then
+			wesnoth.set_variable(string.format("ground.x%d", x))
+		end
+	end
+end

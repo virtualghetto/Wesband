@@ -25,19 +25,17 @@ if r_temp < dungeon_level.current then
 	end
 end
 W.set_variable { name = "dungeon_creation.temp.wall_flavor", rand = "Xu,Xu,Xos" }
-getProb({
+wesnoth.wml_actions.get_prob({
 	variable = "dungeon_creation.temp.terrain_variation",
 	name = "dungeon_creation.terrains",
 	op = "rand"
 })
 W.set_variables {
 		name = "dungeon_creation.temp.prob_list",
-		mode = "replace",
 		to_variable = "dungeon_creation.cluster_themes"
 	}
 W.set_variables {
 		name = "dungeon_creation.temp.loner_themes",
-		mode = "replace",
 		to_variable = "dungeon_creation.loner_themes"
 	}
 W.set_variable { name = "dungeon_creation.temp.crawly_theme", rand = "cave,slime" }
@@ -47,31 +45,31 @@ if dungeon_creation.temp.terrain_variation == "Wwf" then
 		dungeon_creation.temp.terrain_variation = "Ur"
 	else
 		dungeon_creation.temp.crawly_theme = "water"
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.loner_themes",
 			item = "water",
 			weight = 200,
 			op = "set"
 		})
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.loner_themes",
 			item = "naga",
 			weight = 200,
 			op = "set"
 		})
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.loner_themes",
 			item = "saurian",
 			weight = 200,
 			op = "set"
 		})
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
 			item = "water",
 			weight = 400,
 			op = "set"
 		})
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
 			item = "saurian",
 			weight = 800,
@@ -80,32 +78,32 @@ if dungeon_creation.temp.terrain_variation == "Wwf" then
 		dungeon_creation.water_level_counter = 0
 	end
 elseif dungeon_creation.temp.terrain_variation == "Rd" or dungeon_creation.temp.terrain_variation == "Re" or dungeon_creation.temp.terrain_variation == "Ryc" then
-	setProb({
+	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.prob_list",
 		item = "outlaws",
 		weight = 100,
 		op = "add"
 	})
 end
-getProb({
+wesnoth.wml_actions.get_prob({
 	variable = "dungeon_creation.temp.creep_themes[0].theme",
 	name = "dungeon_creation.temp.prob_list",
 	op = "rand"
 })
-setProb({
+wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
 	item = dungeon_creation.temp.creep_themes[0].theme,
 	op = "clear"
 })
 if dungeon_creation.temp.creep_themes[0].theme ~= dungeon_creation.temp.crawly_theme then
-	setProb({
+	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.prob_list",
 		item = dungeon_creation.temp.crawly_theme,
 		weight = 300,
 		op = "scale"
 	})
 end
-getProb({
+wesnoth.wml_actions.get_prob({
 	variable = "dungeon_creation.temp.creep_themes[1].theme",
 	name = "dungeon_creation.temp.prob_list",
 	op = "rand"
@@ -115,12 +113,12 @@ W.set_variables {
 		mode="replace",
 		to_variable="dungeon_creation.loner_themes"
 	}
-setProb({
+wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
 	item = dungeon_creation.temp.creep_themes[0].theme,
 	op = "clear"
 })
-setProb({
+wesnoth.wml_actions.set_prob({
 	name = "dungeon_creation.temp.prob_list",
 	item = dungeon_creation.temp.creep_themes[1].theme,
 	op = "clear"
@@ -138,7 +136,7 @@ else
 		}
 	if dungeon_creation.temp.terrain_variation == "Wwf" or (dungeon_creation.temp.flow_flavor == "" and dungeon_creation.temp.flow_type < 11) or terrain_match then
 		W.set_variable { name = "dungeon_creation.temp.water_theme_position", rand = "2..$($const.max_enemy_count-1)" }
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
 			item = "water",
 			op = "clear"
@@ -157,12 +155,12 @@ for i = 2, const.max_enemy_count - 1 do
 			dungeon_creation.temp.creep_themes[i].theme = string.format("nullTheme%i", i)
 		end
 	else
-		getProb({
+		wesnoth.wml_actions.get_prob({
 			variable = string.format("dungeon_creation.temp.creep_themes[%i].theme", i),
 			name = "dungeon_creation.temp.prob_list",
 			op = "rand"
 		})
-		setProb({
+		wesnoth.wml_actions.set_prob({
 			name = "dungeon_creation.temp.prob_list",
 			item = dungeon_creation.temp.creep_themes[i].theme,
 			op = "clear"
@@ -240,7 +238,7 @@ for i = 0, const.max_enemy_count - 1 do
 	end
 end
 if dungeon_creation.temp.loner_themes.total_weight > 0 and dungeon_creation.temp.prob_list.total_weight > 0 then
-	setProb({
+	wesnoth.wml_actions.set_prob({
 		name = "dungeon_creation.temp.loner_themes",
 		with_list = "dungeon_creation.temp.prob_list",
 		op = "diff"

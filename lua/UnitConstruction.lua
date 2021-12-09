@@ -388,7 +388,7 @@ local function find_npc_value(unit, params)
 		skirmisher = params.skirmisher_mod or 1.2
 	}
 	local function move_cost_modifer(terrain_type, base, multiplier, offset)
-		return 1 + (offset or 0) + (multiplier or 0.7) * ((base or 2) - get_p(unit, "movement_costs." .. terrain_type))
+		return 1 + (offset or 0) + (multiplier or 0.7) * ((base or 2) - math.min(get_p(unit, "movement_costs." .. terrain_type), 5))
 	end
 	local function resist_value(damage_type, base)
 		return math.max(0, (200 - base - get_p(unit, "resistance." .. damage_type)) / modifiers[damage_type])
@@ -475,7 +475,7 @@ local function find_npc_value(unit, params)
 		for i = 1, #ability_array do
 			local ability_id = get_p(ability_array[i], "id") or "none"
 			if ability_id == "illumination" then
-				values.defense = values.defense * values.illuminates
+				values.defense = values.defense * modifiers.illuminates
 			end
 		end
 	end
@@ -747,8 +747,8 @@ function construct_unit(var, unstore)
 		set_p(lich_touch, "special_type", { spell_drains = 1 })
 		lich_touch = unparse_container(lich_touch)
 		lich_touch.icon = "touch-faerie"
-		lich_touch.user_name = "faerie touch"
-		lich_touch.description = "faerie touch"
+		lich_touch.user_name = "lich touch"
+		lich_touch.description = "lich touch"
 		lich_touch.class = "magical"
 		lich_touch.class_description = "Magical"
 		lich_touch.type = "arcane"
@@ -785,9 +785,9 @@ function construct_unit(var, unstore)
 	local equipment = get_unit_equipment(unit)
 	local evade = 3 * (get_p(unit, "variables.evade_level") or 0) + (get_p(equipment.head_armor, "evade_adjust") or 0) + (get_p(equipment.torso_armor, "evade_adjust") or 0) + (get_p(equipment.leg_armor, "evade_adjust") or 0) + (get_p(equipment.shield, "evade_adjust") or 0) + (get_p(equipment.melee_1, "evade_adjust") or 0)
 	if equipment.melee_2 then
-		evade = evade + get_p(equipment.melee_2, "evade_adjust")
+		evade = evade + (get_p(equipment.melee_2, "evade_adjust") or 0)
 		if equipment.melee_3 then
-			evade = evade + get_p(equipment.melee_3, "evade_adjust")
+			evade = evade + (get_p(equipment.melee_3, "evade_adjust") or 0)
 		end
 	end
 	set_p(unit, "variables.mobility", math.max(0, math.min(2, math.floor(evade / 4))))
@@ -814,8 +814,17 @@ function construct_unit(var, unstore)
 
 	local shield_recoup = get_p(equipment.shield, "terrain_recoup") or 0
 	local function set_movetype(terrain)
+		local function check_num(data)
+			if type(data) ~= "number" then
+				H.wml_error(tostring(data) .. "is not a number")
+			end
+		end
 		set_p(unit, "defense." .. terrain, math.max(20, get_p(unit, string.format("variables.terrain.%s.defense", terrain)) - math.max(0, evade) + math.max(0, get_p(equipment.torso_armor, string.format("terrain.%s.defense", terrain)) + get_p(equipment.leg_armor, string.format("terrain.%s.defense", terrain)) - shield_recoup)))
-		set_p(unit, "movement_costs." .. terrain, get_p(unit, string.format("variables.terrain.%s.movement", terrain)))
+		local fixed_move = get_p(unit, string.format("variables.terrain.%s.movement", terrain))
+		if fixed_move == 0 then
+			fixed_move = 99
+		end
+		set_p(unit, "movement_costs." .. terrain, fixed_move)
 	end
 	set_movetype("unwalkable")
 	set_movetype("castle")
@@ -1523,6 +1532,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					else
 						heal_power = 3 * spell_power + 4
 					end
+					set_p(unit, string.format("variables.inventory.spells[%d].mana_cost", i - 1), math.floor(heal_power / 4) + 1)
 					table.insert(abilities, { "heals", {
 						id = "rpg_heals",
 						name = "heals",
@@ -1553,7 +1563,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				elseif spell_name == "phoenix_fire" then
 					set_p(unit, string.format("variables.inventory.spells[%d].description", i - 1), string.format("Phoenix Fire:\
 	<small>Upon death, return to %d hitpoints. Amount decreases by 4 per turn.</small>", 4 * spell_power + 4))
-					set_p(spell_list[i], "mana_cost", 2 * spell_power + 2)
+					set_p(unit, string.format("variables.inventory.spells[%d].mana_cost", i - 1), "mana_cost", 2 * spell_power + 2)
 				elseif spell_name == "mapping" then
 					set_p(unit, string.format("variables.inventory.spells[%d].description", i - 1), string.format("Magic Mapping:\
 	<small>Removes shroud within a radius of %d hexes.</small>", 5 * spell_power + 10))
@@ -2350,7 +2360,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				description = "fireball",
 				icon = "fireball",
 				name = "fireball",
-				damage = 0,
+				damage = 3,
 				number = 2,
 				range = "ranged",
 				type = "fire",
@@ -2365,7 +2375,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				description = "lightbeam",
 				icon = "lightbeam",
 				name = "lightbeam",
-				damage = 1,
+				damage = 4,
 				number = 1,
 				range = "ranged",
 				type = "arcane",
@@ -2385,7 +2395,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				range = "ranged",
 				type = "fire",
 				class = "spell",
-				spell_power = 4,
+				spell_power = 3,
 				bonus_type = "human_magic_adjust",
 				mind_damage_rate = 40,
 				{ "special_type", { magical_to_hit = 1 } }
@@ -2465,6 +2475,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			range = "ranged",
 			type = "arcane",
 			class = "spell",
+			spell_power = 2,
 			bonus_type = "faerie_magic_adjust",
 			mind_damage_rate = 15,
 			{ "special_type", { magical_to_hit = 1 } }
@@ -2476,8 +2487,8 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			description = "vines",
 			icon = "entangle",
 			name = "vines",
-			damage = 2,
-			number = 1,
+			damage = 1,
+			number = 2,
 			range = "ranged",
 			type = "impact",
 			class = "spell",
@@ -2498,7 +2509,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				class = "spell",
 				spell_power = 2,
 				bonus_type = "faerie_magic_adjust",
-				mind_damage_rate = 20,
+				mind_damage_rate = 30,
 				{ "special_type", { magical_to_hit = 1 } }
 			})
 		end
@@ -2722,13 +2733,13 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 		}
 	end
 end
-wesnoth.register_wml_action("construct_unit", function(args)
-	local var = args.variable or H.wml_error("[construct_unit] requires a variable= key")
+function wesnoth.wml_actions.construct_unit(cfg)
+	local var = cfg.variable or H.wml_error("[construct_unit] requires a variable= key")
 	local unstore
-	if type(args.unstore) ~= "boolean" then
+	if type(cfg.unstore) ~= "boolean" then
 		unstore = true
 	else
-		unstore = args.unstore
+		unstore = cfg.unstore
 	end
 	construct_unit(var, unstore)
-end)
+end

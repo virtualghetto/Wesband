@@ -1,0 +1,13 @@
+border_size=0
+usage=mask
+
+Gg          , Gg          , Gg          , Ch          , Ch          , Ch          , Ch          , Ch          , Gg          , Gg          
+Gg          , Ch          , Ch          , Gg^Vo       , Gg          , Gg^Vo       , Gg          , Gg          , Ch          , Ch          
+Gg          , Ch          , Gg          , Rp          , Rp          , Rp          , Rp          , Rp          , Gg          , Ch          
+Gg          , Ch          , Gg          , Rp          , Rp          , Rp          , Rp^Vho      , Rp          , Gg^Vo       , Ch          
+Ch          , Gg^Vo       , Rp          , Rp^Vho      , Rp          , Rp^Vho      , Rp          , Rp          , Gg          , Ch          
+Ch          , Gg          , Rp          , Rp          , Rp          , Rp          , Rp          , Rp^Vho      , Rp          , Rp          
+Ch          , Ch          , Rp          , Rp          , Rp          , Rp^Vho      , Rp          , Rp          , Rp          , Ch          
+_f          , Ch          , Gg^Vo       , Rp          , Rp          , Rp          , Rp          , Rp          , Gg          , Ch          
+Gg          , Ch          , Gg          , Gg          , Rp          , Gg^Vo       , Rp          , Gg          , Gg^Vo       , Ch          
+_f          , Gg          , Ch          , Ch          , Ch          , Ch          , Ch          , Ch          , Ch          , Gg          

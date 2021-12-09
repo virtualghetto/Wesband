@@ -1,0 +1,13 @@
+border_size=0
+usage=mask
+
+_f          , Hh          , _f          , Re          , _f          , _f          , _f          , Hh          , _f          , _f          
+_f          , Re          , Re          , Cud         , Re          , Xu          , Mm          , Hh          , _f          , _f          
+_f          , Re          , Cud         , Re          , Xu          , Uu^Vdo      , Xu          , Xu          , Mm          , Hh          
+Mm          , Xu          , Xu          , Re          , Re          , Re          , Re^Uf       , Uu^Vdo      , Xu          , Mm          
+Hh          , Xu          , Re^Uf       , Re          , Uu^Vuo      , Uu^Ii       , Re          , Re^Uf       , Xu          , Hh          
+Mm          , Xu          , Uu^Vdo      , Re^Uf       , Re          , Re          , Re          , Xu          , Xu          , Mm          
+Hh          , Hh          , Xu          , Xu          , Uu^Vdo      , Xu          , Re          , Cud         , Re          , _f          
+_f          , Hh          , Mm          , Hh          , Xu          , Re          , Cud         , Re          , Re          , _f          
+_f          , _f          , _f          , _f          , Mm          , _f          , Re          , _f          , Hh          , _f          
+_f          , _f          , _f          , _f          , _f          , _f          , Hh          , _f          , _f          , _f          

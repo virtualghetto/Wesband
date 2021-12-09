@@ -1,3 +1,210 @@
+0.2.2
+-mana & casting actions framework
+-playable saurians, goblins, orcs
+-brutal assault added, cleave modified, firststrike modified, skirmisher modified
+-spears allow skirmisher
+-marksman effect reduced
+-enemies heal on going upstairs
+-item stat calculations changed
+-a bunch of non-combat spells implemented
+-different potions and scrolls to correspond to new spells
+-new, more complex item appearance probability settings
+-magic orders get an extra non-combat innate spell, just for this release
+-new map masks
+-created a simple debug tool for the mob themes.  it's a macro in mob_macros.cfg called TEST_MOB_LISTS.  to use it, just add {TEST_MOB_LISTS} to the ON_PRESTART section of Wesband_Main and start a new game.
+-various bug fixes
+
+
+
+0.2.1
+-check and x that syntax error gave (made?)
+-spell attack images weren't updating. basically, the units weren't ready to have construct_unit poke the images in yet and they created containers that off-set the list of objects.
+-merging era with Wesband to prevent inability for MP campaigns to deal with era correctly.
+-changed all initial selection of characters to be done while in the scenario
+-located & added missing kusarigama, implosion, aura blast images
+-got rid of some duplicate includes
+-included wesband_scenario_utils in inclusion file for events folder
+-added missing mob_macros include to macro folder inclusion file
+-found & fixed source of multiplying evade penalty (missing initializations of evade_level in creation.cfg)
+-managed to duplicate the weapon issue, will try to find the cause
+-fixed display issue with weapon switching
+-added in right-click command code for level changing - tested it, and everything seems to work ok, hopefully this will fix the only-host problem,
+	also nice because it lets you move onto exit to attack enemy or pick up loot
+-split martial focus and faerie touch descriptions into two lines
+-latest attempt at fixing sync problem, also made down exit command only show up if there are no fog clearers with canrecruit=yes
+-another attempt at sync problem (following right-click command, then end turn pattern), tested on local server
+-minor code cleanup, also added side_for to 'you have no items to sell' messages in shops
+-added 'Unknown Adventurer' unit ([base_unit] is fog clearer) for character creation purposes
+-realized I had overwritten some of your changes, reverted and merged properly
+-fixed some character initialization issues (due to omission in re-write of character choice code)
+-made an addition at the end of your exit scratch that goes into the "up" code which will probably need to be updated as different types of objects get added. it turns out .length is failing us again. btw, i'm kind of disappointed no dev has noticed the bug report on that yet.
+-assigned locked faction on Northerners, as to not confuse players into thinking there is a choice.
+-using Fog Clearer for players. maybe a little unnerving to start the game as mud.
+-stairs now get flat terrain
+-fixed bug that prevented creation of a second player of the same race (sometimes really wish events defaulted to first_time_only=yes)
+-nerfed runic magic by 2 dmg, fixed/updated runic magic description
+-re-ordered right-click commands
+-wrote in HP for Troll template selection
+
+0.2.0
+-symbol_image=well-tile (was Well-tile)
+-took out turn_number>1 for turn refresh of actions and rested healing (thought that might have caused the level 1 bug)
+-fixed the STR_XXXX missing macros (from Era of Myths- the elementals). not sure where the rest are just yet.
+-fixed missing macros MISSILE_FRAME_RAVAGE, FS_BATTLETUTOR, ABILITY_MIDDLE_PROTECTION, and ABILITY_REGENERATES_VALUE
+-shroud/fog clears when you clear a level of enemies
+-giant fixed missing attack frame in giant toxic slime, tharis blademaster
+-cleaned up unit saving/restoring on level change to get rid of empty unit type errors
+-spent some more time looking for causes of errors
+	FS_BATTLETUTOR, ABILITY_MIDDLE_PROTECTION, and ABILITY_REGENERATES_VALUE are used by the Free Saurians
+	DIR seems to be coming out of the cyclops eyebeam animations, but I don't see why
+		-scratch that, comes from Tharis Master of Darkness line 138, creator probably intended to have directional attack animations then changed their
+		mind and went with just one, but forgot to remove direction={DIR} line.
+-got the following error during play
+	error engine: Formula in WML string cannot be evaluated due to Expected another token
+	--> ""
+	I caught some of this sort of error when working on unit restoration after level change - it was happening because of attempts to use data
+	elements from an array of length 0 (in that case a call to FOREACH on the array).
+	Unfortunately, no way to tell what was triggering this particular occurrence.
+-fixed Master of Darkness
+-added one more inclusion to Wesband_Main.cfg, replaced lost victory_when_enemies_defeated=no line
+-fixed some issues with gold display not being updated properly (dwarf, troll creation & on kill)
+-added [have_location] check to castle removal (3 restarts in a row without any error messages in stderr!)
+-added attack icons for troglodyte & troglodyte spawn attacks
+-reded costs in stores if cost>gold. might want to do something like this for upgrades at some point, but that might get confusing as TP cost isn't always the issue.
+-fix for the dark stone transition to water (took me forever to figure out that transitions are based on nothing other than the terrain letters, that's why it's Rys instead of Cux)
+-new terrain: cobble, dark cobble, dark dwarvish stone. none of these have transitions, which is OK if they don't meet each other
+-modified terrain occurances and added new occurances
+-streamlined terrain randomization
+-berserk of barbarian berserker, minotaur behemoth, ancient behemoth changed to rage (value=2)
+-lowered chance of wells
+-poison removed, units heals on clear level
+-fixed disappearing henchman bug
+-added missing .length in wesband_scenario_utils
+-fixed typo in mob_macros (trandom_gender -> random_gender)
+-restored change to Wesband.cfg made to support storm change (addition of goblins unit folder)
+-changed cross mask placement back to a switch statement
+-adjusted placement of a couple of gold-drop sounds
+-fixed bug that prevented mobs from getting some exp upon spawning.
+-fixed level 1 bug lite
+-handled action use for equipment change while in dungeon
+	-expected behavior: requires attack, allows as many changes to weapons/armor as you like, and only uses attack up if in dungeon and
+		equipment after all changes is different from equipment before all changes (so, if you try on a piece of armor, decide you liked your old
+		armor better, and change back, it won't cost you anything)
+-added variable cleanup to end of equipment change modifications
+-changed order of ops on damage/strike bonus from attributes, reduced npc strike modifier from *3 to *2, gave npc damage modifier of *1.25
+-minor optimization in create_weapon (transformed while loops into if statements)
+-started work on elvish magic, have basic vine attack working
+-done w/ forest magic for the moment (vine attack that can be upgraded with entangle and slow weapon specials)
+-added faerie touch ability, plus an upgrade (basic ability changes damage modifiers and adds magical, upgrade changes damage type to arcane)
+-found another place where elves were using human frames for animations, fixed it
+-remembered to give elven commander potential to learn marksman
+-corrected talent point cost of grasping vines 1
+-fixed attack animation filter on WBD version of goblin impaler
+-Spout=Spout -> Spout=WBD_Spout
+-fixed sell to armor shop message for shields so that it displays shield-specific stats instead of generic armor stats
+
+
+
+0.1.10
+-new units: Siege Troll, Rat Swarm, Spout, Troglodyte, Troglodyte Spawn, Outlaw Maiden, Cunning-Woman, Witch, Giant Ant, Walking Bones, Spirit
+-moved themes up to top of mob_scratch for ease of working on, put comments in themes for organizational purposes
+-replaced the well tile image that got lost, along with other images
+-finally, definitely, put paid to 'storm kills' bug
+-improved mob_scratch so that it can handle different maximum cluster levels for different themes
+-symbol_image=well-tile (was Well-tile)
+-took out turn_number>1 for turn refresh of actions and rested healing (thought that might have caused the level 1 bug)
+-fixed the STR_XXXX missing macros (from Era of Myths- the elementals). not sure where the rest are just yet.
+-fixed missing macros MISSILE_FRAME_RAVAGE, FS_BATTLETUTOR, ABILITY_MIDDLE_PROTECTION, and ABILITY_REGENERATES_VALUE
+-changes to includes
+-shroud/fog clears when you clear a level of enemies
+-giant fixed missing attack frame in giant toxic slime, tharis blademaster
+-replaced non-firing variable substitution with [switch]
+-cleaned up unit saving/restoring on level change to get rid of empty unit type errors
+-cleared up silent error messages
+-fixed Master of Darkness
+-fixed some issues with gold display not being updated properly (dwarf, troll creation & on kill)
+-added [have_location] check to castle removal (3 restarts in a row without any error messages in stderr!)
+-added attack icons for troglodyte & troglodyte spawn attacks
+-removed obsolete references to armor movement penalties
+
+0.1.9
+-moved minotaurs up in mob level, added +1 to each in unit_type level
+
+0.1.8a
+-upped the max mob_level to 28
+-changed the mob_level calc, should ramp up faster now
+-dungeon_level.current declared
+-no planar before dungeon level 5
+-no water on dungeon level 1, water won't appear 2 dungeon levels in a row
+
+0.1.8
+-clear up the bug that resets a player to level 1
+-items sold to store now showing in store
+-level labels showing in fog
+-goblin slave/tamer + power
+-distinct level cleared sound
+-blank images in store fixed
+-new town maps, Dov's random system plus some other cool stuff i put in
+-stairs in dungeon always a certain distance apart
+-current dungeon level saved, unless cleared
+-added a ton of new enemies
+-NPCs now have attributes, weapon bonuses based on 1/2 strike system
+-NPCs can now use potions
+-NPCs can now use armor
+
+0.1.7
+-inactive units stoned to save AI some time
+-buttons for shops
+
+0.1.6a
+-included spells.cfg into dungeon and overworld cfgs
+0.2.6b
+-made the case the same for all inclusions. hat tip to Lord Ork for figuring out this might be the problem for linux users
+
+0.1.6
+-dependancy = "Modular RPG"
+-fixed labels not showing (PERSISTANT ---> PERSISTENT)
+-unfogged town
+-shops back to using the same ID
+-compatibilities with Fractionoth
+-number of items in stores now based on number of players
+-added hero overlay to bosses
+
+
+0.1.5a
+-fixed bug that prevented clearing of levels (hat tip Golbeeze)
+
+0.1.4
+-integrated events eval_npc and create_weapon from the era, lets items be given to NPCs
+-events to handle weapons, dropping them when dead, gaining them when walked over, etc.
+-7 out of 8 bosses given a weapon
+-reworked mobs to spawn more in upper tier
+-limit 1 to henchmen, removed upkeep from henchmen
+
+0.1.3
+-shops now change only if players have cleared a level between visits
+-fixed bug "WhiteMage" (hat tip Golbeeze's friend)
+
+
+0.1.2
+-AI turns for 3 players takes way too long, separated the mobs up a little bit, also fixed bug that prevented separation
+-adding a boss or two per player to each level 
+-adjusting number of enemies each level, clusters of enemies are bigger when there are more players
+-decreased chance of non-themed mobs appearing (trying to make it so AI turns don't take forever)
+-enhanced henchmen in tavern, need to make all stores work a little better in respects to refreshing and ramping up from dungeon activity
+
+
+0.1.1
+-fixed bug that caused unknown unit (hat tip Golbeeze)
+-mobs now spawn in clusters, ongoing adjustments on numbers
+-mobs now spawn with some exp
+-wall/chasm/lava terrain now clears to base terrain if there is a unit there at start
+-added hammer, runic hammer, faerie staff, round shield and tower shield to shop
+-added handling for shields in shop and ground
+
+0.1.0
+-opened up pathways 1 hex in all directions. will be easier to move around this way.
+
 concept++
 -in the process of putting things from ModRPG in here that wouldn't go with that era in another setting (WesSaga)
 -changed the up stairs to new spiral stair graphic, switched down stairs graphic to trapdoor-open
@@ -11,35 +218,382 @@ concept++
 -fixed shops not working, there's a bug in wesnoth with menu_items https://gna.org/bugs/index.php?12946 if that's ever fixed, I can go back to the old way of doing things
 
 
-0.1.0
--opened up pathways 1 hex in all directions. will be easier to move around this way.
+old RPG changelog
+
+0.3.0
+-removed obsolete references to armor movement penalties
+-fixed ghoul form's feeding upgrade show_if
+-TCed character template images, tavern hench images
+-side bar now refreshes for PCs during construct unit due to a dummy [object]. unfortunately, the same trick doesn't work for undead henches. 
+-trolls can buy evade now. not 100% sure about this.
+-dark magic upgrade is costless for magic initiate
+-made it so you don't see "no items to pick up" after picking up things
+-now only one client sees "no items to pick up"
+-updated MOVEMENT_CALCULATOR/DEFENSE_CALCULATOR terrain
+-small changes that affect restrict some messages to the acting side, show appropriate images in message screens.
+-troll torso/legs evade -2/-1, gave troll evade level 1
+-fixed bug that prevented shields getting higher level
+-halved the benefit of higher rank on armor
+-tweaked max exp increase a little (again)
+-bloodlust levels noted in upgrade menu
+-phantom item drop bug fixed. actually due to bug in wesnoth.
+-implemented gold-as-item: drop, give, get, npc handling on kills and moveto
+-fixed hasten?
+-found bug in enemy-vs-enemy loot code, fixed
+-fixed inconsistency between npc and pc inventory structures (weapon -> weapons)
+-fixed weapon filter for defense animations
+-added drop gold/give gold menu icons
+fixed faerie fire animation (human->elf)
+-new version of storm (plus supporting changes)
+-updated drop_gold macro to merge gold with any gold already in that hex
+-fixed drop gold/give gold menu icons not showing up
+-changed berserk value on defense to match description (3 -> 2)
+-tweaked bloodlust description in upgrade menu & mouseover to more closely match effects
+-removed movement penalty from armor display in switch armor command, fixed display of movement loss rate (was displaying the reciprocal)
+-removed obsolete storm events
+-added bloodlust level to mouseover description
+-cleaned up item image removal - should fix problem with fake items (like well image?) disappearing as long as item being picked up doesn't have same image as fake item
+-applied cleanup to enemies picking up items also
+-starting on skeleton henchman fist conversion
+-skeleton fist stuff mostly done (works except for timing on base sprite change when giving weapon)
+-removed storm_stored initialization (missed it when I took out the events that use it), did this in base folder, not modifications
+-added missing attack anim macros to troll (not sure when that happened)
+-added shields to the give command.
+-NPCs can now use shields. 
+-initialized magic_casting.focus
+-found & fixed the display issue with the skeletal hench's weapon change, fist-as-rpg-weapon is now done (feel free to tweak for balance if necessary)
+-fixed bug in npc_eval_gold (missing $)
+-changed id of WBD_She-Elf to WBD_She_Elf (having a '-' in the unit id was causing corrupted save files)
+-fixed a couple of errors in spell damage calculations, altered faerie magic description to reflect spell stats
+-fixed bug affecting some uses of minor actions (was causing action to not be expended)
+-added brambles and elven healing.  Also, caught an empty {} I had left somewhere that was causing error messages
+	-working to fix display of healing to correctly calculate amount for elven healing - shows amount for white magic in description
+		also, changing icons for brambles/elven healing in upgrade menu -done with both, also updated healing description for white magic
+		to match healing stats
+-added martial focus skills for dwarves & elves
+-changed upgrade menu icons for martial focus skills
+-made new icon for elven martial focus skill
+-fixed coloring of talentpoint cost for martial focus when requirements not fully met
+-fixed give item command so that it correctly checks for whether shields are equipped
+-another minor bugfix for upgrade menu options
+-tweaked npc stat calculations
+
+0.2.10
+-bug #11 fixed, sneak working again (Expasperation rocks!)
+-minor code cleanup for inventory dropping macro
+-fixed bug with bonus move from bloodlust
+-I bet that bloodlust is the sort of event that would benefit from first_time_only=no.  :-P
+-fixed bug with remaining ammo not resetting properly, also noticed cleave was missing first_time_only=no on the event that gave xp for extra kills
+-since the problem with bloodlust turned out to be a missing first_time_only, I reverted the other changes that I made trying to fix it
+-put sanity check in for DROP_ITEM to make sure PATH actually points to an item
+-more notes in armor select, total magic adjust, terrain adjust, movement lost
+-reduced armor effect on runic magic, will do more with that later
+-pretty confident now that Modular_RPG.cfg fixes the bug
+-skeleton hench sprite update happens during commands, not npc_util events
+-not using object/effect anymore now that i realized you can poke the variation in directly (even works for leading_anim!)
+-new sprites for thunderstick, bow, xbow and lob for human, elf, troll and dwarf
+-defense frames now filter on second_weapon
+-base sprite is based on the strongest attack that isn't from magic (had to re-order construct_unit around for this)
 
 
-0.1.1
--fixed bug that caused unknown unit (hat tip Golbeeze)
--mobs now spawn in clusters, ongoing adjustments on numbers
--mobs now spawn with some exp
--wall/chasm/lava terrain now clears to base terrain if there is a unit there at start
--added hammer, runic hammer, faerie staff, round shield and tower shield to shop
--added handling for shields in shop and ground
 
-0.1.2
--AI turns for 3 players takes way too long, separated the mobs up a little bit, also fixed bug that prevented separation
--adding a boss or two per player to each level 
--adjusting number of enemies each level, clusters of enemies are bigger when there are more players
--decreased chance of non-themed mobs appearing (trying to make it so AI turns don't take forever)
--enhanced henchmen in tavern, need to make all stores work a little better in respects to refreshing and ramping up from dungeon activity
+0.2.9
+levelup target_unit-->unit
+initialize dungeon_level.current
+equiped --> equipped
+exasperation's macro defense calc
+add reef to armors
+ranger/trailblazer check values (removed mountain)
+hasten undead to add 1 max_moves
+toned down NPC stats
+up rate of strikes upgrade
+remove 1 troll max_moves
+organized unit variables, removed attributes container, put most in [variables]
+{VARIABLE --> [set_variables] when there are many in a row (construct_unit.cfg)
+thunderstick 10 minimum, make it so if the selected option decreases damage below 10, it rejects it and gives a message
+set shield terrain recoup to a hard number, not a %
+bug where Wesnoth GUI gold still isn't being displayed the same as what the shop shows
+ramp difficulty up faster
+-backstab lvls
+-steadfast lvls
+-marksman lvls
+-fire shot (bow)
+-fire shot (xbow
+-readied bolt
+-ensnare
+-slash&dash
+-riposte
+-bloodlust
+-distract
+-storm
+-cleave
+-remaining ammo (thrown light blades)
+-remaining ammo (thrown heavy blades)
+-remaining ammo (javelin)
+-remaining ammo (bow)
+-goliath bane
+-improvements to storm, bloodlust
+-ground items fix
+-include deadly grace, skirm for scimitars
+skel hench
+-base unit_type
+-attack filtering
+-upgrade to skel
+-upgrades for HP, moves, body, deft
+-trigger base sprite (strongest attack) in npc_utils
+-npc_utils needs to re-adjust every time
+exasperation working on NPC stuff, going to hold off on these for a while:
+NPC item storage, variables.weapon.melee variables.armor.torso variables.usables.potion
+NPC can drop duplicate items when AMLA
+turn end --> NPCs to eval potion for use
+specials that need range filter
+ghoul line
 
-0.1.3
--shops now change only if players have cleared a level between visits
--fixed bug "WhiteMage" (hat tip Golbeeze's friend)
 
-0.1.4
--integrated events eval_npc and create_weapon from the era, lets items be given to NPCs
--events to handle weapons, dropping them when dead, gaining them when walked over, etc.
--7 out of 8 bosses given a weapon
--reworked mobs to spawn more in upper tier
--limit 1 to henchmen, removed upkeep from henchmen
+0.2.8a
+-+1 level clears poison/slow fix
+-fix for hasten undead
+-toned down NPC stats a little
+-bug fix for stores
 
-0.1.5a
--fixed bug that prevented clearing of levels (hat tip Golbeeze)
+0.2.8
+-remove slow from undead hench on real level
+-fixed adjusted weapon values counting stat pentalty twice
+-ghost sprite variations
+-troll base move = 4
+-undead decay sound
+-get item stays open
+-plus req for soultrap
+-reef too high for MODRPG hero units
+-new real level cures/unslows hero units
+-added Exasperation's item use macros
+-focus undead caused problems, always check for hench now
+-fixed solidify showing up after use
+-casting power for undead levels fixed
+-undead enhancement points upped
+-increased XP reqs for heroes
+-new event "create_armor"
+
+0.2.7
+-soultrap ability
+-can upgrade ghosts, walking corpses, new units just for that
+-new buttons for right-click commands
+-max hench checked all of the time
+
+
+remaining bugs:
+#11
+
+0.2.6a
+-removed macros ENDMENU and CANCELMENU that refused to show in linux: http://www.wesnoth.org/forum/viewtopic.php?p=344260#p344260
+0.2.6b
+-removed BACKMENU, ENDMENU_COST and CANCELMENU_COST for the same reason as above
+0.2.6c
+-made the case the same for all inclusions. hat tip to Lord Ork for figuring out this might be the problem for linux users
+
+
+0.2.6
+-UNREACHABLE terrain = 99 movement cost (again), caused units moving to places normally not allowed
+-"+"text ---> "+ _"text
+-purchase dark magic skill grants casting power/speed 0 if unowned
+-compatibilities with Fractionoth
+-downgraded mage robe resistances
+-fixed bug#13
+-fixed bug#6
+-new weapon system, weapons have either 0/1 or 2+ strikes, damage/attacks based on that, weapon upgrade requirements changed
+-new weapon skill rate
+-unit attack animations fixed
+-added custom event "create_armor" which creates a weapon based on a few params
+-thunderstick now decreases if user level less than thunderstick level
+-fist/rock rates adjusted
+-fixed double rusty, double special description bug
+-enhanced absolute value finding
+-fixed magic damage not factoring mind, weapon
+-creation now uses create_weapon and create_armor events
+-fixed "adjusted" values not showing what it needed to
+-undead hench abled to be capped, command added to set a main undead hench, non-main undead wither away, non-main living units leave
+-re-did "use" commands (teleport, white heals, use potions, etc.) with events
+-fixed #10 with the above
+-drop/give now use simple action
+-units weren't gaining TP after level (hat tip Golbeeze), since Wesnoth 1.5.13 you can't poke [advancement] directly into unit variables, instead i just made the advancement part of the [unit_type]
+-made max hench 2 for single player games
+-rebalanced character templates, starting with base stats ~40 TP worth of upgrades, not counting equipment
+-rebalanced magics, will look at this for future
+-elf, dwarf, troll start with 10 (7 base * 1.30) max experience
+-attacks.cfg now included before construct_unit.cfg, includes macros correctly
+-have to add illuminates halo via [effect] now
+-fixed selling to store unequipping
+-fixed bug in how armor was being calculated (construct_unit calculated all armor with torso armor values)
+-fixed display of illuminates/metal to arcane/plague in upgrades
+
+remaining bugs:
+#11
+
+0.2.5a
+-tightened code up a bit, shouldn't work any differently except for performance
+
+0.2.4
+-npc_utils.cfg started, used for extra functions of NPCs
+-added custom event "eval_npc" which tests a weapon for adding to a unit and then adds it if not excluded, giving bonuses based on evaluated melee/ranged attack levels.
+-added custom event "create_weapon" which creates a weapon based on a few params
+-give command works for NPCs, needs to work for PCs
+-bug#8 won't fix, let's hope the next menu/message system works better overall
+
+remaining bugs:
+#6,#10,#11,#13
+
+0.2.3
+-dwarves down to 1-2 fist
+-toying with less max exp raise on levelup on higher levels (*1.1+2 now *1.02+2)
+-fixed rogue not getting evade from start
+-evade now increments at superhard rate
+-added rectangular-shield to armor images
+-think I fixed bug#9
+
+remaining bugs:
+#6,#8,#10,#11,#13
+
+
+0.2.2
+-adjusted weapons, magic and weapon skills to new system
+-standardized damage bonuses for body, deft, removed strike bonuses (except for unarmed)
+-ongoing adjustments to unit creation stats
+
+remaining bugs:
+#6,#8,#9,#10,#11,#13
+
+0.2.1
+-commented out sneak ability
+-removed a few things and placed them into Wesband (stores.cfg, gold from kill and rest_unit)
+-bug#13: "poking" of attack/special animations not working
+
+remaining bugs:
+#6,#8,#9,#10,#11,#13
+
+0.2.0
+-moving from Wesband for now. depressed about slowness from having sprites of more than just one race. really depressed about Wesband not working over network
+-removed bug#12 (will try to fix later, testing until now hasn't shown any results)
+-going to join ModRPG with WesSaga, an open-ended RPG with random plot points
+-removed sprite variations based on armor, sprites will only vary based on race and weapon
+-removed "club" sprites
+-made new sprites for human, elf, dwarf and troll. these are the most fancy/distinct hero-type sprites i could frankenstein (i.e. human is ranger with fencer head, elf is high lord with lord head)
+-added starting classes for dwarf: soldier, guardsman, tinker and rune crafter
+-added racial bonus/penalties to weapons: number_hard, damage_percent. these are based on one of either 3 weapon dimensions: class, name, user_name
+-combined att_modifiers and display_weapon_modifiers into one in attack.cfg, reduced a lot of clutter
+-added ranger and trailblazer abilities to mirror terrain movement and defense of human Archer/Ranger tree
+-added ambush_forest and trailblazer for elf ranger line
+-added flame blast spell for troll magic, also the upgrade option to buy it
+-added survivalist, regen based on being in trees, to human ranger line
+-added traits healthy (dwarves) and fearless (trolls)
+-added thunderstick and thunderstick tinker. thunderstick has no skill with it. instead the character buys skills that allow him to improve the weapon itself.
+-added a way to degrade thunderstick damage if the user doesn't have the thunderstick skill equal to the thunderstick level, but what i did doesn't work plus it crashes the game. commented out, may want to go with weapon prereq instead (like att prereq). 
+-added shield functionality. it lets players regain terrain defense lost by wearing armor.
+-gave shield with steadfast capabilities to dwarvish guardsman
+-added steadfast ability to dwarves (requires large enough shield)
+-booya major bug#12 resolved. turns out it was a bug with wesnoth sending to network players tags in alphabetical order rather than in the original order. fixed in Wesnoth 1.5.7.
+-breaking ModRPG from being nested within Wesband (or WesSaga). it might have caused a problem where MP games aren't seen in the lobby.
+-put made CONSTRUCT_UNIT an event thanks to new event functionality
+
+remaining bugs:
+#6,#8,#9,#10,#11
+
+0.1.24
+-fixed bloodlust, still needs icon, may want to limit to polearms, bludgeon and heavy blades (not really possible with current WML)
+-teleport given to mage in silver order. user can currently teleport casting power x 2 hexes away, into anything that isn't unwalkable/impassable
+-temple sells healing potions
+-added tome type of usable item, need requirements 
+-leadership now affect_allies=yes
+-removed darkrobe from humans (frivolous art to add to other races, maybe will reconsider later)
+-consolidated human magic/dark magic casting power/speed 
+-made dark magic a branch from magic initiate, will need to retool the attack spells to make them make sense
+-added artwork and basic framework for male and female elves, handing all the graphics may be way too much for Wesnoth to handle. if this is the case, will take out elves and simply work with humans for now
+
+remaining bugs:
+#6,#8,#9,#10,#11,#12
+
+0.1.23
+-bug#9: selling can unequip items
+-the shop on the overworld refreshes every time you exit the dungeon, gives better equipment depending on how deep the adventurers have gone during the game
+-added white_heals spell, available innately to the white order or magic. 
+-bug#10: option list of white_heals not displaying correctly, also not showing anything about curing
+-added simple_action as variable set from the unit's max_simple_action every side turn
+-bug#11: sneak not working quite like it should, unit showing as hidden sometimes when it shouldn't
+-added "usable" class of item, usable and dropable
+-added 3 healing potions 20hp/cure to human inventory
+-units gain back moves if there is no enemy within 15 hexes
+-units trigger "rested" when no enemy within 15 hexes
+-added Tavern where you can recruit henchmen, very rudimentary at the moment
+-fixed metal_to_holy ability
+-upped AI agressiveness (in Wesband)
+-main GUI gold display should always be fixed to personal_gold now
+-fixed bug with shop weapons not getting their attribute adjustment scores
+-heals_action fixed, currently can heal on top of a simple_action, will probably want to change
+-humans given movement level 1 but decreased base max_moves to 5
+-bug#12: major bug in Wesband, makes Wesband unplayable over network. map alterations in prestart not sending to other players
+
+remaining bugs:
+#6,#8,#9,#10,#11,#12
+
+0.1.22
+-bug#7: darkrobe sprite variation not working at all, just shows unarmored-fist. 
+-added no-income villages for human, human city and elven
+-altered command macro names, condensed use item and cast spell into one command
+-added rudimentary gold gain from killing
+-fixed stat display bugs for armor
+-bug#8: cost column has only been displaying 2 characters wide, wrapping to the next line
+-"fixed" bug#4, simply triggers when a side in Wesband_Dungeon doesn't reference an existing unit (because I changed Modular_RPG_Human_Wesband to just Modular_RPG_Human)
+-likewise, bug#2 is an issue of integrating Modular RPG with Wesband. really considering packaging Mod_RPG with Wesband again, since it will be so much easier at this point
+-fixed bug#7, necro staff needed to have name=magestaff
+-added ability to sell to shop
+-fixed bug#5: dual/triple wield just needed a not_equals=1 instead of equals=0 to test the un-initialized variable special_type.complex
+-fixed bug#2: events like post advance put into outside utils file and then called in each scenario. units need to be constructed every time with a macro. 
+
+remaining bugs:
+#6,#8
+
+0.1.21
+-deleted right-click commands switch armor and switch weapons in favor of manage inventory, right-click menu is still too cluttered when you click on your own player, need to condense more
+-fixed damage/number adjustments to weapons for stats and weapons (to magic)
+-reverted weapon skill cost increase rate. need to make a different scale for weapon than other skills
+-weapon info shows adjusted values as well as base values, also shows specials
+
+0.1.20
+-fixed bug#3, wasn't armor, was weapon_magic_adjust not clearing
+-massive changes in handling of weapons and armor. items are now not part of a list where the unit simply holds a number of IDs from the list. instead, items are part of the unit variables and when dropped, sold or given, they get put on the ground. 
+-added a bunch of (crappy) ground icons
+-created a small item-creating mechanism, will include shops later
+-armor info display significantly more sophisticated
+-get_item and drop_item commands added
+-toying with change to weapon skill cost increase rate. for now the medium/hard increase starts at +3/+5
+-bug#5: dual/triple wield not working at all
+-bug#6: display of terrain defense on armor is positive, needs to be negative
+
+0.1.19 (with 1.5.1+svn)
+-now in trunk, changed terrain to reflect new naming
+-bug#2: events not firing in scenarios past the first (i.e. post-advance for levelup function)
+-armo and weapons in new system that allows flexibility and scability
+-only "Soldier" class available
+-bug#3: armor increases magic power by exponential amounts
+-started using [set_variables] to 
+-bug#4: if starting a new scenario, game_error: Unknown Unit "
+
+0.1.18
+-fixed bug#1
+-fixed item use and spell casting commands, making 1.4-friendly version
+
+0.1.17
+-added commands for item use and spell casting
+-removed commands for healing and teleport (will be added later in spell menu)
+-bug#1: in animation - none of the animations work
+
+0.1.16
+-swapped SLOT for ID (watch out for bug on that)
+-added Dash ability
+-fixed class starting gear/skills
+-did most of the work for bloodlust, need 1.5.x feature [set_variable]/[join] or [filter_attack]/range. also fatal bug on option text for choosing the ability. everything commented out.
+-added alignment to character templates
+-removed alignment from ability option [show_if]s except for leadership (for now)
+
+0.1.15
+-removed store and creation option screen, replaced with starting classes
+-removed alignment-based human unit files. 

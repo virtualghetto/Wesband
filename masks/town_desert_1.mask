@@ -1,0 +1,13 @@
+border_size=0
+usage=mask
+
+Gs          , Dd          , Gs          , Gs          , _f          , Gs          , _f          , _f          , _f          , _f          
+Gs          , Dd          , Dd          , Gs          , Gs          , Dd          , Gs          , Gs          , _f          , _f          
+Gs          , Gs          , Dd          , Dd          , Dd          , Hd          , Dd          , Dd          , Gs          , _f          
+_f          , Gs          , Dd          , Hd          , Dd^Vdt      , Dd          , Hd          , Dd          , Gs          , _f          
+_f          , Gs          , Dd          , Dd^Vda      , Dd          , Dd          , Dd          , Gs          , Gs          , _f          
+Gs          , Dd          , Dd          , Dd          , Dd          , Dd^Do       , Dd          , Gs          , _f          , _f          
+Gs          , Dd          , Dd^Vda      , Dd          , Dd^Vda      , Dd          , Dd          , Dd          , Gs          , _f          
+Gs          , Gs          , Dd          , Dd^Vdt      , Dd          , Dd          , Dd^Vda      , Dd          , Gs          , Gs          
+_f          , Gs          , Dd          , Dd          , Dd          , Dd          , Hd          , Gs          , Gs          , _f          
+_f          , _f          , Gs          , Gs          , Gs          , Gs          , Gs          , Gs          , _f          , _f          

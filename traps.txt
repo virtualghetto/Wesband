@@ -1,0 +1,26 @@
+    [store_locations]
+       x=$x1
+       y=$y1
+       [or]
+           find_in=trap_pos
+       [/or]
+       variable=trap_pos
+    [/store_locations]
+
+put location in trap_pos array variable
+
+
+
+
+
+
+   [event]
+      name=moveto
+      first_time_only=no
+      [filter]
+         [filter_location]
+           find_in=trap_pos
+         [/filter_location]
+      [/filter]
+
+event that triggers when someone moves onto trap

@@ -1,0 +1,45 @@
+concept++
+-in the process of putting things from ModRPG in here that wouldn't go with that era in another setting (WesSaga)
+-changed the up stairs to new spiral stair graphic, switched down stairs graphic to trapdoor-open
+-made it so you start at the down exit if you just went up
+-floors will now randomly put terrain down, most terrain will be regular, others put in for variety
+-altered mobs: separated mob "factions" into respective sides that aren't allied with each other, 2 main factions will spawn on opposite sides of the map, random of other factions will spawn all over, slightly tweeked how mob units are chosen
+-added lvl0s units to recruit from tavern
+-added new mudcrawler-type enemies
+-added well terrain which heals/cures
+-added "level cleared", if you clear a level of enemies you will skip it after that, but only if you clear the levels in order
+-fixed shops not working, there's a bug in wesnoth with menu_items https://gna.org/bugs/index.php?12946 if that's ever fixed, I can go back to the old way of doing things
+
+
+0.1.0
+-opened up pathways 1 hex in all directions. will be easier to move around this way.
+
+
+0.1.1
+-fixed bug that caused unknown unit (hat tip Golbeeze)
+-mobs now spawn in clusters, ongoing adjustments on numbers
+-mobs now spawn with some exp
+-wall/chasm/lava terrain now clears to base terrain if there is a unit there at start
+-added hammer, runic hammer, faerie staff, round shield and tower shield to shop
+-added handling for shields in shop and ground
+
+0.1.2
+-AI turns for 3 players takes way too long, separated the mobs up a little bit, also fixed bug that prevented separation
+-adding a boss or two per player to each level 
+-adjusting number of enemies each level, clusters of enemies are bigger when there are more players
+-decreased chance of non-themed mobs appearing (trying to make it so AI turns don't take forever)
+-enhanced henchmen in tavern, need to make all stores work a little better in respects to refreshing and ramping up from dungeon activity
+
+0.1.3
+-shops now change only if players have cleared a level between visits
+-fixed bug "WhiteMage" (hat tip Golbeeze's friend)
+
+0.1.4
+-integrated events eval_npc and create_weapon from the era, lets items be given to NPCs
+-events to handle weapons, dropping them when dead, gaining them when walked over, etc.
+-7 out of 8 bosses given a weapon
+-reworked mobs to spawn more in upper tier
+-limit 1 to henchmen, removed upkeep from henchmen
+
+0.1.5a
+-fixed bug that prevented clearing of levels (hat tip Golbeeze)

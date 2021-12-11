@@ -2068,7 +2068,10 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					id = "backstab",
 					name = "backstab",
 					backstab = "yes",
-					active_on = "offense"
+					active_on = "offense",
+					{ "filter_opponent", {
+						formula = "enemy_of(self, flanker) and not flanker.petrified where flanker = unit_at(direction_from(loc, other.facing))"
+					} }
 				}
 				if player then
 					new_special.description = string.format("Backstab Level %d:\

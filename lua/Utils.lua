@@ -154,3 +154,21 @@ function wesnoth.wml_actions.generate_shop_details(cfg)
 	wesnoth.wml_actions.set_variable({ name = string.format("shop_names.%s2", shop), rand = shop_descriptors })
 	wesnoth.set_variable(string.format("shop_names.%s3", shop), u.__cfg.profile)
 end
+
+-- lifted from: add-ons/Custom_Campaign/lua/wml-tags.lua
+function wesnoth.wml_actions.wbd_sort_array ( cfg )
+        -- [wbd_sort_array]
+                        -- name=name of the array
+                        -- first_key=to sort by
+                        -- second_key=to sort by if first key is equal
+        -- [/wbd_sort_array]
+        local tArray = wml.array_access.get(cfg.name)
+        local function top_down_left_right(uFirstElem, uSecElem)
+                if uFirstElem[cfg.first_key] == uSecElem[cfg.first_key] then
+                        return uFirstElem[cfg.second_key] < uSecElem[cfg.second_key]
+                end
+                return uFirstElem[cfg.first_key] < uSecElem[cfg.first_key]
+        end
+        table.sort(tArray, top_down_left_right)
+        wml.array_access.set(cfg.name, tArray)
+end

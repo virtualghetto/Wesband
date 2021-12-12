@@ -1723,8 +1723,9 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if special_level > 0 then
 				attack.slashdash = 1
 				new_special = {
+					slashdash = 1,
 					id = "slashdash",
-					name = "slash+dash"
+					name = "slash+dash",
 				}
 				if not player then
 					new_special.description = "Slash+Dash:\nWhen used offensively, every two hits with this weapon grants 1 movement point."
@@ -1841,12 +1842,14 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				special_level = 0
 			end
 			if special_level > 0 then
+				attack.ensnare = 1
 				new_special = {
+					ensnare = 1,
 					id = "ensnare",
 					name = "ensnare",
 					add = 0,
 					cumulative = "yes",
-					active_on = "offense"
+					active_on = "offense",
 				}
 				if player then
 					new_special.description = string.format("Ensnare:\
@@ -1856,7 +1859,6 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 	Each successful strike with this spell increases the chance to hit by 10%. Active on offense."
 				end
 				table.insert(specials, { "chance_to_hit", new_special })
-				attack.ensnare = 1
 			end
 			if (get_p(weapon, "special_type.pointpike") or 0) > 0 then
 				special_level = get_p(unit, "variables.abilities.pointpike") or 0
@@ -1865,13 +1867,14 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			end
 			if special_level > 0 then
 				table.insert(specials, { "chance_to_hit", {
+					pointpike = 1,
 					id = "pointpike",
 					name = "point+pike",
 					description = string.format("Point+Pike Level %d:\
 	Each miss with this weapon increases the chance to hit by %d%%, which is reset upon a successful hit. Active on offense.", special_level, 10 * special_level),
 					add = 0,
 					cumulative = "yes",
-					active_on = "offense"
+					active_on = "offense",
 				} })
 				new_special = {
 					cumulative = "yes",
@@ -2067,7 +2070,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				new_special = {
 					id = "backstab",
 					name = "backstab",
-					backstab = "yes",
+					--backstab = "yes",
 					active_on = "offense",
 					{ "filter_opponent", {
 						formula = "enemy_of(self, flanker) and not flanker.petrified where flanker = unit_at(direction_from(loc, other.facing))"
@@ -2111,8 +2114,9 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if special_level > 0 then
 				attack.cleave = 1
 				new_special = {
+					cleave = 1,
 					id = "cleave",
-					name = "cleave"
+					name = "cleave",
 				}
 				if player then
 					new_special.description = string.format("Cleave Level %d:\
@@ -2131,6 +2135,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if special_level > 0 then
 				attack.riposte = 1
 				new_special = {
+					riposte = 1,
 					id = "riposte",
 					name = "riposte",
 					name_inactive = "riposte",
@@ -2169,8 +2174,9 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if special_level > 0 then
 				attack.remaining_ammo = 1
 				new_special = {
+					remaining_ammo = 1,
 					id = "remaining_ammo",
-					name = "remaining ammo"
+					name = "remaining ammo",
 				}
 				if not player then
 					new_special.description = "Remaining Ammo:\
@@ -2216,6 +2222,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if special_level > 0 then
 				attack.bloodlust = 1
 				new_special = {
+					bloodlust = 1,
 					id = "bloodlust",
 					name = "bloodlust",
 				}
@@ -2240,6 +2247,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			if dash_flag and evade > 7 and attack.range == "melee" and (get_p(unit, "variables.abilities.grace") or 0) > 0 then
 				attack.grace = 1
 				table.insert(specials, { "dummy", {
+					grace = 1,
 					id = "grace",
 					name = "deadly grace",
 					description = "Deadly Grace:\

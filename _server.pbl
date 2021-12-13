@@ -1,9 +1,7 @@
 author="Ken Oh,Exasperation,Dovolente,TL"
 description="Wesnoth hack and slash MP.
 
-This is a beta release for testing purposes.
-Please report any bugs or errors to the forum.
-This upload is part of vghetto port project.
+Ported by vghetto to BfW 1.14 & 1.16.
 "
 email=
 icon="scenery/dwarven-doors-closed.png"

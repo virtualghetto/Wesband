@@ -41,7 +41,7 @@ local function on_board_path(u, x, y)
 	end
 	local w, h = wesnoth.get_map_size()
 	if x >= 1 and y >= 1 and x <= w and y <= h then
-		path, cost = wesnoth.find_path(u, x, y, { ignore_units = true, viewing_side = 0 })
+		path, cost = wesnoth.find_path(u, x, y, { ignore_units = true, ignore_visibility = true })
 	end
 	return path, cost
 end

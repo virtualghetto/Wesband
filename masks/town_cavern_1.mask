@@ -4,9 +4,9 @@ usage=mask
 _f          , Hh          , _f          , Re          , _f          , _f          , _f          , Hh          , _f          , _f          
 _f          , Re          , Re          , Cud         , Re          , Xu          , Mm          , Hh          , _f          , _f          
 _f          , Re          , Cud         , Re          , Xu          , Uu^Vud0      , Xu          , Xu          , Mm          , Hh          
-Mm          , Xu          , Xu          , Re          , Re          , Re          , Re^Uf       , Uu^Vud0      , Xu          , Mm          
-Hh          , Xu          , Re^Uf       , Re          , Uu^Vu0      , Uu^Ii       , Re          , Re^Uf       , Xu          , Hh          
-Mm          , Xu          , Uu^Vud0      , Re^Uf       , Re          , Re          , Re          , Xu          , Xu          , Mm          
+Mm          , Xu          , Xu          , Re          , Re          , Re          , Re^Tf       , Uu^Vud0      , Xu          , Mm          
+Hh          , Xu          , Re^Tf       , Re          , Uu^Vu0      , Uu^Ii       , Re          , Re^Tf       , Xu          , Hh          
+Mm          , Xu          , Uu^Vud0      , Re^Tf       , Re          , Re          , Re          , Xu          , Xu          , Mm          
 Hh          , Hh          , Xu          , Xu          , Uu^Vud0      , Xu          , Re          , Cud         , Re          , _f          
 _f          , Hh          , Mm          , Hh          , Xu          , Re          , Cud         , Re          , Re          , _f          
 _f          , _f          , _f          , _f          , Mm          , _f          , Re          , _f          , Hh          , _f          

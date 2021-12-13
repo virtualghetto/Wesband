@@ -2175,6 +2175,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				attack.remaining_ammo = 1
 				new_special = {
 					remaining_ammo = 1,
+					class = weapon_class,
 					id = "remaining_ammo",
 					name = "remaining ammo",
 				}

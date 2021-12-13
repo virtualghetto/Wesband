@@ -111,3 +111,9 @@ function deepcopy(orig)
     end
     return copy
 end
+
+function wesnoth.wml_actions.dump_variable(args)
+	local name = args.name or H.wml_error("[dump_variable] requires a name= key")
+	local var = wesnoth.get_variable(name)
+	w_pt(var)
+end

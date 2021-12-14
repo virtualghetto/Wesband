@@ -97,24 +97,13 @@ else
 	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_none.lua")
 end
 
-local ff = wesnoth.get_variable("dungeon_creation.temp.flow_flavor") or ""
-local pf = wesnoth.get_variable("dungeon_creation.temp.pool_flavor") or ""
-local tv = wesnoth.get_variable("dungeon_creation.temp.terrain_variation") or ""
-local wf = wesnoth.get_variable("dungeon_creation.temp.wall_flavor") or ""
-
 W.terrain_mask {
 	x = 1,
 	y = 1,
 	mask = mapData,
-	--{"rule", { old = "Xu", new = "Ai", terrain = "$dungeon_creation.temp.flow_flavor" } },
-	--{"rule", { old = "Ai", new = "Re,Ai", terrain = "$dungeon_creation.temp.pool_flavor" } },
-	--{"rule", { old = "Re,Aa", new = "Re,Ai", terrain = "$dungeon_creation.temp.terrain_variation" } },
-	--{"rule", { old = "Xu", new = "Re", terrain = "$dungeon_creation.temp.wall_flavor" } },
-
-	{"rule", { old = "Xu", new = "Ai", terrain = ff } },
-	{"rule", { old = "Ai", new = "Re,Ai", terrain = pf } },
-	{"rule", { old = "Re,Aa", new = "Re,Ai", terrain = tv } },
-	{"rule", { old = "Xu", new = "Re", terrain = wf } },
-
+	{"rule", { old = "Xu", new = "Ai", terrain = wml.variables['dungeon_creation.temp.flow_flavor'] } },
+	{"rule", { old = "Ai", new = "Re,Ai", terrain = wml.variables['dungeon_creation.temp.pool_flavor'] } },
+	{"rule", { old = "Re,Aa", new = "Re,Ai", terrain = wml.variables['dungeon_creation.temp.terrain_variation'] } },
+	{"rule", { old = "Xu", new = "Re", terrain = wml.variables['dungeon_creation.temp.wall_flavor'] } },
 	{"rule", { use_old = "yes" } }
 }

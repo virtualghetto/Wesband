@@ -71,6 +71,10 @@ W.create_exit {
 	label = "To Overworld",
 	image = "stairs-up.png"
 }
+wml.variables["dungeon_up.x"] = trapdoor_data.up.x
+wml.variables["dungeon_up.y"] = trapdoor_data.up.y
+wml.variables["dungeon_down.x"] = trapdoor_data.down.x
+wml.variables["dungeon_down.y"] = trapdoor_data.down.y
 
 local mapData
 if wml.variables['dungeon_creation.temp.flow_type'] == 1 then

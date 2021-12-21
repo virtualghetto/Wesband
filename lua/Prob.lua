@@ -11,19 +11,19 @@ function wesnoth.wml_actions.prob_list(cfg)
 		local ct, ix = 0, 0
 		for w in string.gmatch(weights, "[%s]*([%d]+),?") do
 			if ix == 0 then
-				wesnoth.set_variable(list)
+				wml.variables[list] = nil
 			end
 			local i = entries[ix + 1]
 			if i then
 				ct = ct + w
-				wesnoth.set_variable(string.format("%s.entry[%d].item", list, ix), i)
-				wesnoth.set_variable(string.format("%s.entry[%d].weight", list, ix), w)
+				wml.variables[string.format("%s.entry[%d].item", list, ix)] = i
+				wml.variables[string.format("%s.entry[%d].weight", list, ix)] = w
 				ix = ix + 1
 			else
 				break
 			end
 		end
-		wesnoth.set_variable(string.format("%s.total_weight", list), ct)
+		wml.variables[string.format("%s.total_weight", list)] = ct
 	end
 end
 
@@ -33,8 +33,8 @@ function wesnoth.wml_actions.set_prob(cfg)
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
 			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
-				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - wml.variables[string.format("%s.entry[%i].weight", list, i)])
-				wesnoth.set_variable(string.format("%s.entry[%i]", list, i))
+				wml.variables[string.format("%s.total_weight", list)] = wml.variables[string.format("%s.total_weight", list)] - wml.variables[string.format("%s.entry[%i].weight", list, i)]
+				wml.variables[string.format("%s.entry[%i]", list, i)] = nil
 				break
 			end
 		end
@@ -44,8 +44,8 @@ function wesnoth.wml_actions.set_prob(cfg)
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
 			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
-				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", cfg.name)] - wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight)
-				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), weight)
+				wml.variables[string.format("%s.total_weight", list)] = wml.variables[string.format("%s.total_weight", cfg.name)] - wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight
+				wml.variables[string.format("%s.entry[%i].weight", list, i)] = weight
 				break
 			end
 		end
@@ -56,7 +56,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
 			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
-				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight)
+				wml.variables[string.format("%s.entry[%i].weight", list, i)] = wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight
 				success = true
 				break
 			end
@@ -72,7 +72,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 				}
 		end
 		local count = wml.variables[string.format("%s.total_weight", list)] or 0
-		wesnoth.set_variable(string.format("%s.total_weight", list), count + weight)
+		wml.variables[string.format("%s.total_weight", list)] = count + weight
 	end
 	
 	local function probSub()
@@ -81,11 +81,11 @@ function wesnoth.wml_actions.set_prob(cfg)
 			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
 				local old = wml.variables[string.format("%s.entry[%i].weight", list, i)]
 				if old <= weight then
-					wesnoth.set_variable(string.format("%s.entry[%i]", list, i))
-					wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - old)
+					wml.variables[string.format("%s.entry[%i]", list, i)] = nil
+					wml.variables[string.format("%s.total_weight", list)] = wml.variables[string.format("%s.total_weight", list)] - old
 				else
-					wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), old - weight)
-					wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - weight)
+					wml.variables[string.format("%s.entry[%i].weight", list, i)] = old - weight
+					wml.variables[string.format("%s.total_weight", list)] = wml.variables[string.format("%s.total_weight", list)] - weight
 				end
 				break
 			end
@@ -98,8 +98,8 @@ function wesnoth.wml_actions.set_prob(cfg)
 			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
 				local old = wml.variables[string.format("%s.entry[%i].weight", list, i)]
 				local new = math.max(1, math.floor(old * weight * 0.01 + 0.5))
-				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), new)
-				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - old + new)
+				wml.variables[string.format("%s.entry[%i].weight", list, i)] = new
+				wml.variables[string.format("%s.total_weight", list)] = wml.variables[string.format("%s.total_weight", list)] - old + new
 				break
 			end
 		end
@@ -184,7 +184,7 @@ function wesnoth.wml_actions.get_prob(cfg)
 		for i = 0, item_count - 1 do
 			r_val = r_val - wml.variables[string.format("%s.entry[%i].weight", list, i)]
 			if r_val <= 0 then
-				wesnoth.set_variable(var, wml.variables[string.format("%s.entry[%i].item", list, i)])
+				wml.variables[var] = wml.variables[string.format("%s.entry[%i].item", list, i)]
 				break
 			end
 		end
@@ -199,7 +199,7 @@ function wesnoth.wml_actions.get_prob(cfg)
 				break
 			end
 		end
-		wesnoth.set_variable(var, val)
+		wml.variables[var] = val
 	end
 	
 	var = cfg.variable or H.wml_error("[get_prob] requires a variable= key.")

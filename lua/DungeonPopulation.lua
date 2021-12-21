@@ -8,7 +8,7 @@ local spacings = {
 }
 local function get_active_area(a_type)
 	local s = spacings[a_type]
-	wesnoth.set_variable("dungeon_creation.temp.active_area")
+	wml.variables["dungeon_creation.temp.active_area"] = nil
 	local function get_locations()
 		local loc_table
 		if a_type == "primary" then
@@ -61,8 +61,8 @@ local function get_mob_loc()
 	--local ix = H.rand("0..$($dungeon_creation.temp.active_area.length-1)")
 	local ix = tonumber(H.rand(string.format("0..%i", dcaal - 1)))
 	local loc = wml.variables[string.format("dungeon_creation.temp.active_area[%d]", ix)]
-	wesnoth.set_variable("dungeon_creation.temp.mob_x", loc.x)
-	wesnoth.set_variable("dungeon_creation.temp.mob_y", loc.y)
+	wml.variables["dungeon_creation.temp.mob_x"] = loc.x
+	wml.variables["dungeon_creation.temp.mob_y"] = loc.y
 end
 
 local rnd_1 = H.rand("0..3")
@@ -90,7 +90,7 @@ local function get_cluster_level()
 	elseif rnd > cluster_max then
 		rnd = cluster_max - 1
 	end
-	wesnoth.set_variable("dungeon_creation.temp.cluster_level", rnd)
+	wml.variables["dungeon_creation.temp.cluster_level"] = rnd
 end
 
 local boss_clusters, mini_clusters, loners, pool_loners
@@ -111,17 +111,17 @@ else
 	loners = H.rand("1..5") + 2 * player_count
 	pool_loners = tonumber(H.rand("0,1,2,2,3,3"))
 end
-wesnoth.set_variable("dungeon_creation.temp.cluster_id", 0)
+wml.variables["dungeon_creation.temp.cluster_id"] = 0
 local function advance_cluster()
-	wesnoth.set_variable("dungeon_creation.temp.cluster_id", wml.variables["dungeon_creation.temp.cluster_id"] + 1)
+	wml.variables["dungeon_creation.temp.cluster_id"] = wml.variables["dungeon_creation.temp.cluster_id"] + 1
 end
 
 local first_enemy_position = wml.variables["const.max_player_count"]
 if wml.variables['dungeon_creation.temp.water_theme_position'] > first_enemy_position then
 	get_active_area("water")
 	while pool_loners > 0 and wml.variables["dungeon_creation.temp.active_area"] do
-		wesnoth.set_variable("dungeon_creation.temp.mob_theme", "water")
-		wesnoth.set_variable("dungeon_creation.temp.place_side", wml.variables['dungeon_creation.temp.water_theme_position'])
+		wml.variables["dungeon_creation.temp.mob_theme"] = "water"
+		wml.variables["dungeon_creation.temp.place_side"] = wml.variables['dungeon_creation.temp.water_theme_position']
 		get_mob_loc()
 		get_cluster_level()
 		wesnoth.fire_event("create_mob_loner")
@@ -134,8 +134,8 @@ loners = loners + pool_loners
 
 while boss_clusters > 0 do
 	local theme_index = tonumber(H.rand("0,0,1"))
-	wesnoth.set_variable("dungeon_creation.temp.mob_theme", wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(theme_index)])
-	wesnoth.set_variable("dungeon_creation.temp.place_side", theme_index + first_enemy_position + 1)
+	wml.variables["dungeon_creation.temp.mob_theme"] = wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(theme_index)]
+	wml.variables["dungeon_creation.temp.place_side"] = theme_index + first_enemy_position + 1
 	if theme_index == 0 then
 		get_active_area("primary")
 	else
@@ -164,8 +164,8 @@ spacings.secondary = math.min(spacings.secondary, 3)
 
 while mini_clusters > 0 do
 	local theme_index = tonumber(H.rand("0,1,1"))
-	wesnoth.set_variable("dungeon_creation.temp.mob_theme", wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(theme_index)])
-	wesnoth.set_variable("dungeon_creation.temp.place_side", theme_index + first_enemy_position + 1)
+	wml.variables["dungeon_creation.temp.mob_theme"] = wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(theme_index)]
+	wml.variables["dungeon_creation.temp.place_side"] = theme_index + first_enemy_position + 1
 	if theme_index == 0 then
 		get_active_area("primary")
 	else
@@ -199,17 +199,17 @@ while loners > 0 do
 		op = "rand"
 	})
 	if wml.variables['dungeon_creation.temp.mob_theme'] == wml.variables['dungeon_creation.temp.creep_themes[0].theme'] then
-		wesnoth.set_variable("dungeon_creation.temp.place_side", first_enemy_position + 1)
+		wml.variables["dungeon_creation.temp.place_side"] = first_enemy_position + 1
 		get_active_area("primary")
 	elseif wml.variables['dungeon_creation.temp.mob_theme'] == wml.variables['dungeon_creation.temp.creep_themes[1].theme'] then
-		wesnoth.set_variable("dungeon_creation.temp.place_side", first_enemy_position + 2)
+		wml.variables["dungeon_creation.temp.place_side"] = first_enemy_position + 2
 		get_active_area("secondary")
 	else
 		side_counter = 2
 		while wml.variables['dungeon_creation.temp.mob_theme'] ~= wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(side_counter)] do
 			side_counter = side_counter + 1
 		end
-		wesnoth.set_variable("dungeon_creation.temp.place_side", side_counter + first_enemy_position + 1)
+		wml.variables["dungeon_creation.temp.place_side"] = side_counter + first_enemy_position + 1
 		get_active_area("loner")
 	end
 	get_mob_loc()

@@ -138,7 +138,7 @@ local function adjustWeaponDescription(wt)
 end
 function wesnoth.wml_actions.adjust_weapon_description(args)
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_weapon_description] requires a variable= key")
-	wesnoth.set_variable(var, adjustWeaponDescription(wml.variables[var]))
+	wml.variables[var] = adjustWeaponDescription(wml.variables[var])
 end
 
 local function adjustArmorDescription(at)
@@ -161,7 +161,7 @@ local function adjustArmorDescription(at)
 end
 function wesnoth.wml_actions.adjust_armor_description(args)
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_armor_description] requires a variable= key")
-	wesnoth.set_variable(var, adjustArmorDescription(wml.variables[var]))
+	wml.variables[var] = adjustArmorDescription(wml.variables[var])
 end
 
 local function createWeapon(wtype, rank, attr, var)
@@ -1096,7 +1096,7 @@ local function createWeapon(wtype, rank, attr, var)
 	else
 		H.wml_error(string.format("invalid type= key in [create_weapon] (%s)", wtype))
 	end
-	wesnoth.set_variable(var, finalAdjust(weapon))
+	wml.variables[var] = finalAdjust(weapon)
 end
 function wesnoth.wml_actions.create_weapon(args)
 	local wtype = string.match(args.type, "[^%s]+") or H.wml_error("[create_weapon] requires a type= key")
@@ -1684,7 +1684,7 @@ local function createArmor(atype, rank, attr, var)
 	else
 		H.wml_error(string.format("invalid type= key in [create_armor] (%s)", atype))
 	end
-	wesnoth.set_variable(var, finalAdjust(armor))
+	wml.variables[var] = finalAdjust(armor)
 end
 
 function wesnoth.wml_actions.create_armor(args)
@@ -1722,7 +1722,7 @@ function wesnoth.wml_actions.drop_item(cfg)
 						y = y,
 						image = string.format("items/%s.png", old_image)
 					}
-					wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, j))
+					wml.variables[string.format("ground.x%d.y%d.items[%d]", x, y, j)] = nil
 					break
 				end
 			end
@@ -1746,7 +1746,7 @@ function wesnoth.wml_actions.drop_item(cfg)
 				image = string.format("items/%s.png", item_data.ground_icon),
 				visible_in_fog = "no"
 			}
-			wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, i), item_data)
+			wml.variables[string.format("ground.x%d.y%d.items[%d]", x, y, i)] = item_data
 		end
 	end
 end
@@ -1759,9 +1759,9 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 		ix = -1
 	end
 	if ix == -1 then
-		wesnoth.set_variable(string.format("ground.x%d.y%d.items", x, y))
+		wml.variables[string.format("ground.x%d.y%d.items", x, y)] = nil
 	else
-		wesnoth.set_variable(string.format("ground.x%d.y%d.items[%d]", x, y, ix))
+		wml.variables[string.format("ground.x%d.y%d.items[%d]", x, y, ix)] = nil
 	end
 	W.remove_item {
 		x = x,
@@ -1789,10 +1789,10 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 			end
 		end
 	else
-		wesnoth.set_variable(string.format("ground.x%d.y%d", x, y), nil)
+		wml.variables[string.format("ground.x%d.y%d", x, y)] = nil
 		g = wml.variables[string.format("ground.x%d", x)]
 		if g and not g[1] then
-			wesnoth.set_variable(string.format("ground.x%d", x), nil)
+			wml.variables[string.format("ground.x%d", x)] = nil
 		end
 	end
 end

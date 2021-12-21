@@ -9,8 +9,8 @@ function wesnoth.wml_actions.generate_dungeon_level(cfg)
 			shrink = "yes"
 		}
 	end
-	wesnoth.set_variable("current_dungeon_template.x", width)
-	wesnoth.set_variable("current_dungeon_template.y", height)
+	wml.variables["current_dungeon_template.x"] = width
+	wml.variables["current_dungeon_template.y"] = height
 	wesnoth.dofile("~add-ons/Wesband/lua/DungeonUpdate.lua")
 	wesnoth.dofile("~add-ons/Wesband/lua/DungeonArchitecture.lua")
 	wesnoth.dofile("~add-ons/Wesband/lua/DungeonThemes.lua")
@@ -57,7 +57,7 @@ function wesnoth.wml_actions.restore_map(cfg)
 	end
 
 	if clear then
-		wesnoth.set_variable(var)
+		wml.variables[var] = nil
 	end
 end
 
@@ -81,7 +81,7 @@ function wesnoth.wml_actions.save_map(cfg)
 		end
 		t[y + b] = table.concat(r, ',')
 	end
-	wesnoth.set_variable(var .. ".map", string.format("border_size=%d\nusage=map\n\n%s", b, table.concat(t, '\n')))
+	wml.variables[var .. ".map"] = string.format("border_size=%d\nusage=map\n\n%s", b, table.concat(t, '\n'))
 	if #s > 0 then
 		H.set_variable_array(var .. ".special", s)
 	end
@@ -93,8 +93,8 @@ function wesnoth.wml_actions.save_map(cfg)
 		last_enemy = last_enemy + wml.variables["const.max_enemy_count"] - 1
 	end
 	for i = first_enemy, last_enemy do
-		wesnoth.set_variable(string.format("%s.sides[%d].team_name", var, j), wesnoth.sides[i].team_name)
-		wesnoth.set_variable(string.format("%s.sides[%d].user_team_name", var, j), wesnoth.sides[i].user_team_name)
+		wml.variables[string.format("%s.sides[%d].team_name", var, j)] = wesnoth.sides[i].team_name
+		wml.variables[string.format("%s.sides[%d].user_team_name", var, j)] = wesnoth.sides[i].user_team_name
 		j = j + 1
 	end
 end
@@ -106,9 +106,9 @@ function wesnoth.wml_actions.create_exit(cfg)
 	local image = cfg.image or H.wml_error("[create_exit] requires an image= key")
 	local label = cfg.label or H.wml_error("[create_exit] requires a label= key")
 
-	wesnoth.set_variable(string.format("ground.x%d.y%d.exit.destination", x, y), dest)
-	wesnoth.set_variable(string.format("ground.x%d.y%d.exit.image", x, y), image)
-	wesnoth.set_variable(string.format("ground.x%d.y%d.exit.label", x, y), label)
+	wml.variables[string.format("ground.x%d.y%d.exit.destination", x, y)] = dest
+	wml.variables[string.format("ground.x%d.y%d.exit.image", x, y)] = image
+	wml.variables[string.format("ground.x%d.y%d.exit.label", x, y)] = label
 	W.item {
 		x = x,
 		y = y,

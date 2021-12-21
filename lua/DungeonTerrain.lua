@@ -53,8 +53,8 @@ while invalid_trapdoor_placement() do
 	end
 end
 
-wesnoth.set_variable("dungeon_exit.x", trapdoor_data.up.x)
-wesnoth.set_variable("dungeon_exit.y", trapdoor_data.up.y)
+wml.variables["dungeon_exit.x"] = trapdoor_data.up.x
+wml.variables["dungeon_exit.y"] = trapdoor_data.up.y
 wesnoth.set_terrain(trapdoor_data.down.x, trapdoor_data.down.y, "Re")
 wesnoth.set_terrain(trapdoor_data.up.x, trapdoor_data.up.y, "Re")
 W.create_exit {

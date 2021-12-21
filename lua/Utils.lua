@@ -54,7 +54,7 @@ function wesnoth.wml_actions.store_shroud(cfg)
 	--local team = wesnoth.get_side(team_num)
 	local team = wesnoth.sides[team_num]
 	local current_shroud = team.__cfg.shroud_data
-	wesnoth.set_variable(var, current_shroud)
+	wml.variables[var] = current_shroud
 end
 
 --! [set_shroud]
@@ -97,7 +97,7 @@ function wesnoth.wml_actions.get_distance(cfg)
 	local x2 = cfg.x2 or H.wml_error("[get_distance] expects a x2= attribute")
 	local y2 = cfg.y2 or H.wml_error("[get_distance] expects a y2= attribute")
 	local var_name = cfg.variable or "distance"
-	wesnoth.set_variable(var_name, H.distance_between(x1, y1, x2, y2))
+	wml.variables[var_name] = H.distance_between(x1, y1, x2, y2)
 end
 
 function wesnoth.wml_actions.get_defense(cfg)
@@ -110,7 +110,7 @@ function wesnoth.wml_actions.get_defense(cfg)
 		u = (wesnoth.create_unit { type = cfg.type or H.wml_error("[get_defense] expects either a unit= attribute or a type= attribute") })
 	end
 	local var = cfg.variable or "defense"
-	wesnoth.set_variable(var, wesnoth.unit_defense(u, terrain))
+	wml.variables[var] = wesnoth.unit_defense(u, terrain)
 end
 
 function wesnoth.wml_actions.get_move_cost(cfg)
@@ -123,7 +123,7 @@ function wesnoth.wml_actions.get_move_cost(cfg)
 		u = (wesnoth.create_unit { type = cfg.type }) or H.wml_error("[get_defense] expects either a unit= attribute or a type= attribute")
 	end
 	local var = cfg.variable or "movement_cost"
-	wesnoth.set_variable(var, wesnoth.unit_movement_cost(u, terrain))
+	wml.variables[var] = wesnoth.unit_movement_cost(u, terrain)
 end
 
 function wesnoth.wml_actions.generate_shop_details(cfg)
@@ -150,9 +150,9 @@ function wesnoth.wml_actions.generate_shop_details(cfg)
 
 	local u = wesnoth.create_unit { type = unit_type, random_gender = "yes" }
 
-	wesnoth.set_variable(string.format("shop_names.%s", shop), u.name)
+	wml.variables[string.format("shop_names.%s", shop)] = u.name
 	wesnoth.wml_actions.set_variable({ name = string.format("shop_names.%s2", shop), rand = shop_descriptors })
-	wesnoth.set_variable(string.format("shop_names.%s3", shop), u.__cfg.profile)
+	wml.variables[string.format("shop_names.%s3", shop)] = u.__cfg.profile
 end
 
 -- lifted from: add-ons/Custom_Campaign/lua/wml-tags.lua

@@ -147,10 +147,10 @@ else
 end
 for i = 2, wml.variables['const.max_enemy_count'] - 1 do
 	if i == wml.variables['dungeon_creation.temp.water_theme_position'] then
-		wesnoth.set_variable(string.format("dungeon_creation.temp.creep_themes[%i].theme", i), "water")
+		wml.variables[string.format("dungeon_creation.temp.creep_themes[%i].theme", i)] = "water"
 	elseif wml.variables['dungeon_creation.temp.prob_list.total_count'] == 0 then
 		if i < wml.variables['dungeon_creation.temp.water_theme_position'] then
-			wesnoth.set_variable(string.format("dungeon_creation.temp.creep_themes[%i].theme", i), "water")
+			wml.variables[string.format("dungeon_creation.temp.creep_themes[%i].theme", i)] = "water"
 			wml.variables['dungeon_creation.temp.water_theme_position'] = i
 		else
 			wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] = string.format("nullTheme%i", i)
@@ -170,7 +170,7 @@ for i = 2, wml.variables['const.max_enemy_count'] - 1 do
 end
  wml.variables['dungeon_creation.temp.water_theme_position'] =  wml.variables['dungeon_creation.temp.water_theme_position'] + 1 +  wml.variables['const.max_player_count']
 for i = 0,  wml.variables['const.max_enemy_count'] - 1 do
-	wesnoth.set_variable(string.format("dungeon_creation.active_themes[%i].theme", i),  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)])
+	wml.variables[string.format("dungeon_creation.active_themes[%i].theme", i)] = wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)]
 	if  wml.variables[("dungeon_creation.temp.creep_themes[%d].theme"):format(i)] == "water" then
 		W.modify_side {
 				side = i + 1 +  wml.variables['const.max_player_count'],

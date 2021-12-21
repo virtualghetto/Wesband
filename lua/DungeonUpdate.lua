@@ -12,7 +12,7 @@ local function process_entries(tname)
 					weight = wml.variables[string.format("dungeon_creation.updates.%s[%i].up_rate", tname, i)],
 					op = "add"
 				})
-				wesnoth.set_variable(string.format("dungeon_creation.updates.%s[%i].up_count", tname, i), tcount - 1)
+				wml.variables[string.format("dungeon_creation.updates.%s[%i].up_count", tname, i)] = tcount - 1
 				if tcount == 1 then
 					tcount = wml.variables[string.format("dungeon_creation.updates.%s[%i].down_count", tname, i)]
 				end
@@ -26,7 +26,7 @@ local function process_entries(tname)
 						op = "sub"
 					})
 					tcount = tcount - 1
-					wesnoth.set_variable(string.format("dungeon_creation.updates.%s[%i].down_count", tname, i), tcount)
+					wml.variables[string.format("dungeon_creation.updates.%s[%i].down_count", tname, i)] = tcount
 				end
 			end
 			if tcount == 0 then

@@ -182,7 +182,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		end
 	end
 	if min_index > -1 then
-		wesnoth.set_variable("rouse_list", rouse_list)
+		wml.variables["rouse_list"] = rouse_list
 		local visible = wesnoth.get_units( {
 				id = rouse_enemies[min_index].id,
 				{ "filter_vision", { viewing_side = wml.variables['side_number'] } }
@@ -195,7 +195,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 	elseif cfg.refresh and u and checkSafety(x, y) and u.side == wesnoth.current.side and u.attacks_left > 0 and u.variables.simple_action and u.variables.simple_action > 0 then
 		u.moves = u.max_moves
 	end
-	wesnoth.set_variable("rouse_temp_locs")
+	wml.variables["rouse_temp_locs"] = nil
 end
 
 function wesnoth.wml_actions.check_safety(cfg)
@@ -205,6 +205,6 @@ function wesnoth.wml_actions.check_safety(cfg)
 
 	local safety = checkSafety(x, y)
 	if not safety then
-		wesnoth.set_variable(v, 0)
+		wml.variables[v] = 0
 	end
 end

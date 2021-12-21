@@ -333,8 +333,8 @@ function wesnoth.wml_actions.calculate_weapon_display(args)
 	local equipment = get_unit_equipment(unit)
 	local weapon = parse_container(wml.variables[weapon_var])
 	local attack = get_attack_basics(unit, equipment, weapon)
-	wesnoth.set_variable("display_damage", attack.damage)
-	wesnoth.set_variable("display_number", attack.number)
+	wml.variables["display_damage"] = attack.damage
+	wml.variables["display_number"] = attack.number
 end
 
 local function find_npc_value(unit, params)
@@ -2731,7 +2731,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 		set_p(unit, "variables.equipment_value", find_equipment_value(unit))
 	end
 
-	wesnoth.set_variable(var, unparse_container(unit))
+	wml.variables[var] = unparse_container(unit)
 	if unstore then
 		W.unstore_unit { variable = var }
 		local unit_x, unit_y = get_p(unit, "x"), get_p(unit, "y")
@@ -2766,6 +2766,6 @@ function wesnoth.wml_actions.unit_npc_init(cfg)
        local tcfg = wesnoth.unit_types[string.format("%s", t)].__cfg
        --w_pt(tcfg)
        local npc_init = H.get_child(tcfg, "npc_init")
-       wesnoth.set_variable(string.format("%s.variables.npc_init", u), nil) -- clear it
-       wesnoth.set_variable(string.format("%s.variables.npc_init", u), npc_init)
+       wml.variables[string.format("%s.variables.npc_init", u)] = nil -- clear it
+       wml.variables[string.format("%s.variables.npc_init", u)] = npc_init
 end

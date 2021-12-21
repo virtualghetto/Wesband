@@ -30,10 +30,10 @@ end
 function wesnoth.wml_actions.set_prob(cfg)
 	local weight, list, id
 	local function probClear()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				wesnoth.set_variable(string.format("%s.total_weight", list), wesnoth.get_variable(string.format("%s.total_weight", list)) - wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i)))
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - wml.variables[string.format("%s.entry[%i].weight", list, i)])
 				wesnoth.set_variable(string.format("%s.entry[%i]", list, i))
 				break
 			end
@@ -41,10 +41,10 @@ function wesnoth.wml_actions.set_prob(cfg)
 	end
 	
 	local function probSet()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				wesnoth.set_variable(string.format("%s.total_weight", list), wesnoth.get_variable(string.format("%s.total_weight", cfg.name)) - wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i)) + weight)
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", cfg.name)] - wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight)
 				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), weight)
 				break
 			end
@@ -53,10 +53,10 @@ function wesnoth.wml_actions.set_prob(cfg)
 	
 	local function probAdd()
 		local success = false
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i)) + weight)
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), wml.variables[string.format("%s.entry[%i].weight", list, i)] + weight)
 				success = true
 				break
 			end
@@ -71,21 +71,21 @@ function wesnoth.wml_actions.set_prob(cfg)
 					} }
 				}
 		end
-		local count = wesnoth.get_variable(string.format("%s.total_weight", list)) or 0
+		local count = wml.variables[string.format("%s.total_weight", list)] or 0
 		wesnoth.set_variable(string.format("%s.total_weight", list), count + weight)
 	end
 	
 	local function probSub()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				local old = wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i))
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				local old = wml.variables[string.format("%s.entry[%i].weight", list, i)]
 				if old <= weight then
 					wesnoth.set_variable(string.format("%s.entry[%i]", list, i))
-					wesnoth.set_variable(string.format("%s.total_weight", list), wesnoth.get_variable(string.format("%s.total_weight", list)) - old)
+					wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - old)
 				else
 					wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), old - weight)
-					wesnoth.set_variable(string.format("%s.total_weight", list), wesnoth.get_variable(string.format("%s.total_weight", list)) - weight)
+					wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - weight)
 				end
 				break
 			end
@@ -93,13 +93,13 @@ function wesnoth.wml_actions.set_prob(cfg)
 	end
 	
 	local function probScale()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				local old = wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i))
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				local old = wml.variables[string.format("%s.entry[%i].weight", list, i)]
 				local new = math.max(1, math.floor(old * weight * 0.01 + 0.5))
 				wesnoth.set_variable(string.format("%s.entry[%i].weight", list, i), new)
-				wesnoth.set_variable(string.format("%s.total_weight", list), wesnoth.get_variable(string.format("%s.total_weight", list)) - old + new)
+				wesnoth.set_variable(string.format("%s.total_weight", list), wml.variables[string.format("%s.total_weight", list)] - old + new)
 				break
 			end
 		end
@@ -107,19 +107,19 @@ function wesnoth.wml_actions.set_prob(cfg)
 	
 	local var
 	local function probUnion()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", var)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", var)] or 0
 		for i = 0, item_count -1 do
-			id = wesnoth.get_variable(string.format("%s.entry[%i].item", var, i))
-			weight = wesnoth.get_variable(string.format("%s.entry[%i].weight", var, i))
+			id = wml.variables[string.format("%s.entry[%i].item", var, i)]
+			weight = wml.variables[string.format("%s.entry[%i].weight", var, i)]
 			probAdd()
 		end
 	end
 	
 	local function probDiff()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", var)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", var)] or 0
 		for i = 0, item_count -1 do
-			id = wesnoth.get_variable(string.format("%s.entry[%i].item", var, i))
-			weight = wesnoth.get_variable(string.format("%s.entry[%i].weight", var, i))
+			id = wml.variables[string.format("%s.entry[%i].item", var, i)]
+			weight = wml.variables[string.format("%s.entry[%i].weight", var, i)]
 			probSub()
 		end
 	end
@@ -177,25 +177,25 @@ end
 function wesnoth.wml_actions.get_prob(cfg)
 	local var, list, id
 	local function probRand()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
-		local total_weight = wesnoth.get_variable(string.format("%s.total_weight", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
+		local total_weight = wml.variables[string.format("%s.total_weight", list)] or 0
 		--local r_val = H.rand(string.format("1..$%s.total_weight", list))
 		local r_val = H.rand(string.format("1..%d", total_weight))
 		for i = 0, item_count - 1 do
-			r_val = r_val - wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i))
+			r_val = r_val - wml.variables[string.format("%s.entry[%i].weight", list, i)]
 			if r_val <= 0 then
-				wesnoth.set_variable(var, wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)))
+				wesnoth.set_variable(var, wml.variables[string.format("%s.entry[%i].item", list, i)])
 				break
 			end
 		end
 	end
 	
 	local function probGet()
-		local item_count = wesnoth.get_variable(string.format("%s.entry.length", list)) or 0
+		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		local val = 0
 		for i = 0, item_count - 1 do
-			if wesnoth.get_variable(string.format("%s.entry[%i].item", list, i)) == id then
-				val = wesnoth.get_variable(string.format("%s.entry[%i].weight", list, i))
+			if wml.variables[string.format("%s.entry[%i].item", list, i)] == id then
+				val = wml.variables[string.format("%s.entry[%i].weight", list, i)]
 				break
 			end
 		end

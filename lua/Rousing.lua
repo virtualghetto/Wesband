@@ -1,5 +1,5 @@
 local function checkSafety(x, y)
-	local rouse_list = wesnoth.get_variable("rouse_list")
+	local rouse_list = wml.variables["rouse_list"]
 	local safety
 	if rouse_list then
 		safety = not wesnoth.eval_conditional {
@@ -78,7 +78,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 			if hidden then
 				hidden = not wesnoth.eval_conditional {
 					{ "have_unit", {
-						side = wesnoth.get_variable("const.enemy_sides"),
+						side = wml.variables["const.enemy_sides"],
 						{ "filter_adjacent", {
 							x = x,
 							y = y
@@ -88,7 +88,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 			end
 		end
 	end
-	local rouse_list = wesnoth.get_variable("rouse_list")
+	local rouse_list = wml.variables["rouse_list"]
 	if not hidden then
 		wesnoth.wml_actions.store_locations {
 			variable = "rouse_temp_locs",

@@ -21,7 +21,7 @@ function wesnoth.wml_actions.restore_map(cfg)
 	local var = cfg.variable or H.wml_error("[restore_map] requires a variable= key")
 	local clear = cfg.clear
 
-	local data = wesnoth.get_variable(var)
+	local data = wml.variables[var]
 	W.replace_map {
 		map = data.map,
 		expand = "yes",
@@ -48,11 +48,11 @@ function wesnoth.wml_actions.restore_map(cfg)
 	end
 
 	local j = 0
-	local first_enemy = wesnoth.get_variable("const.max_player_count") + 1
-	local last_enemy = first_enemy + wesnoth.get_variable(string.format("%s.sides.length", var)) - 1
+	local first_enemy = wml.variables["const.max_player_count"] + 1
+	local last_enemy = first_enemy + wml.variables[string.format("%s.sides.length", var)] - 1
 	for i = first_enemy, last_enemy do
-		wesnoth.sides[i].team_name = wesnoth.get_variable(string.format("%s.sides[%d].team_name", var, j))
-		wesnoth.sides[i].user_team_name = wesnoth.get_variable(string.format("%s.sides[%d].user_team_name", var, j))
+		wesnoth.sides[i].team_name = wml.variables[string.format("%s.sides[%d].team_name", var, j)]
+		wesnoth.sides[i].user_team_name = wml.variables[string.format("%s.sides[%d].user_team_name", var, j)]
 		j = j + 1
 	end
 
@@ -70,12 +70,12 @@ function wesnoth.wml_actions.save_map(cfg)
 		local r = {}
 		for x = 1 - b, w + b do
 			r[x + b] = wesnoth.get_terrain(x, y)
-			local exit_data = wesnoth.get_variable(string.format("ground.x%d.y%d.exit", x, y))
+			local exit_data = wml.variables[string.format("ground.x%d.y%d.exit", x, y)]
 			if exit_data then
 				table.insert(s, { id = "exit", x = x, y = y, destination = exit_data.destination, image = exit_data.image, label = exit_data.label })
 			end
-			for i = 0, wesnoth.get_variable(string.format("ground.x%d.y%d.items.length", x, y)) - 1 do
-				table.insert(s, { id = "item", x = x, y = y, { "item", wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d]", x, y, i)) } })
+			for i = 0, wml.variables[string.format("ground.x%d.y%d.items.length", x, y)] - 1 do
+				table.insert(s, { id = "item", x = x, y = y, { "item", wml.variables[string.format("ground.x%d.y%d.items[%d]", x, y, i)] } })
 			end
 			
 		end
@@ -87,10 +87,10 @@ function wesnoth.wml_actions.save_map(cfg)
 	end
 
 	local j = 0
-	local first_enemy = wesnoth.get_variable("const.max_player_count") + 1
+	local first_enemy = wml.variables["const.max_player_count"] + 1
 	local last_enemy = first_enemy
-	if wesnoth.get_variable("in_dungeon") == 1 then
-		last_enemy = last_enemy + wesnoth.get_variable("const.max_enemy_count") - 1
+	if wml.variables["in_dungeon"] == 1 then
+		last_enemy = last_enemy + wml.variables["const.max_enemy_count"] - 1
 	end
 	for i = first_enemy, last_enemy do
 		wesnoth.set_variable(string.format("%s.sides[%d].team_name", var, j), wesnoth.sides[i].team_name)

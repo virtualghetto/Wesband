@@ -135,7 +135,7 @@ local function select_layout(edge_room_chance, extra_path_chance, stray_path_cha
 		local accept_room
 		if x == 1 or y == 1 or x == x_room_limit or y == y_room_limit then
 			W.set_variable { name = "r_temp", rand = "0..99" }
-			accept_room = wesnoth.get_variable("r_temp") < edge_room_chance
+			accept_room = wml.variables["r_temp"] < edge_room_chance
 		else
 			accept_room = true
 		end
@@ -189,18 +189,18 @@ local function select_layout(edge_room_chance, extra_path_chance, stray_path_cha
 	local candidate_count, path_index, accept_path = #candidate_paths
 	while island_count > 1 do
 		W.set_variable { name = "r_temp", rand = string.format("1..%d", candidate_count) }
-		path_index = wesnoth.get_variable("r_temp")
+		path_index = wml.variables["r_temp"]
 		if rooms[candidate_paths[path_index][1]] and rooms[candidate_paths[path_index][2]] then
 			accept_path = union(candidate_paths[path_index][1], candidate_paths[path_index][2])
 			if accept_path then
 				island_count = island_count - 1
 			else
 				W.set_variable { name = "r_temp", rand = "0..99" }
-				accept_path = wesnoth.get_variable("r_temp") < extra_path_chance
+				accept_path = wml.variables["r_temp"] < extra_path_chance
 			end
 		elseif rooms[candidate_paths[path_index][1]] or rooms[candidate_paths[path_index][2]] then
 			W.set_variable { name = "r_temp", rand = "0..99" }
-			accept_path = wesnoth.get_variable("r_temp") < stray_path_chance
+			accept_path = wml.variables["r_temp"] < stray_path_chance
 		else
 			accept_path = false
 		end
@@ -213,9 +213,9 @@ local function select_layout(edge_room_chance, extra_path_chance, stray_path_cha
 	for i = 1, candidate_count do
 		W.set_variable { name = "r_temp", rand = "0..99" }
 		if rooms[candidate_paths[i][1]] and rooms[candidate_paths[i][2]] then
-			accept_path = wesnoth.get_variable("r_temp") < extra_path_chance
+			accept_path = wml.variables["r_temp"] < extra_path_chance
 		elseif rooms[candidate_paths[i][1]] or rooms[candidate_paths[i][2]] then
-			accept_path = wesnoth.get_variable("r_temp") < stray_path_chance
+			accept_path = wml.variables["r_temp"] < stray_path_chance
 		else
 			accept_path = false
 		end

@@ -1,4 +1,4 @@
-local min_x_0, max_x_0, min_y_0, max_y_0 = 1, wesnoth.get_variable("current_dungeon_template.x"), 1, wesnoth.get_variable("current_dungeon_template.y")
+local min_x_0, max_x_0, min_y_0, max_y_0 = 1, wml.variables["current_dungeon_template.x"], 1, wml.variables["current_dungeon_template.y"]
 local min_x_1, max_x_1, min_y_1, max_y_1 = 1, max_x_0, 1, max_y_0
 local spacings = {
 	primary = 4,
@@ -43,7 +43,7 @@ local function get_active_area(a_type)
 		end
 		W.store_locations(loc_table)
 		local filled = false
-		if wesnoth.get_variable("dungeon_creation.temp.active_area") then
+		if wml.variables["dungeon_creation.temp.active_area"] then
 			filled = true
 		end
 		return filled
@@ -57,10 +57,10 @@ local function get_active_area(a_type)
 end
 
 local function get_mob_loc()
-	local dcaal = tonumber(wesnoth.get_variable("dungeon_creation.temp.active_area.length")) or 0
+	local dcaal = tonumber(wml.variables["dungeon_creation.temp.active_area.length"]) or 0
 	--local ix = H.rand("0..$($dungeon_creation.temp.active_area.length-1)")
 	local ix = tonumber(H.rand(string.format("0..%i", dcaal - 1)))
-	local loc = wesnoth.get_variable(string.format("dungeon_creation.temp.active_area[%d]", ix))
+	local loc = wml.variables[string.format("dungeon_creation.temp.active_area[%d]", ix)]
 	wesnoth.set_variable("dungeon_creation.temp.mob_x", loc.x)
 	wesnoth.set_variable("dungeon_creation.temp.mob_y", loc.y)
 end
@@ -77,7 +77,7 @@ else
 	max_y_1, min_y_0 = max_y_0 / 2 + rnd_2 - 7, max_y_0 / 2 + rnd_2 - 2
 end
 
-local current_level = wesnoth.get_variable("dungeon_level.current")
+local current_level = wml.variables["dungeon_level.current"]
 local cluster_min, cluster_max = math.floor((current_level + 1) * 0.4), math.floor((current_level + 3) * 0.6)
 local nominal_max, nominal_min = math.floor(cluster_max * 4 / 3), cluster_min
 if nominal_max < cluster_max + 3 then
@@ -94,7 +94,7 @@ local function get_cluster_level()
 end
 
 local boss_clusters, mini_clusters, loners, pool_loners
-local player_count = tonumber(wesnoth.get_variable("const.active_players")) or 0
+local player_count = tonumber(wml.variables["const.active_players"]) or 0
 if player_count == 1 then
 	boss_clusters = tonumber(H.rand("1,1,2"))
 	mini_clusters = tonumber(H.rand("1,2,2"))
@@ -113,13 +113,13 @@ else
 end
 wesnoth.set_variable("dungeon_creation.temp.cluster_id", 0)
 local function advance_cluster()
-	wesnoth.set_variable("dungeon_creation.temp.cluster_id", wesnoth.get_variable("dungeon_creation.temp.cluster_id") + 1)
+	wesnoth.set_variable("dungeon_creation.temp.cluster_id", wml.variables["dungeon_creation.temp.cluster_id"] + 1)
 end
 
-local first_enemy_position = wesnoth.get_variable("const.max_player_count")
+local first_enemy_position = wml.variables["const.max_player_count"]
 if wml.variables['dungeon_creation.temp.water_theme_position'] > first_enemy_position then
 	get_active_area("water")
-	while pool_loners > 0 and wesnoth.get_variable("dungeon_creation.temp.active_area") do
+	while pool_loners > 0 and wml.variables["dungeon_creation.temp.active_area"] do
 		wesnoth.set_variable("dungeon_creation.temp.mob_theme", "water")
 		wesnoth.set_variable("dungeon_creation.temp.place_side", wml.variables['dungeon_creation.temp.water_theme_position'])
 		get_mob_loc()
@@ -144,7 +144,7 @@ while boss_clusters > 0 do
 	get_mob_loc()
 	get_cluster_level()
 	wesnoth.fire_event("create_mob_boss")
-	local ap = tonumber(wesnoth.get_variable("const.active_players")) or 0
+	local ap = tonumber(wml.variables["const.active_players"]) or 0
 	--local tough_count = H.rand(string.format("1..%d", H.rand("1..$const.active_players")))
 	local tough_count = tonumber(H.rand(string.format("1..%i", ap)))
 	for i = 1, tough_count do
@@ -173,7 +173,7 @@ while mini_clusters > 0 do
 	end
 	get_mob_loc()
 	get_cluster_level()
-	local ap = tonumber(wesnoth.get_variable("const.active_players")) or 0
+	local ap = tonumber(wml.variables["const.active_players"]) or 0
 	--local tough_count = H.rand(string.format("1..%d", H.rand("1..$const.active_players")))
 	local tough_count = tonumber(H.rand(string.format("1..%i", ap)))
 	for i = 1, tough_count do

@@ -104,7 +104,7 @@ function wesnoth.wml_actions.get_defense(cfg)
 	local terrain = cfg.terrain or wesnoth.get_terrain(cfg.x, cfg.y) or H.wml_error("[get_defense] expects either a terrain= attribute or x= and y= attributes")
 	local u
 	if cfg.unit then
-		local upath = wesnoth.get_variable(cfg.unit)
+		local upath = wml.variables[cfg.unit]
 		u = wesnoth.get_units({ id = upath.id })[1]
 	else
 		u = (wesnoth.create_unit { type = cfg.type or H.wml_error("[get_defense] expects either a unit= attribute or a type= attribute") })
@@ -117,7 +117,7 @@ function wesnoth.wml_actions.get_move_cost(cfg)
 	local terrain = cfg.terrain or wesnoth.get_terrain(cfg.x, cfg.y) or H.wml_error("[get_move_cost] expects either a terrain= attribute or x= and y= attributes")
 	local u
 	if cfg.unit then
-		local upath = wesnoth.get_variable(cfg.unit)
+		local upath = wml.variables[cfg.unit]
 		u = wesnoth.get_units({ id = upath.id })[1]
 	else
 		u = (wesnoth.create_unit { type = cfg.type }) or H.wml_error("[get_defense] expects either a unit= attribute or a type= attribute")

@@ -138,7 +138,7 @@ local function adjustWeaponDescription(wt)
 end
 function wesnoth.wml_actions.adjust_weapon_description(args)
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_weapon_description] requires a variable= key")
-	wesnoth.set_variable(var, adjustWeaponDescription(wesnoth.get_variable(var)))
+	wesnoth.set_variable(var, adjustWeaponDescription(wml.variables[var]))
 end
 
 local function adjustArmorDescription(at)
@@ -161,7 +161,7 @@ local function adjustArmorDescription(at)
 end
 function wesnoth.wml_actions.adjust_armor_description(args)
 	local var = string.match(args.variable, "[^%s]+") or H.wml_error("[adjust_armor_description] requires a variable= key")
-	wesnoth.set_variable(var, adjustArmorDescription(wesnoth.get_variable(var)))
+	wesnoth.set_variable(var, adjustArmorDescription(wml.variables[var]))
 end
 
 local function createWeapon(wtype, rank, attr, var)
@@ -1702,21 +1702,21 @@ function wesnoth.wml_actions.drop_item(cfg)
 	local var = cfg.from_variable
 	local item_data
 	if var then
-		item_data = wesnoth.get_variable(var)
+		item_data = wml.variables[var]
 	else
 		item_data = H.get_child(cfg, "item") or H.wml_error("[drop_item] requires either a from_variable= key or an [item] subtag")
 		item_data = item_data.__shallow_parsed
 	end
 
 	if not item_data.undroppable or item_data.undroppable ~= 1 then
-		local i = wesnoth.get_variable(string.format("ground.x%d.y%d.items.length", x, y))
+		local i = wml.variables[string.format("ground.x%d.y%d.items.length", x, y)]
 		if item_data.category == "gold" then
 		item_data.amount = tonumber(item_data.amount) or 0
 		if item_data.amount > 0 then
 			for j = 0, i - 1 do
-				if wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].category", x, y, j)) == "gold" then
-					local old_image = wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].ground_icon", x, y, j))
-					item_data.amount = item_data.amount + wesnoth.get_variable(string.format("ground.x%d.y%d.items[%d].amount", x, y, j))
+				if wml.variables[string.format("ground.x%d.y%d.items[%d].category", x, y, j)] == "gold" then
+					local old_image = wml.variables[string.format("ground.x%d.y%d.items[%d].ground_icon", x, y, j)]
+					item_data.amount = item_data.amount + wml.variables[string.format("ground.x%d.y%d.items[%d].amount", x, y, j)]
 					W.remove_item {
 						x = x,
 						y = y,
@@ -1767,7 +1767,7 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 		x = x,
 		y = y
 	}
-	local e = wesnoth.get_variable(string.format("ground.x%d.y%d.exit.image", x, y))
+	local e = wml.variables[string.format("ground.x%d.y%d.exit.image", x, y)]
 	if e then
 		W.item {
 			x = x,
@@ -1776,7 +1776,7 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 			visible_in_fog = "yes"
 		}
 	end
-	local g = wesnoth.get_variable(string.format("ground.x%d.y%d", x, y))
+	local g = wml.variables[string.format("ground.x%d.y%d", x, y)]
 	if g and g[1] then
 		for i = 1, #g do
 			if g[i][1] == "items" and g[i][2].ground_icon then
@@ -1790,7 +1790,7 @@ function wesnoth.wml_actions.item_cleanup(cfg)
 		end
 	else
 		wesnoth.set_variable(string.format("ground.x%d.y%d", x, y), nil)
-		g = wesnoth.get_variable(string.format("ground.x%d", x))
+		g = wml.variables[string.format("ground.x%d", x)]
 		if g and not g[1] then
 			wesnoth.set_variable(string.format("ground.x%d", x), nil)
 		end

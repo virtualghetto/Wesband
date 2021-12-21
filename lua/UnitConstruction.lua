@@ -329,9 +329,9 @@ end
 function wesnoth.wml_actions.calculate_weapon_display(args)
 	local unit_var = args.unit_variable or H.wml_error("[calculate_weapon_display] requires a unit_variable= key")
 	local weapon_var = args.weapon_variable or H.wml_error("[calculate_weapon_display] requires a unit_variable= key")
-	local unit = parse_container(wesnoth.get_variable(unit_var))
+	local unit = parse_container(wml.variables[unit_var])
 	local equipment = get_unit_equipment(unit)
-	local weapon = parse_container(wesnoth.get_variable(weapon_var))
+	local weapon = parse_container(wml.variables[weapon_var])
 	local attack = get_attack_basics(unit, equipment, weapon)
 	wesnoth.set_variable("display_damage", attack.damage)
 	wesnoth.set_variable("display_number", attack.number)
@@ -725,8 +725,8 @@ local function find_equipment_value(unit)
 end
 
 local function constructUnit(var, unstore)
-	local unit = parse_container(wesnoth.get_variable(var))
-	local player = get_p(unit, "side") <= wesnoth.get_variable("const.max_player_count") and get_p(unit, "canrecruit")
+	local unit = parse_container(wml.variables[var])
+	local player = get_p(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
 
 	if (get_p(unit, "variables.abilities.faerie_touch") or 0) > 0 and get_p(unit, "variables.inventory.weapons.melee[0].description") ~= "faerie touch" then
 		local faerie_touch = get_p(unit, "variables.inventory.weapons.melee[0]")

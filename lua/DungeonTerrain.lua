@@ -35,10 +35,10 @@ end
 
 local trapdoor_data = {}
 local function select_trapdoor_location(dir)
-	local cthl = tonumber(wesnoth.get_variable("chamber_terrain.hexes.length")) or 0
+	local cthl = tonumber(wml.variables["chamber_terrain.hexes.length"]) or 0
 	--local loc_index = H.rand("0..$($chamber_terrain.hexes.length-1)")
 	local loc_index = tonumber(H.rand(string.format("0..%i",  cthl - 1)))
-	trapdoor_data[dir] = wesnoth.get_variable(string.format("chamber_terrain.hexes[%d]", loc_index))
+	trapdoor_data[dir] = wml.variables[string.format("chamber_terrain.hexes[%d]", loc_index)]
 end
 local function invalid_trapdoor_placement()
 	return H.distance_between(trapdoor_data.up.x, trapdoor_data.up.y, trapdoor_data.down.x, trapdoor_data.down.y) < 35
@@ -61,7 +61,7 @@ W.create_exit {
 	x = trapdoor_data.down.x,
 	y = trapdoor_data.down.y,
 	destination = "Dungeon",
-	label = string.format("Down to level %d", wesnoth.get_variable("dungeon_level.current") + 1),
+	label = string.format("Down to level %d", wml.variables["dungeon_level.current"] + 1),
 	image = "scenery/trapdoor-open.png"
 }
 W.create_exit {

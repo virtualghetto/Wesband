@@ -83,7 +83,7 @@ function wesnoth.wml_actions.save_map(cfg)
 	end
 	wml.variables[var .. ".map"] = string.format("border_size=%d\nusage=map\n\n%s", b, table.concat(t, '\n'))
 	if #s > 0 then
-		H.set_variable_array(var .. ".special", s)
+		wml.array_access.set(var .. ".special", s)
 	end
 
 	local j = 0

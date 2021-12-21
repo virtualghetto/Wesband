@@ -42,7 +42,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 	local u = wesnoth.get_unit(x, y)
 	if u then
 		local v = u.variables.__cfg
-		local a = H.get_child(v, "abilities")
+		local a = wml.get_child(v, "abilities")
 		if a then
 			if a.sneak == 1 and v.mobility == 2 and 2 * u.moves >= u.max_moves then
 				hidden = true
@@ -120,7 +120,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		local dist = 14
 		local min_dist = 13
 		for i, u in ipairs(rouse_enemies) do
-			dist = H.distance_between(x, y, u.x, u.y)
+			dist = wesnoth.map.distance_between(x, y, u.x, u.y)
 			if dist <= (u.max_moves + 1) then
 				local target_cost = u.max_moves + wesnoth.unit_movement_cost(u, wesnoth.get_terrain(x, y))
 				local path, cost

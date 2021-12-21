@@ -41,7 +41,7 @@ local function select_trapdoor_location(dir)
 	trapdoor_data[dir] = wml.variables[string.format("chamber_terrain.hexes[%d]", loc_index)]
 end
 local function invalid_trapdoor_placement()
-	return H.distance_between(trapdoor_data.up.x, trapdoor_data.up.y, trapdoor_data.down.x, trapdoor_data.down.y) < 35
+	return wesnoth.map.distance_between(trapdoor_data.up.x, trapdoor_data.up.y, trapdoor_data.down.x, trapdoor_data.down.y) < 35
 end
 
 select_trapdoor_location("up")

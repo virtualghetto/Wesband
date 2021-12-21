@@ -97,7 +97,7 @@ function wesnoth.wml_actions.get_distance(cfg)
 	local x2 = cfg.x2 or H.wml_error("[get_distance] expects a x2= attribute")
 	local y2 = cfg.y2 or H.wml_error("[get_distance] expects a y2= attribute")
 	local var_name = cfg.variable or "distance"
-	wml.variables[var_name] = H.distance_between(x1, y1, x2, y2)
+	wml.variables[var_name] = wesnoth.map.distance_between(x1, y1, x2, y2)
 end
 
 function wesnoth.wml_actions.get_defense(cfg)

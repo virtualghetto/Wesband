@@ -59,7 +59,7 @@ function wesnoth.wml_actions.road_path(cfg)
 	local windiness = tonumber(cfg.road_windiness) or 1
 
 	local road_costs, road_ops = {}, {}
-	for road in helper.child_range(cfg, "road_cost") do
+	for road in wml.child_range(cfg, "road_cost") do
 		road_costs[road.terrain] = road.cost
 		road_ops[road.terrain] = road
 	end

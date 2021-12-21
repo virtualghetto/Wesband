@@ -32,7 +32,7 @@ local function adjustWeaponDescription(wt)
 	if wt.class == "thunderstick" then
 		st1 = "requires thunderstick tinker for upkeep and upgrade"
 	end
-	local sp = H.get_child(wt, "special_type")
+	local sp = wml.get_child(wt, "special_type")
 	if sp then
 		if sp.throwable and sp.throwable == 1 then
 			st1 = cappend(st1, "throwable")
@@ -115,7 +115,7 @@ local function adjustWeaponDescription(wt)
 	st2 = sappend(st2, "; ", st3)
 	st1 = sappend(st1, "\n", st2)
 	st2 = ""
-	local pr = H.get_child(wt, "prereq")
+	local pr = wml.get_child(wt, "prereq")
 	if pr then
 		if pr.body and pr.body > 0 then
 			st2 = string.format("%d body", pr.body)
@@ -153,7 +153,7 @@ local function adjustArmorDescription(at)
 	if at.block_ranged and at.block_ranged == 1 then
 		at.special = cappend(at.special, "disallows ranged weapon")
 	end
-	local sp = H.get_child(at, "special_type")
+	local sp = wml.get_child(at, "special_type")
 	if sp and sp.steadfast and sp.steadfast == 1 then
 		at.special = cappend(at.special, "allows steadfast")
 	end
@@ -1704,7 +1704,7 @@ function wesnoth.wml_actions.drop_item(cfg)
 	if var then
 		item_data = wml.variables[var]
 	else
-		item_data = H.get_child(cfg, "item") or H.wml_error("[drop_item] requires either a from_variable= key or an [item] subtag")
+		item_data = wml.get_child(cfg, "item") or H.wml_error("[drop_item] requires either a from_variable= key or an [item] subtag")
 		item_data = item_data.__shallow_parsed
 	end
 

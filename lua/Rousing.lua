@@ -5,7 +5,7 @@ local function checkSafety(x, y)
 		safety = not wesnoth.eval_conditional {
 			{ "have_unit", {
 				side = wml.variables['const.enemy_sides'],
-				{ "filter_location", { x = x, y = y, radius = 12 } },
+				{ "filter_location", { x = x, y = y, radius = 7 } },
 				{ "and", {
 					{ "not", {
 						{ "filter_wml", {
@@ -22,7 +22,7 @@ local function checkSafety(x, y)
 		safety = not wesnoth.eval_conditional {
 			{ "have_unit", {
 				side = wml.variables['const.enemy_sides'],
-				{ "filter_location", { x = x, y = y, radius = 12 } },
+				{ "filter_location", { x = x, y = y, radius = 7 } },
 				{ "not", {
 					{ "filter_wml", {
 						{ "status", { guardian = "yes" } }

@@ -185,7 +185,7 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		wml.variables["rouse_list"] = rouse_list
 		local visible = wesnoth.get_units( {
 				id = rouse_enemies[min_index].id,
-				{ "filter_vision", { viewing_side = wml.variables['side_number'] } }
+				{ "filter_vision", { side = wml.variables['side_number'] } }
 			} )
 		if visible[1] then
 			wesnoth.fire_event("spot", x, y, visible[1].x, visible[1].y)

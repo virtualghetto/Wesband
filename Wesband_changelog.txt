@@ -1,3 +1,10 @@
+0.8.2-*
+-code port to make it compatible with 1.14 and 1.16
+-disabled town_type cavern1
+-increased max_hench per side. Tied to the number of side players.
+-decreased rousing movement restrictions from radius 12 to 7
+-carve dungeon paths from all units to both exits
+
 0.8.2
 -converted several variable operations in spellcasting setup to formulas (fixes rounding problems)
 -converted DROP_ITEM and DROP_GOLD macros into [drop_item] tag, fixing bug preventing item dropping
@@ -59,7 +66,7 @@
 
 0.7.5
 -fixed UPGRADE_MAGIC_WHITE_METAL_TO_ARCANE_CONDITION macro
--added female elf and human PCs (art by Shinobody) 
+-added female elf and human PCs (art by Shinobody)
 
 0.7.4
 -fixed default attributes of neutral elves' wooden weapons
@@ -190,7 +197,7 @@ fixed round shields blocking dual wield
 -enemies spaced out more sensibly
 -max players upped to 4
 -shroud kept when players revisit a level
--NPCs set to system that mirrors PCs, NPCs contain actual item for every item they should have. 
+-NPCs set to system that mirrors PCs, NPCs contain actual item for every item they should have.
 -NPCs are much more varied and can now level past their normal max level, gaining stats and abilities in the process
 -[end_level] now able to be within the change level command
 -hundreds of lines of other small changes
@@ -387,7 +394,7 @@ fixed round shields blocking dual wield
 
 0.1.2
 -AI turns for 3 players takes way too long, separated the mobs up a little bit, also fixed bug that prevented separation
--adding a boss or two per player to each level 
+-adding a boss or two per player to each level
 -adjusting number of enemies each level, clusters of enemies are bigger when there are more players
 -decreased chance of non-themed mobs appearing (trying to make it so AI turns don't take forever)
 -enhanced henchmen in tavern, need to make all stores work a little better in respects to refreshing and ramping up from dungeon activity
@@ -423,7 +430,7 @@ old RPG changelog
 -removed obsolete references to armor movement penalties
 -fixed ghoul form's feeding upgrade show_if
 -TCed character template images, tavern hench images
--side bar now refreshes for PCs during construct unit due to a dummy [object]. unfortunately, the same trick doesn't work for undead henches. 
+-side bar now refreshes for PCs during construct unit due to a dummy [object]. unfortunately, the same trick doesn't work for undead henches.
 -trolls can buy evade now. not 100% sure about this.
 -dark magic upgrade is costless for magic initiate
 -made it so you don't see "no items to pick up" after picking up things
@@ -458,7 +465,7 @@ fixed faerie fire animation (human->elf)
 -removed storm_stored initialization (missed it when I took out the events that use it), did this in base folder, not modifications
 -added missing attack anim macros to troll (not sure when that happened)
 -added shields to the give command.
--NPCs can now use shields. 
+-NPCs can now use shields.
 -initialized magic_casting.focus
 -found & fixed the display issue with the skeletal hench's weapon change, fist-as-rpg-weapon is now done (feel free to tweak for balance if necessary)
 -fixed bug in npc_eval_gold (missing $)
@@ -685,7 +692,7 @@ remaining bugs:
 -added survivalist, regen based on being in trees, to human ranger line
 -added traits healthy (dwarves) and fearless (trolls)
 -added thunderstick and thunderstick tinker. thunderstick has no skill with it. instead the character buys skills that allow him to improve the weapon itself.
--added a way to degrade thunderstick damage if the user doesn't have the thunderstick skill equal to the thunderstick level, but what i did doesn't work plus it crashes the game. commented out, may want to go with weapon prereq instead (like att prereq). 
+-added a way to degrade thunderstick damage if the user doesn't have the thunderstick skill equal to the thunderstick level, but what i did doesn't work plus it crashes the game. commented out, may want to go with weapon prereq instead (like att prereq).
 -added shield functionality. it lets players regain terrain defense lost by wearing armor.
 -gave shield with steadfast capabilities to dwarvish guardsman
 -added steadfast ability to dwarves (requires large enough shield)
@@ -700,10 +707,10 @@ remaining bugs:
 -fixed bloodlust, still needs icon, may want to limit to polearms, bludgeon and heavy blades (not really possible with current WML)
 -teleport given to mage in silver order. user can currently teleport casting power x 2 hexes away, into anything that isn't unwalkable/impassable
 -temple sells healing potions
--added tome type of usable item, need requirements 
+-added tome type of usable item, need requirements
 -leadership now affect_allies=yes
 -removed darkrobe from humans (frivolous art to add to other races, maybe will reconsider later)
--consolidated human magic/dark magic casting power/speed 
+-consolidated human magic/dark magic casting power/speed
 -made dark magic a branch from magic initiate, will need to retool the attack spells to make them make sense
 -added artwork and basic framework for male and female elves, handing all the graphics may be way too much for Wesnoth to handle. if this is the case, will take out elves and simply work with humans for now
 
@@ -713,7 +720,7 @@ remaining bugs:
 0.1.23
 -bug#9: selling can unequip items
 -the shop on the overworld refreshes every time you exit the dungeon, gives better equipment depending on how deep the adventurers have gone during the game
--added white_heals spell, available innately to the white order or magic. 
+-added white_heals spell, available innately to the white order or magic.
 -bug#10: option list of white_heals not displaying correctly, also not showing anything about curing
 -added simple_action as variable set from the unit's max_simple_action every side turn
 -bug#11: sneak not working quite like it should, unit showing as hidden sometimes when it shouldn't
@@ -734,7 +741,7 @@ remaining bugs:
 #6,#8,#9,#10,#11,#12
 
 0.1.22
--bug#7: darkrobe sprite variation not working at all, just shows unarmored-fist. 
+-bug#7: darkrobe sprite variation not working at all, just shows unarmored-fist.
 -added no-income villages for human, human city and elven
 -altered command macro names, condensed use item and cast spell into one command
 -added rudimentary gold gain from killing
@@ -745,7 +752,7 @@ remaining bugs:
 -fixed bug#7, necro staff needed to have name=magestaff
 -added ability to sell to shop
 -fixed bug#5: dual/triple wield just needed a not_equals=1 instead of equals=0 to test the un-initialized variable special_type.complex
--fixed bug#2: events like post advance put into outside utils file and then called in each scenario. units need to be constructed every time with a macro. 
+-fixed bug#2: events like post advance put into outside utils file and then called in each scenario. units need to be constructed every time with a macro.
 
 remaining bugs:
 #6,#8
@@ -758,7 +765,7 @@ remaining bugs:
 
 0.1.20
 -fixed bug#3, wasn't armor, was weapon_magic_adjust not clearing
--massive changes in handling of weapons and armor. items are now not part of a list where the unit simply holds a number of IDs from the list. instead, items are part of the unit variables and when dropped, sold or given, they get put on the ground. 
+-massive changes in handling of weapons and armor. items are now not part of a list where the unit simply holds a number of IDs from the list. instead, items are part of the unit variables and when dropped, sold or given, they get put on the ground.
 -added a bunch of (crappy) ground icons
 -created a small item-creating mechanism, will include shops later
 -armor info display significantly more sophisticated
@@ -773,7 +780,7 @@ remaining bugs:
 -armo and weapons in new system that allows flexibility and scability
 -only "Soldier" class available
 -bug#3: armor increases magic power by exponential amounts
--started using [set_variables] to 
+-started using [set_variables] to
 -bug#4: if starting a new scenario, game_error: Unknown Unit "
 
 0.1.18
@@ -795,4 +802,4 @@ remaining bugs:
 
 0.1.15
 -removed store and creation option screen, replaced with starting classes
--removed alignment-based human unit files. 
+-removed alignment-based human unit files.

@@ -77,7 +77,6 @@ function wesnoth.wml_actions.save_map(cfg)
 			for i = 0, wml.variables[string.format("ground.x%d.y%d.items.length", x, y)] - 1 do
 				table.insert(s, { id = "item", x = x, y = y, { "item", wml.variables[string.format("ground.x%d.y%d.items[%d]", x, y, i)] } })
 			end
-			
 		end
 		t[y + b] = table.concat(r, ',')
 	end

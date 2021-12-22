@@ -39,7 +39,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			end
 		end
 	end
-	
+
 	local function probSet()
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
@@ -50,7 +50,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			end
 		end
 	end
-	
+
 	local function probAdd()
 		local success = false
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
@@ -74,7 +74,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 		local count = wml.variables[string.format("%s.total_weight", list)] or 0
 		wml.variables[string.format("%s.total_weight", list)] = count + weight
 	end
-	
+
 	local function probSub()
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
@@ -91,7 +91,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			end
 		end
 	end
-	
+
 	local function probScale()
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		for i = 0, item_count - 1 do
@@ -104,7 +104,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			end
 		end
 	end
-	
+
 	local var
 	local function probUnion()
 		local item_count = wml.variables[string.format("%s.entry.length", var)] or 0
@@ -114,7 +114,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			probAdd()
 		end
 	end
-	
+
 	local function probDiff()
 		local item_count = wml.variables[string.format("%s.entry.length", var)] or 0
 		for i = 0, item_count -1 do
@@ -123,7 +123,7 @@ function wesnoth.wml_actions.set_prob(cfg)
 			probSub()
 		end
 	end
-	
+
 	local op = cfg.op or H.wml_error("[set_prob] requires an op= key.")
 	list = cfg.name or H.wml_error("[set_prob] requires a name= key.")
 	if op == "clear" then
@@ -189,7 +189,7 @@ function wesnoth.wml_actions.get_prob(cfg)
 			end
 		end
 	end
-	
+
 	local function probGet()
 		local item_count = wml.variables[string.format("%s.entry.length", list)] or 0
 		local val = 0
@@ -201,7 +201,7 @@ function wesnoth.wml_actions.get_prob(cfg)
 		end
 		wml.variables[var] = val
 	end
-	
+
 	var = cfg.variable or H.wml_error("[get_prob] requires a variable= key.")
 	list = cfg.name or H.wml_error("[get_prob] requires a name= key.")
 	local op = cfg.op or H.wml_error("[get_prob] requires an op= key.")

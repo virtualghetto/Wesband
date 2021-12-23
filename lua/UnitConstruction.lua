@@ -1235,8 +1235,8 @@ This unit's resistances are doubled, up to a maximum of 50%, when defending. Vul
 		local chaotic = { "filter_wml", {
 			alignment = "chaotic"
 		} }
-		local non_chaotic = { "filter_wml", {
-			{ "not", {
+		local non_chaotic = { "not", {
+			{ "filter_wml", {
 				alignment = "chaotic"
 			} }
 		} }

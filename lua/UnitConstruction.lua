@@ -2751,7 +2751,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 end
 function wesnoth.wml_actions.construct_unit(cfg)
 	local var = cfg.variable or H.wml_error("[construct_unit] requires a variable= key")
-	local unstore
+	local unstore = nil
 	if type(cfg.unstore) ~= "boolean" then
 		unstore = true
 	else

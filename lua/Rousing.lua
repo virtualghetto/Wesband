@@ -194,6 +194,8 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		end
 	elseif cfg.refresh and u and checkSafety(x, y) and u.side == wesnoth.current.side and u.attacks_left > 0 and u.variables.simple_action and u.variables.simple_action > 0 then
 		u.moves = u.max_moves
+		-- Might not be multiplayer safe according to the wiki
+		W.select_unit { x = u.x, y = u.y }
 	end
 	wml.variables["rouse_temp_locs"] = nil
 end

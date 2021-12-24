@@ -6,11 +6,11 @@ Ported by vghetto to BfW 1.14 & 1.16.
 email=
 icon="scenery/dwarven-doors-closed.png"
 passphrase=
-tags="WBD"
+tags="WBD,WHK"
 title="Wesband"
 translate=true
 type="campaign_mp"
-version="0.8.2-2"
+version="0.8.2-3"
 [feedback]
 	topic_id=21234
 [/feedback]

@@ -222,7 +222,7 @@ local function get_unit_equipment(unit)
 			equipment.melee_3 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_3")))
 		end
 	end
-	-- FIXME: check that thrown[0] is a valid field
+	-- thrown[0] is a valid field. Keep it.
 	equipment.thrown = get_p(equipment.melee_1, "thrown[0]")
 	if get_n(equipment.shield, "block_ranged") == 0 and get_n(unit, "variables.no_ranged") == 0 then
 		equipment.ranged = get_p(unit, string.format("variables.inventory.weapons.ranged[%d]", math.max(0, get_n(unit, "variables.equipment_slots.ranged"))))
@@ -730,10 +730,9 @@ local function constructUnit(var, unstore)
 	local unit = parse_container(wml.variables[var])
 	local player = get_n(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
 
-	-- FIXME: use variables.equipment_slots.melee_1 for melee[0]
-	local slot_melee_1 = get_n(unit, "variables.equipment_slots.melee_1")
-	if get_n(unit, "variables.abilities.faerie_touch") > 0 and get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "].description") ~= "faerie touch" then
-		local faerie_touch = get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]")
+	-- melee[0] is a valid field. Keep it. Replaces fists.
+	if get_n(unit, "variables.abilities.faerie_touch") > 0 and get_p(unit, "variables.inventory.weapons.melee[0].user_name") ~= "faerie touch" then
+		local faerie_touch = get_p(unit, "variables.inventory.weapons.melee[0]")
 		set_p(faerie_touch, "special_type", { magical_to_hit = 1 })
 		faerie_touch = unparse_container(faerie_touch)
 		faerie_touch.icon = "touch-faerie"
@@ -749,12 +748,12 @@ local function constructUnit(var, unstore)
 		faerie_touch.mind_damage_rate = 10
 		faerie_touch.deft_number_rate = 5
 		faerie_touch.mind_number_rate = 5
-		set_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]", adjustWeaponDescription(faerie_touch))
-	elseif get_n(unit, "variables.abilities.lich_touch") == 1 and get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "].description") ~= "lich touch" then
-		local lich_touch = get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]")
+		set_p(unit, "variables.inventory.weapons.melee[0]", adjustWeaponDescription(faerie_touch))
+	elseif get_n(unit, "variables.abilities.lich_touch") == 1 and get_p(unit, "variables.inventory.weapons.melee[0].user_name") ~= "lich touch" then
+		local lich_touch = get_p(unit, "variables.inventory.weapons.melee[0]")
 		set_p(lich_touch, "special_type", { spell_drains = 1 })
 		lich_touch = unparse_container(lich_touch)
-		lich_touch.icon = "touch-faerie"
+		lich_touch.icon = "touch-undead"
 		lich_touch.user_name = "lich touch"
 		lich_touch.description = "lich touch"
 		lich_touch.class = "magical"
@@ -765,7 +764,7 @@ local function constructUnit(var, unstore)
 		lich_touch.mind_damage_rate = 10
 		lich_touch.deft_number_rate = 5
 		lich_touch.mind_number_rate = 5
-		set_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]", adjustWeaponDescription(lich_touch))
+		set_p(unit, "variables.inventory.weapons.melee[0]", adjustWeaponDescription(lich_touch))
 	end
 	clear_p(unit, "variables.inventory.type")
 	local weapon_list = get_p(unit, "variables.inventory.weapons.melee") or {}

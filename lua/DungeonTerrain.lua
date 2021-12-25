@@ -40,7 +40,20 @@ local function select_trapdoor_location(dir)
 	local loc_index = tonumber(H.rand(string.format("0..%i",  cthl - 1)))
 	trapdoor_data[dir] = wml.variables[string.format("chamber_terrain.hexes[%d]", loc_index)]
 end
+local function trapdoor_on_board(x, y)
+	if type(x) ~= "number" or type(y) ~= "number" then
+		return false
+	end
+	local w, h, b = wesnoth.get_map_size()
+	return x >= 1 and y >= 1 and x <= w and y <= h
+end
 local function invalid_trapdoor_placement()
+	if not trapdoor_on_board(trapdoor_data.up.x, trapdoor_data.up.y) then
+		return true
+	end
+	if not trapdoor_on_board(trapdoor_data.down.x, trapdoor_data.down.y) then
+		return true
+	end
 	return wesnoth.map.distance_between(trapdoor_data.up.x, trapdoor_data.up.y, trapdoor_data.down.x, trapdoor_data.down.y) < 35
 end
 

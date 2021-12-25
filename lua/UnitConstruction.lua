@@ -92,9 +92,10 @@ local function get_p(parsed, relative)
 	end
 	return v or t
 end
-local function get_n(parsed, relative)
-        local n = get_p(parsed, relative)
-        return tonumber(n) or 0
+local function get_n(parsed, relative, num)
+	local n = tonumber(num) or 0
+	local p = get_p(parsed, relative)
+	return tonumber(p) or n
 end
 local function clear_p(parsed, relative)
 	if type(relative) ~= "nil" then
@@ -209,21 +210,22 @@ end
 
 local function get_unit_equipment(unit)
 	local equipment = {}
-	equipment.head_armor = get_p(unit, string.format("variables.inventory.armor.head[%d]", get_p(unit, "variables.equipment_slots.head_armor")))
-	equipment.torso_armor = get_p(unit, string.format("variables.inventory.armor.torso[%d]", get_p(unit, "variables.equipment_slots.torso_armor")))
-	equipment.leg_armor = get_p(unit, string.format("variables.inventory.armor.legs[%d]", get_p(unit, "variables.equipment_slots.leg_armor")))
-	equipment.shield = get_p(unit, string.format("variables.inventory.armor.shield[%d]", get_p(unit, "variables.equipment_slots.shield")))
-	equipment.melee_1 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_p(unit, "variables.equipment_slots.melee_1")))
-	local wield_skill, block_wield = get_p(unit, "variables.abilities.wield"), get_p(equipment.shield, "block_wield")
-	if wield_skill and wield_skill > 0 and block_wield < 2 then
-		equipment.melee_2 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_p(unit, "variables.equipment_slots.melee_2")))
+	equipment.head_armor = get_p(unit, string.format("variables.inventory.armor.head[%d]", get_n(unit, "variables.equipment_slots.head_armor")))
+	equipment.torso_armor = get_p(unit, string.format("variables.inventory.armor.torso[%d]", get_n(unit, "variables.equipment_slots.torso_armor")))
+	equipment.leg_armor = get_p(unit, string.format("variables.inventory.armor.legs[%d]", get_n(unit, "variables.equipment_slots.leg_armor")))
+	equipment.shield = get_p(unit, string.format("variables.inventory.armor.shield[%d]", get_n(unit, "variables.equipment_slots.shield")))
+	equipment.melee_1 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_1")))
+	local wield_skill, block_wield = get_n(unit, "variables.abilities.wield"), get_n(equipment.shield, "block_wield")
+	if wield_skill > 0 and block_wield < 2 then
+		equipment.melee_2 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_2")))
 		if wield_skill == 2 and block_wield == 0 then
-			equipment.melee_3 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_p(unit, "variables.equipment_slots.melee_3")))
+			equipment.melee_3 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_3")))
 		end
 	end
+	-- FIXME: check that thrown[0] is a valid field
 	equipment.thrown = get_p(equipment.melee_1, "thrown[0]")
-	if get_p(equipment.shield, "block_ranged") == 0 and (get_p(unit, "variables.no_ranged") or 0) == 0 then
-		equipment.ranged = get_p(unit, string.format("variables.inventory.weapons.ranged[%d]", math.max(0, get_p(unit, "variables.equipment_slots.ranged"))))
+	if get_n(equipment.shield, "block_ranged") == 0 and get_n(unit, "variables.no_ranged") == 0 then
+		equipment.ranged = get_p(unit, string.format("variables.inventory.weapons.ranged[%d]", math.max(0, get_n(unit, "variables.equipment_slots.ranged"))))
 	end
 	return equipment
 end
@@ -241,20 +243,20 @@ local function get_attack_basics(unit, equipment, weapon)
 	local percent_mult, skill_dam, skill_num = 1.0, 1, 0
 	local weapon_class = get_p(weapon, "class")
 	if weapon_class == "magical" or weapon_class == "spell" then
-		skill_dam = (get_p(unit, "variables.abilities.magic_casting.power") or 0) * (get_p(weapon, "spell_power") or 1)
-		skill_num = (get_p(unit, "variables.abilities.magic_casting.speed") or 0)
+		skill_dam = get_n(unit, "variables.abilities.magic_casting.power") * get_n(weapon, "spell_power", 1)
+		skill_num = get_n(unit, "variables.abilities.magic_casting.speed")
 	else
-		if get_p(weapon, "number") < 2 then
+		if get_n(weapon, "number") < 2 then
 			skill_dam = 2
 		end
-		skill_dam = skill_dam * (get_p(unit, string.format("variables.weapon_skills.%s.damage", weapon_class)) or 0)
-		skill_num = get_p(unit, string.format("variables.weapon_skills.%s.attack", weapon_class)) or 0
+		skill_dam = skill_dam * get_n(unit, string.format("variables.weapon_skills.%s.damage", weapon_class))
+		skill_num = get_n(unit, string.format("variables.weapon_skills.%s.attack", weapon_class))
 	end
 	local function add_stat_adjusts(stat)
-		local stat_level = get_p(unit, "variables." .. stat)
-		skill_dam = skill_dam + (get_p(weapon, stat .. "_damage_rate") or 0) * stat_level * 0.01
-		skill_num = skill_num + (get_p(weapon, stat .. "_number_rate") or 0) * stat_level * 0.01
-		local prereq = get_p(weapon, "prereq." .. stat) or 0
+		local stat_level = get_n(unit, "variables." .. stat)
+		skill_dam = skill_dam + get_n(weapon, stat .. "_damage_rate") * stat_level * 0.01
+		skill_num = skill_num + get_n(weapon, stat .. "_number_rate") * stat_level * 0.01
+		local prereq = get_n(weapon, "prereq." .. stat)
 		if prereq > stat_level then
 			percent_mult = percent_mult * stat_level / prereq
 		end
@@ -264,20 +266,20 @@ local function get_attack_basics(unit, equipment, weapon)
 	add_stat_adjusts("mind")
 	if weapon_class == "spell" then
 		local spell_bonus_type = get_p(weapon, "bonus_type")
-		local armor_penalty = get_p(equipment.shield, "magic_adjust") + get_p(equipment.head_armor, "magic_adjust") + get_p(equipment.torso_armor, "magic_adjust") + get_p(equipment.leg_armor, "magic_adjust")
+		local armor_penalty = get_n(equipment.shield, "magic_adjust") + get_n(equipment.head_armor, "magic_adjust") + get_n(equipment.torso_armor, "magic_adjust") + get_n(equipment.leg_armor, "magic_adjust")
 		if spell_bonus_type == "runic_magic_adjust" then
 			armor_penalty = armor_penalty * 0.5
 			if get_p(equipment.melee_1, "user_name") == "hammer" then
-				armor_penalty = math.min(0, armor_penalty + 3 * (get_p(unit, "variables.abilities.magic_casting.focus") or 0))
+				armor_penalty = math.min(0, armor_penalty + 3 * get_n(unit, "variables.abilities.magic_casting.focus"))
 			end
 		elseif get_p(weapon, "name") == "faerie fire" then
 			if get_p(equipment.melee_1, "name") == "sword" then
-				armor_penalty = math.min(0, armor_penalty + 3 * (get_p(unit, "variables.abilities.magic_casting.focus") or 0))
+				armor_penalty = math.min(0, armor_penalty + 3 * get_n(unit, "variables.abilities.magic_casting.focus"))
 			end
 		end
-		percent_mult = percent_mult * math.max(0, 100 + (get_p(equipment.melee_1, spell_bonus_type) or 0) + armor_penalty) * 0.01
+		percent_mult = percent_mult * math.max(0, 100 + get_n(equipment.melee_1, spell_bonus_type) + armor_penalty) * 0.01
 	elseif attack.range == "ranged" then
-		percent_mult = percent_mult * math.max(0, 100 + get_p(equipment.head_armor, "ranged_adjust") + get_p(equipment.shield, "ranged_adjust")) * 0.01
+		percent_mult = percent_mult * math.max(0, 100 + get_n(equipment.head_armor, "ranged_adjust") + get_n(equipment.shield, "ranged_adjust")) * 0.01
 	end
 	local unit_race = get_p(unit, "race")
 	if unit_race == "elf" then
@@ -302,20 +304,20 @@ local function get_attack_basics(unit, equipment, weapon)
 			percent_mult = percent_mult * 0.8
 		end
 	end
-	attack.damage = math.max(1, math.floor(percent_mult * (get_p(weapon, "damage") + skill_dam)))
-	attack.number = math.floor(get_p(weapon, "number") + skill_num)
-	local target_level = get_p(unit, "variables.abilities.target") or 0
-	if target_level > 0 and (get_p(weapon, "special_type.backstab") or 0) > 0 then
+	attack.damage = math.max(1, math.floor(percent_mult * (get_n(weapon, "damage") + skill_dam)))
+	attack.number = math.floor(get_n(weapon, "number") + skill_num)
+	local target_level = get_n(unit, "variables.abilities.target")
+	if target_level > 0 and get_n(weapon, "special_type.backstab") > 0 then
 		attack.damage = math.ceil(attack.damage * 0.5 * (3 + target_level))
 		attack.number = math.ceil(attack.number * 0.5)
 	end
-	if (get_p(unit, "variables.abilities.witch_magic") or 0) == 4 then
+	if get_n(unit, "variables.abilities.witch_magic") == 4 then
 		attack.damage = math.floor(attack.damage * 1.5 + 0.5)
 	end
-	if weapon_class == "light_blade" and (get_p(unit, "variables.abilities.witchcraft") or 0) == 1 and (get_p(unit, "variables.abilities.magic_casting.power") or 0) > 0 then
+	if weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0 then
 		attack.number = math.ceil(attack.number * 0.5)
 	end
-	if attack.user_name == "hammer" and (get_p(unit, "variables.abilities.devling_spiker") or 0) > 0 then
+	if attack.user_name == "hammer" and get_n(unit, "variables.abilities.devling_spiker") > 0 then
 		attack.description = "nail 'em"
 		attack.damage = math.floor(attack.damage * attack.number + 0.5)
 		attack.number = 1
@@ -392,17 +394,17 @@ local function find_npc_value(unit, params)
 		skirmisher = params.skirmisher_mod or 1.2
 	}
 	local function move_cost_modifer(terrain_type, base, multiplier, offset)
-		return 1 + (offset or 0) + (multiplier or 0.7) * ((base or 2) - math.min(get_p(unit, "movement_costs." .. terrain_type), 5))
+		return 1 + (offset or 0) + (multiplier or 0.7) * ((base or 2) - math.min(get_n(unit, "movement_costs." .. terrain_type), 5))
 	end
 	local function resist_value(damage_type, base)
-		return math.max(0, (200 - base - get_p(unit, "resistance." .. damage_type)) / modifiers[damage_type])
+		return math.max(0, (200 - base - get_n(unit, "resistance." .. damage_type)) / modifiers[damage_type])
 	end
 	local function defense_value(terrain_type, base, divisor)
-		return (100 - base - get_p(unit, "defense." .. terrain_type)) / divisor
+		return (100 - base - get_n(unit, "defense." .. terrain_type)) / divisor
 	end
 	local values = { -- get basic values
-		hp = get_p(unit, "max_hitpoints") * 1.1,
-		moves = (get_p(unit, "max_moves") * 0.04 + 0.6) * move_cost_modifer("swamp_water", 3) * move_cost_modifer("shallow_water", 3) * move_cost_modifer("forest") * move_cost_modifer("frozen", 3, 0.04, -0.01) * move_cost_modifer("hills", 2, 0.1) * move_cost_modifer("mountains", 3, 0.05) * move_cost_modifer("cave", 2, 0.1, 0.05) * move_cost_modifer("fungus") * move_cost_modifer("sand"),
+		hp = get_n(unit, "max_hitpoints") * 1.1,
+		moves = (get_n(unit, "max_moves") * 0.04 + 0.6) * move_cost_modifer("swamp_water", 3) * move_cost_modifer("shallow_water", 3) * move_cost_modifer("forest") * move_cost_modifer("frozen", 3, 0.04, -0.01) * move_cost_modifer("hills", 2, 0.1) * move_cost_modifer("mountains", 3, 0.05) * move_cost_modifer("cave", 2, 0.1, 0.05) * move_cost_modifer("fungus") * move_cost_modifer("sand"),
 		resists = 1.35 * (resist_value("arcane", 50) + resist_value("blade", 50) + resist_value("cold", 50) + resist_value("fire", 50) + resist_value("impact", 50) + resist_value("pierce", 50)) / (1 / modifiers.arcane + 1 / modifiers.blade + 1 / modifiers.cold + 1 / modifiers.fire + 1 / modifiers.impact + 1 / modifiers.pierce) - 17.5, -- no idea the rationale behind this formula, but it seems to be what the WML version converts to
 		defense = 50 + defense_value("flat", 50, 3) + defense_value("swamp_water", 20, 8) + defense_value("forest", 50, 4) + defense_value("hills", 50, 2) + defense_value("frozen", 20, 10) + defense_value("mountains", 60, 5) + defense_value("cave", 40, 3) + defense_value("sand", 30, 4),
 		attacks = 0,
@@ -435,7 +437,7 @@ local function find_npc_value(unit, params)
 		for i = 1, #ability_array do
 			local ability_id = get_p(ability_array[i], "id") or "none"
 			if ability_id == "regenerates" then
-				values.hp = values.hp + get_p(ability_array[i], "value")
+				values.hp = values.hp + get_n(ability_array[i], "value")
 			end
 		end
 	end
@@ -444,7 +446,7 @@ local function find_npc_value(unit, params)
 		for i = 1, #ability_array do
 			local ability_id = get_p(ability_array[i], "id") or "none"
 			if ability_id == "healing" then
-				values.defense = values.defense + 2 * get_p(ability_array[i], "value")
+				values.defense = values.defense + 2 * get_n(ability_array[i], "value")
 			end
 		end
 	end
@@ -536,7 +538,7 @@ local function find_npc_value(unit, params)
 				type = get_p(attack_array[i], "type"),
 				specials = false
 			}
-			attack_eval.value = get_p(attack_array[i], "damage") * get_p(attack_array[i], "number") * modifiers[attack_eval.type]
+			attack_eval.value = get_n(attack_array[i], "damage") * get_n(attack_array[i], "number") * modifiers[attack_eval.type]
 			ability_array = get_p(attack_array[i], "specials.backstab")
 			if type(ability_array) == "table" then
 				for i = 1, #ability_array do
@@ -669,7 +671,7 @@ local function find_npc_value(unit, params)
 				for i = 1, #ability_array do
 					local ability_id = get_p(ability_array[i], "id") or "none"
 					if ability_id == "poison" then
-						attack_eval.value = attack_eval.value + modifiers.poison + get_p(attack_array[i], "number")
+						attack_eval.value = attack_eval.value + modifiers.poison + get_n(attack_array[i], "number")
 						attack_eval.specials = true
 					end
 				end
@@ -716,7 +718,7 @@ local function find_equipment_value(unit)
 		local equipment_array, value = get_p(unit, "variables.inventory." .. equipment_type), 0
 		if type(equipment_array) == "table" then
 			for i = 1, #equipment_array do
-				value = value + math.floor((get_p(equipment_array[i], "absolute_value") or 0) * 0.2 + 0.5)
+				value = value + math.floor(get_n(equipment_array[i], "absolute_value") * 0.2 + 0.5)
 			end
 		end
 		return value
@@ -726,10 +728,12 @@ end
 
 local function constructUnit(var, unstore)
 	local unit = parse_container(wml.variables[var])
-	local player = get_p(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
+	local player = get_n(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
 
-	if (get_p(unit, "variables.abilities.faerie_touch") or 0) > 0 and get_p(unit, "variables.inventory.weapons.melee[0].description") ~= "faerie touch" then
-		local faerie_touch = get_p(unit, "variables.inventory.weapons.melee[0]")
+	-- FIXME: use variables.equipment_slots.melee_1 for melee[0]
+	local slot_melee_1 = get_n(unit, "variables.equipment_slots.melee_1")
+	if get_n(unit, "variables.abilities.faerie_touch") > 0 and get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "].description") ~= "faerie touch" then
+		local faerie_touch = get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]")
 		set_p(faerie_touch, "special_type", { magical_to_hit = 1 })
 		faerie_touch = unparse_container(faerie_touch)
 		faerie_touch.icon = "touch-faerie"
@@ -737,7 +741,7 @@ local function constructUnit(var, unstore)
 		faerie_touch.description = "faerie touch"
 		faerie_touch.class = "magical"
 		faerie_touch.class_description = "Magical"
-		if get_p(unit, "variables.abilities.faerie_touch") == 2 then
+		if get_n(unit, "variables.abilities.faerie_touch") == 2 then
 			faerie_touch.type = "arcane"
 		end
 		faerie_touch.body_damage_rate = 0
@@ -745,9 +749,9 @@ local function constructUnit(var, unstore)
 		faerie_touch.mind_damage_rate = 10
 		faerie_touch.deft_number_rate = 5
 		faerie_touch.mind_number_rate = 5
-		set_p(unit, "variables.inventory.weapons.melee[0]", adjustWeaponDescription(faerie_touch))
-	elseif (get_p(unit, "variables.abilities.lich_touch") or 0) == 1 and get_p(unit, "variables.inventory.weapons.melee[0].description") ~= "lich touch" then
-		local lich_touch = get_p(unit, "variables.inventory.weapons.melee[0]")
+		set_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]", adjustWeaponDescription(faerie_touch))
+	elseif get_n(unit, "variables.abilities.lich_touch") == 1 and get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "].description") ~= "lich touch" then
+		local lich_touch = get_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]")
 		set_p(lich_touch, "special_type", { spell_drains = 1 })
 		lich_touch = unparse_container(lich_touch)
 		lich_touch.icon = "touch-faerie"
@@ -761,49 +765,49 @@ local function constructUnit(var, unstore)
 		lich_touch.mind_damage_rate = 10
 		lich_touch.deft_number_rate = 5
 		lich_touch.mind_number_rate = 5
-		set_p(unit, "variables.inventory.weapons.melee[0]", adjustWeaponDescription(lich_touch))
+		set_p(unit, "variables.inventory.weapons.melee[" .. slot_melee_1 .. "]", adjustWeaponDescription(lich_touch))
 	end
 	clear_p(unit, "variables.inventory.type")
 	local weapon_list = get_p(unit, "variables.inventory.weapons.melee") or {}
 	for i = 1, #weapon_list do
 		local weapon_class_path = "variables.inventory.type." .. get_p(weapon_list[i], "class")
-		set_p(unit, weapon_class_path, 1 + (get_p(unit, weapon_class_path) or 0))
+		set_p(unit, weapon_class_path, 1 + get_n(unit, weapon_class_path))
 		local thrown = get_p(weapon_list[i], "thrown")
 		if thrown then
 			weapon_class_path = "variables.inventory.type." .. get_p(weapon_list[i], "thrown.class")
-			set_p(unit, weapon_class_path, 1 + (get_p(unit, weapon_class_path) or 0))
+			set_p(unit, weapon_class_path, 1 + get_n(unit, weapon_class_path))
 		end
 	end
 	weapon_list = get_p(unit, "variables.inventory.weapons.ranged") or {}
 	for i = 1, #weapon_list do
 		local weapon_class_path = "variables.inventory.type." .. get_p(weapon_list[i], "class")
-		set_p(unit, weapon_class_path, 1 + (get_p(unit, weapon_class_path) or 0))
+		set_p(unit, weapon_class_path, 1 + get_n(unit, weapon_class_path))
 		if weapon_class_path == "thunderstick" then
-			local max_damage = get_p(weapon_list[i], "max_damage")
-			if max_damage > get_p(weapon_list[i], "damage") and get_p(weapon_list[i], "level") <= (get_p(unit, "variables.abilities.thunderstick_tinker") or 0) then
+			local max_damage = get_n(weapon_list[i], "max_damage")
+			if max_damage > get_n(weapon_list[i], "damage") and get_n(weapon_list[i], "level") <= get_n(unit, "variables.abilities.thunderstick_tinker") then
 				set_p(unit, string.format("variables.inventory.weapons.ranged[%d].damage", i - 1), max_damage)
 			end
 		end
 	end
 
 	local equipment = get_unit_equipment(unit)
-	local evade = 3 * (get_p(unit, "variables.evade_level") or 0) + (get_p(equipment.head_armor, "evade_adjust") or 0) + (get_p(equipment.torso_armor, "evade_adjust") or 0) + (get_p(equipment.leg_armor, "evade_adjust") or 0) + (get_p(equipment.shield, "evade_adjust") or 0) + (get_p(equipment.melee_1, "evade_adjust") or 0)
+	local evade = 3 * get_n(unit, "variables.evade_level") + get_n(equipment.head_armor, "evade_adjust") + get_n(equipment.torso_armor, "evade_adjust") + get_n(equipment.leg_armor, "evade_adjust") + get_n(equipment.shield, "evade_adjust") + get_n(equipment.melee_1, "evade_adjust")
 	if equipment.melee_2 then
-		evade = evade + (get_p(equipment.melee_2, "evade_adjust") or 0)
+		evade = evade + get_n(equipment.melee_2, "evade_adjust")
 		if equipment.melee_3 then
-			evade = evade + (get_p(equipment.melee_3, "evade_adjust") or 0)
+			evade = evade + get_n(equipment.melee_3, "evade_adjust")
 		end
 	end
 	set_p(unit, "variables.mobility", math.max(0, math.min(2, math.floor(evade / 4))))
-	set_p(unit, "variables.abstract_moves", get_p(unit, "variables.max_moves"))
-	if (not player) and (get_p(unit, "variables.abilities.minotaur_magic") or 0) == 2 then
+	set_p(unit, "variables.abstract_moves", get_n(unit, "variables.max_moves"))
+	if (not player) and get_n(unit, "variables.abilities.minotaur_magic") == 2 then
 		set_p(unit, "max_moves", 8)
 	else
-		set_p(unit, "max_moves", math.floor(get_p(unit, "variables.max_moves") * math.min(1, 1 + evade * 0.01)))
+		set_p(unit, "max_moves", math.floor(get_n(unit, "variables.max_moves") * math.min(1, 1 + evade * 0.01)))
 	end
-	set_p(unit, "moves", math.min(get_p(unit, "moves"), get_p(unit, "max_moves")))
+	set_p(unit, "moves", math.min(get_n(unit, "moves"), get_n(unit, "max_moves")))
 	local function set_resist(resist)
-		set_p(unit, "resistance." .. resist, math.max(0, get_p(unit, "variables.resistance." .. resist)) - get_p(equipment.head_armor, "resistance." .. resist) - get_p(equipment.torso_armor, "resistance." .. resist) - get_p(equipment.leg_armor, "resistance." .. resist))
+		set_p(unit, "resistance." .. resist, math.max(100, get_n(unit, "variables.resistance." .. resist)) - get_n(equipment.head_armor, "resistance." .. resist) - get_n(equipment.torso_armor, "resistance." .. resist) - get_n(equipment.leg_armor, "resistance." .. resist))
 	end
 	set_resist("arcane")
 	set_resist("blade")
@@ -812,19 +816,19 @@ local function constructUnit(var, unstore)
 	set_resist("impact")
 	set_resist("pierce")
 
-	if (not player) and (get_p(unit, "variables.abilities.minotaur_magic") or 0) > 0 then
-		set_p(unit, "resistance.fire", math.max(0, get_p(unit, "resistance.fire") - 20))
+	if (not player) and get_n(unit, "variables.abilities.minotaur_magic") > 0 then
+		set_p(unit, "resistance.fire", math.max(0, get_n(unit, "resistance.fire") - 20))
 	end
 
-	local shield_recoup = get_p(equipment.shield, "terrain_recoup") or 0
+	local shield_recoup = get_n(equipment.shield, "terrain_recoup")
 	local function set_movetype(terrain)
 		local function check_num(data)
 			if type(data) ~= "number" then
 				H.wml_error(tostring(data) .. "is not a number")
 			end
 		end
-		set_p(unit, "defense." .. terrain, math.max(20, get_p(unit, string.format("variables.terrain.%s.defense", terrain)) - math.max(0, evade) + math.max(0, get_p(equipment.torso_armor, string.format("terrain.%s.defense", terrain)) + get_p(equipment.leg_armor, string.format("terrain.%s.defense", terrain)) - shield_recoup)))
-		local fixed_move = get_p(unit, string.format("variables.terrain.%s.movement", terrain))
+		set_p(unit, "defense." .. terrain, math.max(20, get_n(unit, string.format("variables.terrain.%s.defense", terrain)) - math.max(0, evade) + math.max(0, get_n(equipment.torso_armor, string.format("terrain.%s.defense", terrain)) + get_n(equipment.leg_armor, string.format("terrain.%s.defense", terrain)) - shield_recoup)))
+		local fixed_move = get_n(unit, string.format("variables.terrain.%s.movement", terrain))
 		if fixed_move == 0 then
 			fixed_move = 99
 		end
@@ -847,8 +851,8 @@ local function constructUnit(var, unstore)
 	set_movetype("fungus")
 	set_movetype("reef")
 
-	if (get_p(unit, "variables.abilities.faerie_form") or 0) == 1 then
-		set_p(unit, "resistance.impact", get_p(unit, "resistance.impact") + 10)
+	if get_n(unit, "variables.abilities.faerie_form") == 1 then
+		set_p(unit, "resistance.impact", get_n(unit, "resistance.impact") + 10)
 		set_p(unit, "movement_costs.shallow_water", 1)
 		set_p(unit, "movement_costs.deep_water", 2)
 		set_p(unit, "movement_costs.hills", 1)
@@ -858,15 +862,15 @@ local function constructUnit(var, unstore)
 		set_p(unit, "movement_costs.cave", 2)
 		set_p(unit, "movement_costs.frozen", 1)
 		set_p(unit, "movement_costs.reef", 1)
-		set_p(unit, "defense.reef", math.max(20, get_p(unit, "defense.reef") - 20))
-		set_p(unit, "defense.deep_water", math.max(20, get_p(unit, "defense.deep_water") - 10))
-		set_p(unit, "defense.flat", math.max(20, get_p(unit, "defense.flat") - 10))
-		set_p(unit, "defense.frozen", math.max(20, get_p(unit, "defense.frozen") - 10))
-		set_p(unit, "defense.sand", math.max(20, get_p(unit, "defense.sand") - 10))
-		set_p(unit, "defense.shallow_water", math.max(20, get_p(unit, "defense.shallow_water") - 10))
-		set_p(unit, "defense.swamp_water", math.max(20, get_p(unit, "defense.swamp_water") - 10))
+		set_p(unit, "defense.reef", math.max(20, get_n(unit, "defense.reef") - 20))
+		set_p(unit, "defense.deep_water", math.max(20, get_n(unit, "defense.deep_water") - 10))
+		set_p(unit, "defense.flat", math.max(20, get_n(unit, "defense.flat") - 10))
+		set_p(unit, "defense.frozen", math.max(20, get_n(unit, "defense.frozen") - 10))
+		set_p(unit, "defense.sand", math.max(20, get_n(unit, "defense.sand") - 10))
+		set_p(unit, "defense.shallow_water", math.max(20, get_n(unit, "defense.shallow_water") - 10))
+		set_p(unit, "defense.swamp_water", math.max(20, get_n(unit, "defense.swamp_water") - 10))
 	elseif not player then
-		if (get_p(unit, "variables.abilities.minotaur_magic") or 0) == 2 then
+		if get_n(unit, "variables.abilities.minotaur_magic") == 2 then
 			set_p(unit, "defense", {
 				unwalkable = 70,
 				castle = 50,
@@ -903,7 +907,7 @@ local function constructUnit(var, unstore)
 				fungus = 1,
 				reef = 2
 			})
-		elseif (get_p(unit, "variables.abilities.devling_flyer") or 0) == 1 then
+		elseif get_n(unit, "variables.abilities.devling_flyer") == 1 then
 			set_p(unit, "defense", {
 				unwalkable = 50,
 				castle = 50,
@@ -950,7 +954,7 @@ local function constructUnit(var, unstore)
 	if player then
 		table.insert(new_traits, parse_container({
 			id = "mana_counter",
-			name = string.format("mana: %d/%d", get_p(unit, "variables.abilities.magic_casting.mana"), get_p(unit, "variables.abilities.magic_casting.max_mana")),
+			name = string.format("mana: %d/%d", get_n(unit, "variables.abilities.magic_casting.mana"), get_n(unit, "variables.abilities.magic_casting.max_mana")),
 			description = " Available mana / maximum stored mana."
 		}))
 	end
@@ -962,14 +966,14 @@ local function constructUnit(var, unstore)
 			end
 		end
 	end
-	if (get_p(unit, "variables.abilities.healthy") or 0) > 0 then
+	if get_n(unit, "variables.abilities.healthy") > 0 then
 		table.insert(new_traits, parse_container({
 			id = "healthy",
 			name = "healthy",
 			description = "Can rest while moving, halves poison damage."
 		}))
 	end
-	if (get_p(unit, "variables.abilities.fearless") or 0) > 0 then
+	if get_n(unit, "variables.abilities.fearless") > 0 then
 		table.insert(new_traits, parse_container({
 			id = "fearless",
 			name = "fearless",
@@ -983,7 +987,7 @@ local function constructUnit(var, unstore)
 
 	clear_p(unit, "halo")
 	local abilities = {}
-	if (get_p(unit, "variables.abilities.illuminates") or 0) == 1 and get_p(unit, "alignment") == "lawful" then
+	if get_n(unit, "variables.abilities.illuminates") == 1 and get_p(unit, "alignment") == "lawful" then
 		set_p(unit, "halo", "halo/illuminates-aura.png")
 		table.insert(abilities, { "illuminates", {
 			id = "illumination",
@@ -998,7 +1002,7 @@ Any units adjacent to this unit will fight as if it were dusk when it is night, 
 			affect_self = "yes"
 		} })
 	elseif not player then
-		local halo_level = get_p(unit, "variables.abilities.witch_magic") or 0
+		local halo_level = get_n(unit, "variables.abilities.witch_magic")
 		if halo_level == 2 then
 			set_p(unit, "halo", "halo/coldaura.png")
 			table.insert(abilities, { "resistance", {
@@ -1073,7 +1077,7 @@ The unit will heal itself 8 HP per turn. If it is poisoned, it will remove the p
 	end
 
 	if not player then
-		if (get_p(unit, "variables.abilities.water") or 0) == 1 then
+		if get_n(unit, "variables.abilities.water") == 1 then
 			table.insert(abilities, { "regenerate", {
 				id = "regenerates",
 				value = 6,
@@ -1091,7 +1095,7 @@ This unit is made of water. As a result, if it is standing in water, it will rec
 					} }
 				} }
 			} })
-		elseif (get_p(unit, "variables.abilities.rock") or 0) == 1 then
+		elseif get_n(unit, "variables.abilities.rock") == 1 then
 			table.insert(abilities, { "regenerate", {
 				id = "regenerates",
 				value = 6,
@@ -1109,7 +1113,7 @@ This unit is made of rock. If it stands in loose rock, it will recive 6 hp. If i
 					} }
 				} }
 			} })
-		elseif (get_p(unit, "variables.abilities.fire") or 0) == 1 then
+		elseif get_n(unit, "variables.abilities.fire") == 1 then
 			table.insert(abilities, { "regenerate", {
 				id = "regenerates",
 				value = 6,
@@ -1128,7 +1132,7 @@ This unit is made of fire. If it stands in lava, it will recive 6 hp. If it is p
 				} }
 			} })
 		end
-		local divine_health = get_p(unit, "variables.abilities.divine_health") or 0
+		local divine_health = get_n(unit, "variables.abilities.divine_health")
 		if divine_health == 1 then
 			table.insert(abilities, { "regenerate", {
 				id = "divine_health",
@@ -1146,7 +1150,7 @@ This unit is made of fire. If it stands in lava, it will recive 6 hp. If it is p
 				affect_self = "yes",
 			} })
 		end
-		if (get_p(unit, "variables.abilities.feeding") or 0) == 1 then
+		if get_n(unit, "variables.abilities.feeding") == 1 then
 			table.insert(abilities, { "dummy", {
 				id = "wbd_feeding",
 				name = "feeding",
@@ -1155,19 +1159,19 @@ This unit is made of fire. If it stands in lava, it will recive 6 hp. If it is p
 This unit gains 1 hitpoint added to its maximum whenever it kills a living unit."
 			} })
 		end
-		local spell_power = get_p(unit, "variables.abilities.magic_casting.power") or 0
-		if (get_p(unit, "variables.abilities.human_magic") or 0) == 3 then
+		local spell_power = get_n(unit, "variables.abilities.magic_casting.power")
+		if get_n(unit, "variables.abilities.human_magic") == 3 then
 			spell_power = spell_power * 3 + 2
-		elseif (get_p(unit, "variables.abilities.nature_heal") or 0) == 1 then
+		elseif get_n(unit, "variables.abilities.nature_heal") == 1 then
 			spell_power = spell_power * 2 + 4
-		elseif (get_p(unit, "variables.abilities.swamp_magic") or 0) > 0 then
-			if (get_p(unit, "variables.abilities.benevolent") or 0) > 0 then
+		elseif get_n(unit, "variables.abilities.swamp_magic") > 0 then
+			if get_n(unit, "variables.abilities.benevolent") > 0 then
 				spell_power = spell_power * 3
 			end
 			spell_power = spell_power + 4
-		elseif (get_p(unit, "variables.abilities.witchcraft") or 0) > 0 then
+		elseif get_n(unit, "variables.abilities.witchcraft") > 0 then
 			spell_power = spell_power * 2 + 2
-		elseif (get_p(unit, "variables.abilities.minotaur_magic") or 0) == 3 then
+		elseif get_n(unit, "variables.abilities.minotaur_magic") == 3 then
 			spell_power = spell_power * 2 + 6
 		else
 			spell_power = 0
@@ -1204,8 +1208,8 @@ A unit cared for by this healer may heal up to %d HP per turn, or stop poison fr
 			} })
 		end
 	end
-	local skill_level = get_p(unit, "variables.abilities.steadfast") or 0
-	if skill_level > 0 and (get_p(equipment.shield, "special_type.steadfast") or 0) == 1 then
+	local skill_level = get_n(unit, "variables.abilities.steadfast")
+	if skill_level > 0 and get_n(equipment.shield, "special_type.steadfast") == 1 then
 		local new_ability = {
 			id = "steadfast",
 			multiply = 2,
@@ -1230,8 +1234,8 @@ This unit's resistances are doubled, up to a maximum of 50%, when defending. Vul
 		end
 		table.insert(abilities, { "resistance", new_ability })
 	end
-	skill_level = get_p(unit, "variables.abilities.leadership") or 0
-	if skill_level > 0 and (get_p(unit, "variables.abilities.cruelty") or 0) == 1 then
+	skill_level = get_n(unit, "variables.abilities.leadership")
+	if skill_level > 0 and get_n(unit, "variables.abilities.cruelty") == 1 then
 		local chaotic = { "filter_wml", {
 			alignment = "chaotic"
 		} }
@@ -1326,7 +1330,7 @@ Adjacent friendly units of lower level will do more damage in battle. When a uni
 		end
 	end
 	if not player then
-		if (get_p(unit, "variables.abilities.battle_tutor") or 0) == 1 then
+		if get_n(unit, "variables.abilities.battle_tutor") == 1 then
 			table.insert(abilities, { "dummy", {
 				id = "battletutor",
 				name = "battle tutor",
@@ -1334,7 +1338,7 @@ Adjacent friendly units of lower level will do more damage in battle. When a uni
 This unit's ability to teach battle skills gives each adjacent allied unit a +1 to experience earned in battle."
 			} })
 		end
-		if (get_p(unit, "variables.npc_init.abilities.skeletal") or 0) == 1 then
+		if get_n(unit, "variables.npc_init.abilities.skeletal") == 1 then
 			table.insert(abilities, { "hides", {
 				id = "submerge",
 				name = "submerge",
@@ -1358,7 +1362,7 @@ Enemy units cannot see this unit while it is in deep water, except if they have 
 			} })
 		end
 	end
-	if (get_p(unit, "variables.abilities.loner") or 0) == 1 then
+	if get_n(unit, "variables.abilities.loner") == 1 then
 		table.insert(abilities, { "leadership", {
 			id = "loner",
 			name = "loner",
@@ -1377,7 +1381,7 @@ This unit is 25% more effective in combat when not adjacent to any allied units.
 		} })
 	end
 	local skirmisher_flag = false
-	if (evade > 1 or get_p(unit, "race") == "undead") and (get_p(unit, "variables.abilities.skirm") or 0) > 0 then
+	if (evade > 1 or get_p(unit, "race") == "undead") and get_n(unit, "variables.abilities.skirm") > 0 then
 		skirmisher_flag = true
 		table.insert(abilities, { "skirmisher", {
 			id = "skirmisher",
@@ -1385,7 +1389,7 @@ This unit is 25% more effective in combat when not adjacent to any allied units.
 			affect_self = "yes",
 			description = "Skirmisher: This unit is skilled in moving past enemies quickly, and ignores all enemy Zones of Control."
 		} })
-		if (get_p(unit, "variables.abilities.distract") or 0) > 0 then
+		if get_n(unit, "variables.abilities.distract") > 0 then
 			table.insert(abilities, { "skirmisher", {
 				id = "distract",
 				name = "distract",
@@ -1399,7 +1403,7 @@ This unit negates enemy Zones of Control around itself for allied units (but not
 			} })
 		end
 	end
-	local dash_flag = evade > 5 and (get_p(unit, "variables.abilities.dash") or 0) > 0
+	local dash_flag = evade > 5 and get_n(unit, "variables.abilities.dash") > 0
 	if dash_flag then
 		table.insert(abilities, { "dummy", {
 			id = "dash",
@@ -1412,7 +1416,7 @@ This unit negates enemy Zones of Control around itself for allied units (but not
 	end
 	if evade > 0 then
 		if evade > 3 then
-			if (get_p(unit, "variables.abilities.ambush_forest") or 0) > 0 then
+			if get_n(unit, "variables.abilities.ambush_forest") > 0 then
 				table.insert(abilities, { "hides", {
 					id = "ambush_forest",
 					name = "ambush",
@@ -1429,7 +1433,7 @@ This unit can hide in forest if wearing only light armor.",
 					} }
 				} })
 			end
-			if (get_p(unit, "variables.abilities.ambush_mountains") or 0) > 0 then
+			if get_n(unit, "variables.abilities.ambush_mountains") > 0 then
 				table.insert(abilities, { "hides", {
 					id = "ambush_mountains",
 					name = "ambush",
@@ -1446,7 +1450,7 @@ This unit can hide in mountains if wearing only light armor.",
 					} }
 				} })
 			end
-			if evade > 7 and (get_p(unit, "variables.abilities.sneak") or 0) > 0 then
+			if evade > 7 and get_n(unit, "variables.abilities.sneak") > 0 then
 				table.insert(abilities, { "hides", {
 					id = "sneak",
 					name = "sneak",
@@ -1460,11 +1464,11 @@ This unit can hide in mountains if wearing only light armor.",
 						} }
 					} }
 				} })
-				set_p(unit, "variables.stealthiness", math.min(1, 2 * get_p(unit, "moves") - get_p(unit, "max_moves") + 1))
+				set_p(unit, "variables.stealthiness", math.min(1, 2 * get_n(unit, "moves") - get_n(unit, "max_moves") + 1))
 				set_p(unit, "status.hidden", "yes")
 			end
 		end
-		if (not player) and (get_p(unit, "variables.abilities.nightstalk") or 0) > 0 then
+		if (not player) and get_n(unit, "variables.abilities.nightstalk") > 0 then
 			table.insert(abilities, { "hides", {
 				id = "nightstalk",
 				name = "nightstalk",
@@ -1488,7 +1492,7 @@ Enemy units cannot see this unit at night, except if they have units next to it.
 			} })
 		end
 	end
-	skill_level = 2 * (get_p(unit, "variables.abilities.regen") or 0)
+	skill_level = 2 * get_n(unit, "variables.abilities.regen")
 	if skill_level > 0 then
 		local new_ability = {
 			id = "regenerate",
@@ -1506,7 +1510,7 @@ The unit will heal itself %d HP per turn. If it is poisoned, it will slow the po
 		end
 		table.insert(abilities, { "regenerate", new_ability })
 	end
-	if (get_p(unit, "variables.abilities.survivalist") or 0) > 0 then
+	if get_n(unit, "variables.abilities.survivalist") > 0 then
 		table.insert(abilities, { "regenerate", {
 			id = "survivalist",
 			name = "survivalist",
@@ -1523,15 +1527,15 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 	end
 
 	if player then
-		local spell_list, spell_power = get_p(unit, "variables.inventory.spells"), get_p(unit, "variables.abilities.magic_casting.power")
+		local spell_list, spell_power = get_p(unit, "variables.inventory.spells"), get_n(unit, "variables.abilities.magic_casting.power")
 		if type(spell_list) == "table" then
 			for i = 1, #spell_list do
 				local spell_name = get_p(spell_list[i], "user_name")
 				if spell_name == "heals" then
-					local heal_type, heal_power = get_p(spell_list[i], "command")
+					local heal_type, heal_power = get_p(spell_list[i], "command"), 0
 					if heal_type == "green_healing" then
 						heal_power = 2 * spell_power + 4
-					elseif heal_type == "spirit_healing" and (get_p(unit, "variables.abilities.benevolent") or 0) <= 0 then
+					elseif heal_type == "spirit_healing" and get_n(unit, "variables.abilities.benevolent") <= 0 then
 						heal_power = spell_power + 4
 					else
 						heal_power = 3 * spell_power + 4
@@ -1612,7 +1616,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 		end
 	end
 
-	local spell_status = 5 * (get_p(unit, "variables.status.protection_armor_magic") or 0)
+	local spell_status = 5 * get_n(unit, "variables.status.protection_armor_magic")
 	if spell_status > 0 then
 		table.insert(abilities, { "resistance", {
 			id = "protection_armor_magic",
@@ -1625,7 +1629,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			description = string.format("This unit is protected from damage by an extra %d%%. This value degrades by 5%% every round.", spell_status)
 		} })
 	end
-	local spell_status = 10 * (get_p(unit, "variables.status.protection_from_fire") or 0)
+	local spell_status = 10 * get_n(unit, "variables.status.protection_from_fire")
 	if spell_status > 0 then
 		table.insert(abilities, { "resistance", {
 			id = "protection_from_fire",
@@ -1639,7 +1643,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			description = string.format("This unit is protected from fire damage by an extra %d%%. This value degrades by 10%% every round.", spell_status)
 		} })
 	end
-	spell_status = get_p(unit, "variables.status.protection_from_poison") or 0
+	spell_status = get_n(unit, "variables.status.protection_from_poison")
 	if spell_status > 0 then
 		clear_p(unit, "status.poisoned")
 		set_p(unit, "variables.unpoisonable_flag", 1)
@@ -1649,7 +1653,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			description = string.format("This unit is protected from poison for the next %d rounds.", spell_status)
 		} })
 	end
-	spell_status = get_p(unit, "variables.status.protection_from_slow") or 0
+	spell_status = get_n(unit, "variables.status.protection_from_slow")
 	if spell_status > 0 then
 		clear_p(unit, "status.slowed")
 		set_p(unit, "variables.unslowable_flag", 1)
@@ -1659,7 +1663,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			description = string.format("This unit is protected from slowing for the next %d rounds.", spell_status)
 		} })
 	end
-	spell_status = get_p(unit, "variables.phoenix_fire") or 0
+	spell_status = get_n(unit, "variables.phoenix_fire")
 	if spell_status > 0 then
 		table.insert(abilities, { "dummy", {
 			id = "phoenix_fire",
@@ -1672,7 +1676,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 
 	clear_p(unit, "attack")
 	local attacks, variation, variation_strength = {}, "fist", 1
-	local unblocked_counter, unblocked_class = 1 - (get_p(unit, "variables.blocked_attacks") or 0), get_p(unit, "variables.weapon_block_class")
+	local unblocked_counter, unblocked_class = 1 - get_n(unit, "variables.blocked_attacks"), get_p(unit, "variables.weapon_block_class")
 	local blocked_flag = unblocked_counter == 0
 	local function add_attack(weapon)
 		local attack, weapon_class = get_attack_basics(unit, equipment, weapon)
@@ -1690,7 +1694,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			local specials, new_special, special_level = {}, {}, 0
 			local storm_allowed = true
 			if #attacks == 0 and attack.range == "melee" then -- specials that only affect first melee weapon get handled here
-				if (get_p(unit, "variables.abilities.berserk") or 0) == 1 then
+				if get_n(unit, "variables.abilities.berserk") == 1 then
 					table.insert(specials, { "berserk", {
 						id = "berserk",
 						name = "berserk",
@@ -1705,7 +1709,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 						active_on = "defense"
 					} })
 					storm_allowed = false
-				elseif (get_p(unit, "variables.abilities.rage") or 0) == 1 then
+				elseif get_n(unit, "variables.abilities.rage") == 1 then
 					table.insert(specials, { "berserk", {
 						id = "rage",
 						name = "rage",
@@ -1715,11 +1719,11 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					} })
 					storm_allowed = false
 				end
-				if attack.material == "metal" and (get_p(unit, "variables.status.metal_to_drain") or 0) > 0 and (get_p(weapon, "special_type.spell_drains") or 0) ~= 1 then
+				if attack.material == "metal" and get_n(unit, "variables.status.metal_to_drain") > 0 and get_n(weapon, "special_type.spell_drains") ~= 1 then
 					set_p(weapon, "special_type.spell_drains", 2)
 				end
 			end
-			special_level = get_p(unit, "variables.abilities.slashdash") or 0
+			special_level = get_n(unit, "variables.abilities.slashdash")
 			if special_level > 0 then
 				attack.slashdash = 1
 				new_special = {
@@ -1740,13 +1744,13 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 			end
 			local marksman_offset
 			if weapon_class == "thrown_light_blade" then
-				special_level = get_p(unit, "variables.abilities.marksman_thrown_light_blade") or 0
+				special_level = get_n(unit, "variables.abilities.marksman_thrown_light_blade")
 				marksman_offset = 45
-			elseif (get_p(weapon, "special_type.marksman") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.marksman") or 0
+			elseif get_n(weapon, "special_type.marksman") > 0 then
+				special_level = get_n(unit, "variables.abilities.marksman")
 				marksman_offset = 50
 			elseif (not player) and attack.user_name == "chakram" then
-				special_level = get_p(unit, "variables.abilities.marksman_chakram") or 0
+				special_level = get_n(unit, "variables.abilities.marksman_chakram")
 			else
 				special_level = 0
 			end
@@ -1767,7 +1771,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				table.insert(specials, { "chance_to_hit", new_special })
 			end
 			if not player then
-				if weapon_class == "light_blade" and (get_p(unit, "variables.abilities.accuracy_light_blade") or 0) > 0 then
+				if weapon_class == "light_blade" and get_n(unit, "variables.abilities.accuracy_light_blade") > 0 then
 					table.insert(specials, { "chance_to_hit", {
 						id = "accuracy",
 						name = "accuracy",
@@ -1778,7 +1782,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 	When used offensively, this attack always has at least a 50% chance to hit."
 					} })
 				end
-				if weapon_class == "polearm" and (get_p(unit, "variables.abilities.evasion_polearm") or 0) > 0 then
+				if weapon_class == "polearm" and get_n(unit, "variables.abilities.evasion_polearm") > 0 then
 					table.insert(specials, { "damage", {
 						id = "evasion",
 						name = "evasion",
@@ -1793,8 +1797,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					} })
 				end
 			end
-			special_level = get_p(unit, "variables.abilities.goliath_bane") or 0
-			if special_level > 0 and (get_p(weapon, "special_type.goliath_bane") or 0) > 0 then
+			special_level = get_n(unit, "variables.abilities.goliath_bane")
+			if special_level > 0 and get_n(weapon, "special_type.goliath_bane") > 0 then
 				new_special = {
 					id = "goliath_bane",
 					active_on = "offense",
@@ -1834,10 +1838,10 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					end
 				end
 			end
-			if (get_p(weapon, "special_type.ensnare") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.ensnare") or 0
-			elseif (get_p(weapon, "special_type.vine_ensnare") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.vine_ensnare") or 0
+			if get_n(weapon, "special_type.ensnare") > 0 then
+				special_level = get_n(unit, "variables.abilities.ensnare")
+			elseif get_n(weapon, "special_type.vine_ensnare") > 0 then
+				special_level = get_n(unit, "variables.abilities.vine_ensnare")
 			else
 				special_level = 0
 			end
@@ -1860,8 +1864,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "chance_to_hit", new_special })
 			end
-			if (get_p(weapon, "special_type.pointpike") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.pointpike") or 0
+			if get_n(weapon, "special_type.pointpike") > 0 then
+				special_level = get_n(unit, "variables.abilities.pointpike")
 			else
 				special_level = 0
 			end
@@ -1897,14 +1901,14 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				new_special[1][2][1][2][1][2].pointpike = 100
 				table.insert(specials, { "chance_to_hit", new_special })
 			end
-			if storm_allowed and (get_p(weapon, "special_type.storm") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.storm") or 0
+			if storm_allowed and get_n(weapon, "special_type.storm") > 0 then
+				special_level = get_n(unit, "variables.abilities.storm")
 			else
 				special_level = 0
 			end
 			if special_level > 0 then
 				local storm_limit = attack.number
-				if (get_p(unit, "variables.abilities.brutal") or 0) > 0 then
+				if get_n(unit, "variables.abilities.brutal") > 0 then
 					storm_limit = math.ceil(storm_limit * 0.5)
 					table.insert(specials, { "damage", {
 						id = "brutal_damage",
@@ -1973,7 +1977,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					} }
 				} })
 			end
-			if ((get_p(weapon, "special_type.vine_slows") or 0) > 0 and (get_p(unit, "abilities.vine_slows") or 0) > 0) or ((not player) and attack.user_name == "kusarigama" and attack.range == "ranged" and (get_p(unit, "abilities.kusarigama_slows") or 0) > 0) then
+			if (get_n(weapon, "special_type.vine_slows") > 0 and get_n(unit, "abilities.vine_slows") > 0) or ((not player) and attack.user_name == "kusarigama" and attack.range == "ranged" and get_n(unit, "abilities.kusarigama_slows") > 0) then
 				table.insert(specials, { "slow", {
 					id = "slow",
 					name = "slows",
@@ -1991,7 +1995,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					} }
 				} })
 			end
-			if (get_p(weapon, "special_type.natural_poison") or 0) > 0 or (weapon_class == "thrown_light_blade" and (get_p(weapon, "special_type.allow_poison") or 0) > 0 and ((get_p(unit, "special_type.variables.abilities.poison_thrown_light_blade") or 0) > 0 or (get_p(unit, "variables.abilities.poison_thrown_light_blade_orc") or 0) > 0)) or (weapon_class == "light_blade" and (get_p(unit, "variables.abilities.poison_light_blade") or 0) == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and (get_p(unit, "variables.abilities.kusarigama_poison") or 0) > 0) or (weapon_class == "light_blade" and (get_p(unit, "variables.abilities.witchcraft") or 0) == 1 and (get_p(unit, "variables.abilities.magic_casting.power") or 0) > 0))) then
+			if get_n(weapon, "special_type.natural_poison") > 0 or (weapon_class == "thrown_light_blade" and get_n(weapon, "special_type.allow_poison") > 0 and (get_n(unit, "special_type.variables.abilities.poison_thrown_light_blade") > 0 or get_n(unit, "variables.abilities.poison_thrown_light_blade_orc") > 0)) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.poison_light_blade") == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and get_n(unit, "variables.abilities.kusarigama_poison") > 0) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0))) then
 				table.insert(specials, { "poison", {
 					id = "poison",
 					name = "poison",
@@ -2012,10 +2016,10 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					} }
 				} })
 			end
-			if (get_p(unit, "variables.abilities.witch_magic") or 0) == 4 then
+			if get_n(unit, "variables.abilities.witch_magic") == 4 then
 				special_level = 1
 			else
-				special_level = get_p(weapon, "special_type.spell_drains") or 0
+				special_level = get_n(weapon, "special_type.spell_drains")
 			end
 			if special_level > 0 then
 				new_special = {
@@ -2030,7 +2034,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "drains", new_special })
 			end
-			if (not player) and attack.range == "melee" and attack.class == "bludgeon" and (get_p(unit, "variables.abilities.dread") or 0) > 0 then
+			if (not player) and attack.range == "melee" and attack.class == "bludgeon" and get_n(unit, "variables.abilities.dread") > 0 then
 				table.insert(specials, { "damage", {
 					id = "dread",
 					name = "dread",
@@ -2044,7 +2048,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					multiply = 0.66
 				} })
 			end
-			if (get_p(unit, "variables.abilities.readied_bolt") or 0) > 0 and (get_p(weapon, "special_type.readied_bolt") or 0) > 0 then
+			if get_n(unit, "variables.abilities.readied_bolt") > 0 and get_n(weapon, "special_type.readied_bolt") > 0 then
 				table.insert(specials, { "firststrike", {
 					id = "firststrike",
 					name = "readied bolt",
@@ -2052,7 +2056,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 	This attack always strikes first, even when defending."
 				} })
 			end
-			if (not skirmisher_flag) and (get_p(weapon, "special_type.firststrike") or 0) > 0 and (get_p(unit, "variables.abilities.firststrike") or 0) > 0 then
+			if (not skirmisher_flag) and get_n(weapon, "special_type.firststrike") > 0 and get_n(unit, "variables.abilities.firststrike") > 0 then
 				table.insert(specials, { "firststrike", {
 					id = "firststrike",
 					name = "firststrike",
@@ -2061,8 +2065,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				} })
 				set_p(unit, "variables.firststrike_flag", 1)
 			end
-			if (get_p(weapon, "special_type.backstab") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.backstab") or 0
+			if get_n(weapon, "special_type.backstab") > 0 then
+				special_level = get_n(unit, "variables.abilities.backstab")
 			else
 				special_level = 0
 			end
@@ -2087,8 +2091,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "damage", new_special })
 			end
-			if (get_p(weapon, "special_type.backstab") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.target") or 0
+			if get_n(weapon, "special_type.backstab") > 0 then
+				special_level = get_n(unit, "variables.abilities.target")
 			else
 				special_level = 0
 			end
@@ -2106,8 +2110,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "dummy", new_special })
 			end
-			if (get_p(weapon, "special_type.cleave") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.cleave") or 0
+			if get_n(weapon, "special_type.cleave") > 0 then
+				special_level = get_n(unit, "variables.abilities.cleave")
 			else
 				special_level = 0
 			end
@@ -2127,8 +2131,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "dummy", new_special })
 			end
-			if (get_p(weapon, "special_type.riposte") or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.riposte") or 0
+			if get_n(weapon, "special_type.riposte") > 0 then
+				special_level = get_n(unit, "variables.abilities.riposte")
 			else
 				special_level = 0
 			end
@@ -2166,8 +2170,8 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				new_special.description_inactive = new_special.description
 				table.insert(specials, { "chance_to_hit", new_special })
 			end
-			if (weapon_class == "bow" or weapon_class == "javelin" or weapon_class == "thrown_light_blade" or weapon_class == "thrown_heavy_blade") and (get_p(weapon, "special_type.remaining_ammo_" .. weapon_class) or 0) > 0 then
-				special_level = get_p(unit, "variables.abilities.remaining_ammo_" .. weapon_class) or 0
+			if (weapon_class == "bow" or weapon_class == "javelin" or weapon_class == "thrown_light_blade" or weapon_class == "thrown_heavy_blade") and get_n(weapon, "special_type.remaining_ammo_" .. weapon_class) > 0 then
+				special_level = get_n(unit, "variables.abilities.remaining_ammo_" .. weapon_class)
 			else
 				special_level = 0
 			end
@@ -2194,7 +2198,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "dummy", new_special })
 			end
-			if (get_p(weapon, "special_type.plague") or 0) > 0 and (get_p(unit, "variables.abilities.plague") or 0) > 0 then
+			if get_n(weapon, "special_type.plague") > 0 and get_n(unit, "variables.abilities.plague") > 0 then
 				table.insert(specials, { "plague", {
 					id = "plague",
 					name = "plague",
@@ -2203,7 +2207,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					type = "Walking Corpse_MODRPG"
 				} })
 			end
-			if (get_p(weapon, "special_type.soultrap") or 0) > 0 and (get_p(unit, "variables.abilities.soultrap") or 0) > 0 then
+			if get_n(weapon, "special_type.soultrap") > 0 and get_n(unit, "variables.abilities.soultrap") > 0 then
 				table.insert(specials, { "plague", {
 					id = "soultrap",
 					name = "soul trap",
@@ -2212,11 +2216,11 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					type = "Trapped Spirit"
 				} })
 			end
-			if attack.material == "metal" and attack.range == "melee" and (get_p(unit, "variables.abilities.metal_to_arcane") or 0) > 0 then
+			if attack.material == "metal" and attack.range == "melee" and get_n(unit, "variables.abilities.metal_to_arcane") > 0 then
 				attack.type = "arcane"
 			end
 			if (not skirmisher_flag) and attack.range == "melee" then
-				special_level = get_p(unit, "variables.abilities.bloodlust") or 0
+				special_level = get_n(unit, "variables.abilities.bloodlust")
 			else
 				special_level = 0
 			end
@@ -2245,7 +2249,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 				end
 				table.insert(specials, { "dummy", new_special })
 			end
-			if dash_flag and evade > 7 and attack.range == "melee" and (get_p(unit, "variables.abilities.grace") or 0) > 0 then
+			if dash_flag and evade > 7 and attack.range == "melee" and get_n(unit, "variables.abilities.grace") > 0 then
 				attack.grace = 1
 				table.insert(specials, { "dummy", {
 					grace = 1,
@@ -2257,7 +2261,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 	NOTE: The defending unit must have the chance to strike at least one time for special to trigger."
 				} })
 			end
-			if (get_p(weapon, "special_type.magical_to_hit") or 0) > 0 then
+			if get_n(weapon, "special_type.magical_to_hit") > 0 then
 				table.insert(specials, { "chance_to_hit", {
 					id = "magical",
 					name = "magical",
@@ -2267,7 +2271,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					cumulative = "no"
 				} })
 			end
-			if (get_p(weapon, "special_type.precision") or 0) > 0 then
+			if get_n(weapon, "special_type.precision") > 0 then
 				table.insert(specials, { "chance_to_hit", {
 					id = "precision",
 					name = "precision",
@@ -2277,7 +2281,7 @@ The unit will heal itself 8 HP per turn if in a forest. If it is poisoned, it wi
 					cumulative = "no"
 				} })
 			end
-			if (get_p(weapon, "special_type.swarm") or 0) > 0 then
+			if get_n(weapon, "special_type.swarm") > 0 then
 				table.insert(specials, { "swarm", {
 					id = "swarm",
 					name = "swarm",
@@ -2288,8 +2292,8 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 
 			if blocked_flag then
 				if weapon_class == unblocked_class or (attack[unblocked_class] or 0) > 0 then
-					if (get_p(unit, "variables.ammo_stored") or -1) >= 0 then
-						local available_ammo = get_p(unit, "variables.current_ammo") or 0
+					if get_n(unit, "variables.ammo_stored", -1) >= 0 then
+						local available_ammo = get_n(unit, "variables.current_ammo")
 						set_p(unit, "variables.base_ammo", attack.number)
 						if available_ammo > attack.number then
 							set_p(unit, "variables.current_ammo", attack.number)
@@ -2307,18 +2311,18 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				table.insert(attack, { "specials", specials })
 			end
 			table.insert(attacks, attack)
-			if attack.user_name == "hammer" and (get_p(unit, "variables.abilities.devling_spiker") or 0) > 0 then
+			if attack.user_name == "hammer" and get_n(unit, "variables.abilities.devling_spiker") > 0 then
 				local spikes = get_p(weapon)
 				set_p(spikes, "type", "pierce")
 				set_p(spikes, "description", "spike 'em")
 				set_p(spikes, "user_name", "spike 'em")
 				add_attack(spikes)
 			end
-			if ((get_p(weapon, "special_type.fire_shot_bow") or 0) > 0 and (get_p(unit, "variables.abilities.fire_shot_bow") or 0) > 0) or ((get_p(weapon, "special_type.fire_shot_xbow") or 0) > 0 and (get_p(unit, "variables.abilities.fire_shot_xbow") or 0) > 0) then
+			if (get_n(weapon, "special_type.fire_shot_bow") > 0 and get_n(unit, "variables.abilities.fire_shot_bow") > 0) or (get_n(weapon, "special_type.fire_shot_xbow") > 0 and get_n(unit, "variables.abilities.fire_shot_xbow") > 0) then
 				local fire_shot = get_p(weapon)
 				set_p(fire_shot, "type", "fire")
-				set_p(fire_shot, "damage", get_p(weapon, "damage") + 2)
-				set_p(fire_shot, "number", get_p(weapon, "number") - 1)
+				set_p(fire_shot, "damage", get_n(weapon, "damage") + 2)
+				set_p(fire_shot, "number", get_n(weapon, "number") - 1)
 				set_p(fire_shot, "special_type.fire_shot_bow", 0)
 				set_p(fire_shot, "special_type.fire_shot_xbow", 0)
 				add_attack(fire_shot)
@@ -2339,7 +2343,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 	if equipment.ranged then
 		add_attack(equipment.ranged)
 	end
-	if (get_p(unit, "variables.abilities.net") or 0) > 0 then
+	if get_n(unit, "variables.abilities.net") > 0 then
 		table.insert(attacks, {
 			name = "net",
 			description = "net",
@@ -2369,7 +2373,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 		})
 	end
 	local spells, magic_level = {}, 0
-	magic_level = get_p(unit, "variables.abilities.human_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.human_magic")
 	if magic_level > 0 then
 		if magic_level == 2 then
 			table.insert(spells, {
@@ -2432,7 +2436,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			})
 		end
 	end
-	magic_level = get_p(unit, "variables.abilities.dark_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.dark_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "chill wave",
@@ -2463,7 +2467,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			{ "special_type", { magical_to_hit = 1 } }
 		})
 	end
-	magic_level = get_p(unit, "variables.abilities.runic_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.runic_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "lightning",
@@ -2480,7 +2484,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			{ "special_type", { magical_to_hit = 1 } }
 		})
 	end
-	magic_level = get_p(unit, "variables.abilities.faerie_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.faerie_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "faerie fire",
@@ -2497,7 +2501,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			{ "special_type", { magical_to_hit = 1 } }
 		})
 	end
-	magic_level = get_p(unit, "variables.abilities.wood_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.wood_magic")
 	if magic_level > 0 then
 		table.insert(spells, 1, {
 			description = "vines",
@@ -2512,7 +2516,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			mind_damage_rate = 30,
 			{ "special_type", { vine_slows = 1, vine_ensnare = 1 } }
 		})
-		if (get_p(unit, "variables.abilities.brambles") or 0) == 1 then
+		if get_n(unit, "variables.abilities.brambles") == 1 then
 			spells[1].spell_power = 2
 			table.insert(spells, {
 				description = "thorns",
@@ -2530,7 +2534,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			})
 		end
 	end
-	magic_level = get_p(unit, "variables.abilities.troll_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.troll_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "flame blast",
@@ -2546,7 +2550,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			{ "special_type", { magical_to_hit = 1 } }
 		})
 	end
-	magic_level = get_p(unit, "variables.abilities.swamp_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.swamp_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "curse",
@@ -2561,11 +2565,11 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 			mind_damage_rate = 10,
 			{ "special_type", { magical_to_hit = 1 } }
 		})
-		if (get_p(unit, "variables.abilities.baleful") or 0) > 0 then
+		if get_n(unit, "variables.abilities.baleful") > 0 then
 			spells[#spells].spell_power = 3
 		end
 	end
-	magic_level = get_p(unit, "variables.abilities.tribal_magic") or 0
+	magic_level = get_n(unit, "variables.abilities.tribal_magic")
 	if magic_level > 0 then
 		table.insert(spells, {
 			description = "curse",
@@ -2583,7 +2587,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 		})
 	end
 	if not player then
-		magic_level = get_p(unit, "variables.abilities.witchcraft") or 0
+		magic_level = get_n(unit, "variables.abilities.witchcraft")
 		if magic_level > 0 then
 			table.insert(spells, {
 				description = "hex",
@@ -2601,7 +2605,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				{ "special_type", { magical_to_hit = 1 } }
 			})
 		end
-		magic_level = get_p(unit, "variables.abilities.minotaur_magic") or 0
+		magic_level = get_n(unit, "variables.abilities.minotaur_magic")
 		if magic_level > 0 then
 			table.insert(spells, {
 				description = "aura blast",
@@ -2633,7 +2637,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				})
 			end
 		end
-		magic_level = get_p(unit, "variables.abilities.witch_magic") or 0
+		magic_level = get_n(unit, "variables.abilities.witch_magic")
 		if magic_level > 0 and magic_level < 4 then
 			local new_spell = {
 				damage = 4,
@@ -2642,7 +2646,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				type = "fire",
 				mind_number_rate = 10
 			}
-			if (get_p(equipment.shield, "magic_adjust") + get_p(equipment.head_armor, "magic_adjust") + get_p(equipment.torso_armor, "magic_adjust") + get_p(equipment.leg_armor, "magic_adjust")) > -5 then
+			if (get_n(equipment.shield, "magic_adjust") + get_n(equipment.head_armor, "magic_adjust") + get_n(equipment.torso_armor, "magic_adjust") + get_n(equipment.leg_armor, "magic_adjust")) > -5 then
 				new_spell.description = "witch fire"
 				new_spell.icon = "witch-fire"
 				new_spell.name = "witch fire"
@@ -2663,7 +2667,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				table.insert(new_spell, { "special_type", { magical_to_hit = 1 } })
 			end
 		end
-		magic_level = get_p(unit, "variables.abilities.warlock_magic") or 0
+		magic_level = get_n(unit, "variables.abilities.warlock_magic")
 		if magic_level > 0 then
 			table.insert(spells, {
 				description = "implosion",
@@ -2680,7 +2684,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				{ "special_type", { magical_to_hit = 1 } }
 			})
 		end
-		magic_level = get_p(unit, "variables.abilities.devling_flyer") or 0
+		magic_level = get_n(unit, "variables.abilities.devling_flyer")
 		if magic_level > 0 then
 			table.insert(spells, {
 				description = "breath",
@@ -2695,7 +2699,7 @@ The number of strikes of this attack decreases when the unit is wounded. The num
 				deft_number_rate = 10
 			})
 		end
-		magic_level = get_p(unit, "variables.abilities.devling_magic") or 0
+		magic_level = get_n(unit, "variables.abilities.devling_magic")
 		if magic_level > 0 then
 			table.insert(spells, {
 				description = "wail",

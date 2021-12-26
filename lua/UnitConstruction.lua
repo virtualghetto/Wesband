@@ -2768,7 +2768,7 @@ function wesnoth.wml_actions.unit_npc_init(cfg)
        --std_print("Unit = " .. u .. " Type = " .. t)
        local tcfg = wesnoth.unit_types[string.format("%s", t)].__cfg
        --w_pt(tcfg)
-       local npc_init = wml.get_child(tcfg, "npc_init")
+       local npc_init = wml.get_child(tcfg, "npc_init") or {}
        wml.variables[string.format("%s.variables.npc_init", u)] = nil -- clear it
        wml.variables[string.format("%s.variables.npc_init", u)] = npc_init
 end

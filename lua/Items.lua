@@ -24,7 +24,7 @@ local function cappend(st1, st2)
 	return sappend(st1, ", ", st2)
 end
 
-local function adjustWeaponDescription(wt)
+function adjustWeaponDescription(wt)
 	if wt.evade_adjust and wt.evade_adjust < 0 then
 		wt.evade_description = string.format(", Evade Adjust: %d", wt.evade_adjust)
 	end

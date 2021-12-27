@@ -728,6 +728,7 @@ end
 
 local function constructUnit(var, unstore)
 	local unit = parse_container(wml.variables[var])
+	std_print("constructUnit type= " .. (get_p(unit, "type") or "") .. " side= " .. get_n(unit, "side") .. " name= " .. (get_p(unit, "name") or ""))
 	local player = get_n(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
 
 	-- melee[0] is a valid field. Keep it. Replaces fists.
@@ -2763,12 +2764,12 @@ function wesnoth.wml_actions.construct_unit(cfg)
 	constructUnit(var, unstore)
 end
 function wesnoth.wml_actions.unit_npc_init(cfg)
-       local t = cfg.type or H.wml_error("[unit_npc_init] requires a type= key")
-       local u = cfg.variable or H.wml_error("[unit_npc_init] requires a variable= key")
-       --std_print("Unit = " .. u .. " Type = " .. t)
-       local tcfg = wesnoth.unit_types[string.format("%s", t)].__cfg
-       --w_pt(tcfg)
-       local npc_init = wml.get_child(tcfg, "npc_init") or {}
-       wml.variables[string.format("%s.variables.npc_init", u)] = nil -- clear it
-       wml.variables[string.format("%s.variables.npc_init", u)] = npc_init
+	local var = cfg.variable or H.wml_error("[unit_npc_init] requires a variable= key")
+	local unit = parse_container(wml.variables[var])
+	--std_print("unit_npc_init = " .. var .. " Type = " .. get_p(unit, "type"))
+	local tcfg = wesnoth.unit_types[string.format("%s", get_p(unit, "type"))].__cfg or {}
+	--w_pt(tcfg)
+	local npc_init = wml.get_child(tcfg, "npc_init") or {}
+	wml.variables[string.format("%s.variables.npc_init", var)] = nil -- clear it
+	wml.variables[string.format("%s.variables.npc_init", var)] = npc_init
 end

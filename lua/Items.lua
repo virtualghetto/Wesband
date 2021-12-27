@@ -175,6 +175,12 @@ local function createWeapon(wtype, rank, attr, var)
 	rank = math.floor((rank * 5 + 6) / 12)
 
 	local function adjustCoreStats(wt)
+		if wt.range == "melee" then
+			wt.category = "melee_weapon"
+		end
+		if wt.range == "ranged" then
+			wt.category = "ranged_weapon"
+		end
 		wt.category = wt.category or "melee_weapon"
 		if wt.category == "melee_weapon" then
 			wt.range = wt.range or "melee"
@@ -381,6 +387,8 @@ local function createWeapon(wtype, rank, attr, var)
 	local weapon
 	if wtype == "axe" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "axe",
 			user_name = "axe",
 			description = _ "axe",
@@ -402,6 +410,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "bow" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "bow",
 			user_name = "bow",
 			description = _ "bow",
@@ -424,6 +433,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "chakram" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "lob",
 			user_name = "chakram",
 			description = _ "chakram",
@@ -440,6 +450,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "cleaver" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "axe",
 			user_name = "cleaver",
 			description = _ "cleaver",
@@ -462,6 +474,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "club" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "mace",
 			user_name = "club",
 			description = _ "club",
@@ -485,6 +499,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "crossbow" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "crossbow",
 			user_name = "crossbow",
 			description = _ "crossbow",
@@ -503,6 +518,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "dagger" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "dagger",
 			user_name = "dagger",
 			description = _ "dagger",
@@ -525,6 +542,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "dart" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "thrown-light-blade",
 			user_name = "dagger-thrown",
 			description = _ "dart",
@@ -546,6 +564,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "epee" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "sword",
 			user_name = "epee",
 			description = _ "epee",
@@ -567,6 +587,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "faerie_staff" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "magestaff",
 			user_name = "magestaff",
 			description = _ "faerie staff",
@@ -588,6 +610,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = addMagicAdjust("faerie_magic_adjust", 10, weapon)
 	elseif wtype == "glaive" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "spear",
 			user_name = "glaive",
 			description = _ "glaive",
@@ -607,6 +631,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "hammer" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "mace",
 			user_name = "hammer",
 			description = _ "hammer",
@@ -628,6 +654,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "hatchet" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "lob",
 			user_name = "hatchet",
 			description = _ "thrown hatchet",
@@ -648,6 +675,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "javelin" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "javelin",
 			user_name = "javelin",
 			description = _ "javelin",
@@ -667,6 +695,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "kusarigama" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "axe",
 			user_name = "kusarigama",
 			description = _ "kusarigama",
@@ -688,6 +718,7 @@ local function createWeapon(wtype, rank, attr, var)
 			} },
 			{ "thrown", adjustCoreStats {
 				category = "ranged_weapon",
+				range = "ranged",
 				name = "lob",
 				user_name = "kusarigama",
 				description = _ "kusarigama",
@@ -705,6 +736,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "mace" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "mace",
 			user_name = "mace",
 			description = _ "mace",
@@ -724,6 +757,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "magestaff" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "magestaff",
 			user_name = "magestaff",
 			description = _ "magestaff",
@@ -745,6 +780,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = addMagicAdjust("human_magic_adjust", 20, weapon)
 	elseif wtype == "necrostaff" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "magestaff",
 			user_name = "necrostaff",
 			description = _ "necromancer staff",
@@ -767,6 +804,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = addMagicAdjust("dark_magic_adjust", 15, weapon)
 	elseif wtype == "pike" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "spear",
 			user_name = "pike",
 			description = _ "pike",
@@ -791,6 +830,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "pitchfork" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "spear",
 			user_name = "pitchfork",
 			description = _ "pitchfork",
@@ -813,6 +854,7 @@ local function createWeapon(wtype, rank, attr, var)
 			} },
 			{ "thrown", adjustCoreStats {
 				category = "ranged_weapon",
+				range = "ranged",
 				name = "javelin",
 				user_name = "javelin",
 				description = _ "pitchfork",
@@ -831,6 +873,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "runic_hammer" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "magestaff",
 			user_name = "hammer",
 			description = _ "runic hammer",
@@ -852,6 +896,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = addMagicAdjust("runic_magic_adjust", 20, weapon)
 	elseif wtype == "saber" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "sword",
 			user_name = "saber",
 			description = _ "saber",
@@ -873,6 +919,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "scimitar" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "sword",
 			user_name = "sword",
 			description = _ "scimitar",
@@ -895,6 +943,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "scythe" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "axe",
 			user_name = "scythe",
 			description = _ "scythe",
@@ -917,6 +967,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "sling" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "sling",
 			user_name = "sling",
 			description = _ "sling",
@@ -936,6 +987,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "spear" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "spear",
 			user_name = "spear",
 			description = _ "spear",
@@ -959,6 +1012,7 @@ local function createWeapon(wtype, rank, attr, var)
 			} },
 			{ "thrown", adjustCoreStats {
 				category = "ranged_weapon",
+				range = "ranged",
 				name = "javelin",
 				user_name = "javelin",
 				description = _ "thrown spear",
@@ -977,7 +1031,9 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "spiked_gauntlet" then
 		weapon = adjustStats {
-			name = "fist",
+			category = "melee_weapon",
+			range = "melee",
+			name = "spiked gauntlet",
 			user_name = "spiked gauntlet",
 			description = _ "spiked gauntlet",
 			icon = "pike",
@@ -996,6 +1052,8 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "spirit_staff" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "magestaff",
 			user_name = "spirit_staff",
 			description = _ "spirit staff",
@@ -1017,6 +1075,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = addMagicAdjust("spirit_magic_adjust", 20, weapon)
 	elseif wtype == "sword" then
 		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
 			name = "sword",
 			user_name = "sword",
 			description = _ "sword",
@@ -1040,6 +1100,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "thrown_dagger" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "thrown-light-blade",
 			user_name = "dagger_thrown",
 			description = _ "thrown dagger",
@@ -1062,6 +1123,7 @@ local function createWeapon(wtype, rank, attr, var)
 	elseif wtype == "thunderstick" then
 		weapon = adjustStats {
 			category = "ranged_weapon",
+			range = "ranged",
 			name = "thunderstick",
 			user_name = "thunderstick",
 			description = _ "thunderstick",
@@ -1077,7 +1139,9 @@ local function createWeapon(wtype, rank, attr, var)
 		}
 	elseif wtype == "whip" then
 		weapon = adjustStats {
-			name = "fist",
+			category = "melee_weapon",
+			range = "melee",
+			name = "whip",
 			user_name = "whip",
 			description = _ "whip",
 			icon = "whip",

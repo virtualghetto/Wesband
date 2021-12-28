@@ -1365,7 +1365,7 @@ local function constructUnit(var, unstore)
 		} })
 	end
 	local skirmisher_flag = false
-	if (evade > 1 or get_p(unit, "race") == "undead") and get_n(unit, "variables.abilities.skirm") > 0 then
+	if (evade > 1 or get_p(unit, "race") == "undead") and get_n(unit, "variables.abilities.skirmisher") > 0 then
 		skirmisher_flag = true
 		table.insert(abilities, { "skirmisher", {
 			id = "skirmisher",

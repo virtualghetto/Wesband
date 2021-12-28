@@ -1985,7 +1985,7 @@ local function constructUnit(var, unstore)
 					name_inactive = "poison",
 					description = "Poison:\nThis attack poisons living targets. Poisoned units lose 8 HP every turn until they are cured or are reduced to 1 HP. Poison can not, of itself, kill a unit.",
 					description_inactive = "Poison:\nThis attack poisons living targets. Poisoned units lose 8 HP every turn until they are cured or are reduced to 1 HP. Poison can not, of itself, kill a unit.",
-					icon = "attacks/dagger-thrown-poison-human.png",
+					icon = "dagger-thrown-poison-human",
 					{ "filter_opponent", {
 						{ "not", {
 							{ "filter_wml", {
@@ -2305,7 +2305,7 @@ local function constructUnit(var, unstore)
 		table.insert(attacks, {
 			name = "net",
 			description = "net",
-			icon = "attacks/net.png",
+			icon = "net",
 			range = "ranged",
 			type = "impact",
 			damage = 5,
@@ -2748,12 +2748,15 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 		end
 	end
 	deepdive(specials)
-	special_type = { "special_type",  s }
 	clear_p(at, "specials")
 	set_p(at, "special_type", s)
 	set_p(at, "user_name", get_p(at, "name"))
 	set_p(at, "class", "none")
 	set_p(at, "class_description", "none")
 	set_p(at, "undroppable", 1)
+	local icon = get_p(at, "icon")
+	icon = string.gsub(icon, "attacks/","")
+	icon = string.gsub(icon, ".png","")
+	set_p(at, "icon", icon)
 	wml.variables[var] = unparse_container(at)
 end

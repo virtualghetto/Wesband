@@ -76,6 +76,12 @@ function adjustWeaponDescription(wt)
 		if sp.cleave and sp.cleave == 1 then
 			st1 = cappend(st1, "allows cleave")
 		end
+		if sp.charge and sp.charge == 1 then
+			st1 = cappend(st1, "allows charge")
+		end
+		if sp.poison and sp.poison == 1 then
+			st1 = cappend(st1, "allows poisoning")
+		end
 	end
 	if wt.human_magic_adjust > 0 then
 		st1 = cappend(st1, string.format("%d%% to human magic", wt.human_magic_adjust))

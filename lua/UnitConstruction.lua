@@ -1978,7 +1978,7 @@ local function constructUnit(var, unstore)
 					} }
 				} })
 			end
-			if get_n(weapon, "special_type.natural_poison") > 0 or (weapon_class == "thrown_light_blade" and get_n(weapon, "special_type.allow_poison") > 0 and (get_n(unit, "special_type.variables.abilities.poison_thrown_light_blade") > 0 or get_n(unit, "variables.abilities.poison_thrown_light_blade_orc") > 0)) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.poison_light_blade") == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and get_n(unit, "variables.abilities.kusarigama_poison") > 0) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0))) then
+			if get_n(weapon, "special_type.poison") > 0 or get_n(weapon, "special_type.natural_poison") > 0 or (weapon_class == "thrown_light_blade" and get_n(weapon, "special_type.allow_poison") > 0 and (get_n(unit, "special_type.variables.abilities.poison_thrown_light_blade") > 0 or get_n(unit, "variables.abilities.poison_thrown_light_blade_orc") > 0)) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.poison_light_blade") == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and get_n(unit, "variables.abilities.kusarigama_poison") > 0) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0))) then
 				table.insert(specials, { "poison", {
 					id = "poison",
 					name = "poison",
@@ -2212,7 +2212,7 @@ local function constructUnit(var, unstore)
 					description = "Deadly Grace:\nIf this unit avoids all defending strikes while using this attack, it can attack again.\n\nNOTE: The defending unit must have the chance to strike at least one time for special to trigger."
 				} })
 			end
-			if (get_n(weapon, "special_type.magical_to_hit") or get_n(weapon, "special_type.magical")) > 0 then
+			if get_n(weapon, "special_type.magical_to_hit") > 0 or get_n(weapon, "special_type.magical") > 0 then
 				table.insert(specials, { "chance_to_hit", {
 					id = "magical",
 					name = "magical",
@@ -2243,8 +2243,8 @@ local function constructUnit(var, unstore)
 					name = "charge",
 					description = "Charge:\nWhen used offensively, this attack deals double damage to the target. It also causes this unit to take double damage from the target’s counterattack.",
 					multiply=2,
-					apply_to=both,
-					active_on=offense
+					apply_to="both",
+					active_on="offense"
 				} })
 			end
 
@@ -2730,4 +2730,30 @@ function wesnoth.wml_actions.unit_npc_init(cfg)
 	local npc_init = wml.get_child(tcfg, "npc_init") or {}
 	wml.variables[string.format("%s.variables.npc_init", var)] = nil -- clear it
 	wml.variables[string.format("%s.variables.npc_init", var)] = npc_init
+end
+function wesnoth.wml_actions.create_attack_weapon(cfg)
+	local var = cfg.variable or H.wml_error("[create_attack_weapon] requires a variable= key")
+	local attack = cfg.attack or H.wml_error("[create_attack_weapon] requires a attack= key")
+	local at = parse_container(wml.variables[attack])
+	local s = {}
+	local specials = get_p(at, "specials")
+	local function deepdive(t)
+		for i,k in pairs(t) do
+			if type(i) == "string" and i == "id" then
+				s[k] =  1
+			end
+			if type(k) == "table" then
+				deepdive(t[i])
+			end
+		end
+	end
+	deepdive(specials)
+	special_type = { "special_type",  s }
+	clear_p(at, "specials")
+	set_p(at, "special_type", s)
+	set_p(at, "user_name", get_p(at, "name"))
+	set_p(at, "class", "none")
+	set_p(at, "class_description", "none")
+	set_p(at, "undroppable", 1)
+	wml.variables[var] = unparse_container(at)
 end

@@ -355,7 +355,7 @@ local function find_npc_value(unit, params)
 		charge = params.charge_mod or 1.1,
 		plague = params.plague_mod or 1.1,
 		soultrap = params.soultrap_mod or 1.2,
-		drain = params.drain_mod or 2.5,
+		drains = params.drains_mod or 2.5,
 		slow = params.slow_mod or 1.5,
 		rage = params.rage_mod or 1.8,
 		berserk = params.berserk_mod or 2.2,
@@ -515,6 +515,7 @@ local function find_npc_value(unit, params)
 			end
 		end
 	end
+
 	-- evaluate attacks
 	local attack_array = get_p(unit, "attack")
 	local function process_attack_set(attack_set)
@@ -572,12 +573,12 @@ local function find_npc_value(unit, params)
 					end
 				end
 			end
-			ability_array = get_p(attack_array[i], "specials.drain")
+			ability_array = get_p(attack_array[i], "specials.drains")
 			if type(ability_array) == "table" then
 				for i = 1, #ability_array do
 					local ability_id = get_p(ability_array[i], "id") or "none"
-					if ability_id == "drain" then
-						attack_eval.value = attack_eval.value * modifiers.drain
+					if ability_id == "drains" then
+						attack_eval.value = attack_eval.value * modifiers.drains
 						attack_eval.specials = true
 					end
 				end
@@ -948,7 +949,23 @@ local function constructUnit(var, unstore)
 	end
 
 	set_p(unit, "variables.firststrike_flag", 0)
-	set_p(unit, "variables.unpoisonable_flag", 0)
+	--set_p(unit, "variables.unpoisonable_flag", 0)
+
+	if get_n(unit, "variables.unpoisonable_flag") > 0 then
+		set_p(unit, "status.unpoisonable", "yes")
+	else
+		clear_p(unit, "status.unpoisonable")
+	end
+	if get_n(unit, "variables.undrainable_flag") > 0 then
+		set_p(unit, "status.undrainable", "yes")
+	else
+		clear_p(unit, "status.undrainable")
+	end
+	if get_n(unit, "variables.unplagueable_flag") > 0 then
+		set_p(unit, "status.unplagueable", "yes")
+	else
+		clear_p(unit, "status.unplagueable")
+	end
 
 	local old_traits, new_traits = get_p(unit, "modifications.trait"), {}
 	if player then
@@ -2201,6 +2218,16 @@ local function constructUnit(var, unstore)
 					id = "swarm",
 					name = "swarm",
 					description = "Swarm:\nThe number of strikes of this attack decreases when the unit is wounded. The number of strikes is proportional to the percentage of its of maximum HP the unit has. For example a unit with 3/4 of its maximum HP will get 3/4 of the number of strikes."
+				} })
+			end
+			if get_n(weapon, "special_type.charge") > 0 then
+				table.insert(specials, { "damage", {
+					id = "charge",
+					name = "charge",
+					description = "Charge:\nWhen used offensively, this attack deals double damage to the target. It also causes this unit to take double damage from the target’s counterattack.",
+					multiply=2,
+					apply_to=both,
+					active_on=offense
 				} })
 			end
 

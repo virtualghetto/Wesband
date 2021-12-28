@@ -1926,7 +1926,7 @@ local function constructUnit(var, unstore)
 					} }
 				} })
 			end
-			if get_n(weapon, "special_type.drains") > 0 then
+			if get_n(weapon, "special_type.drains") > 0 and get_n(unit, "variables.abilities.drains") then
 				table.insert(specials, { "drains", {
 					id = "drains",
 					name = "drains",

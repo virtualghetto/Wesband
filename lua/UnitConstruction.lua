@@ -1380,7 +1380,7 @@ local function constructUnit(var, unstore)
 	else
 		set_p(unit, "variables.status.dash", 0)
 	end
-	if evade > 0 then
+	if (evade > 0 or get_p(unit, "race") == "undead") then
 		if evade > 3 then
 			if get_n(unit, "variables.abilities.ambush_forest") > 0 then
 				table.insert(abilities, { "hides", {
@@ -1430,7 +1430,7 @@ local function constructUnit(var, unstore)
 				set_p(unit, "status.hidden", "yes")
 			end
 		end
-		if (not player) and get_n(unit, "variables.abilities.nightstalk") > 0 then
+		if ((not player) or get_p(unit, "race") == "undead") and get_n(unit, "variables.abilities.nightstalk") > 0 then
 			table.insert(abilities, { "hides", {
 				id = "nightstalk",
 				name = "nightstalk",
@@ -1447,6 +1447,14 @@ local function constructUnit(var, unstore)
 				} }
 			} })
 		end
+	end
+	if get_p(unit, "race") == "undead" and get_n(unit, "variables.abilities.wallpass") > 0 then
+		table.insert(abilities, { "dummy", {
+			id = "wallpass",
+			name = "wall pass",
+			description = "Wall Pass:\nThis unit can pass through solid objects with a cost of 2 movement points."
+		} })
+		set_p(unit, "movement_costs.impassable", 2)
 	end
 	skill_level = 2 * get_n(unit, "variables.abilities.regen")
 	if skill_level > 0 then
@@ -1912,6 +1920,24 @@ local function constructUnit(var, unstore)
 							{ "filter_wml", {
 								{ "variables", {
 									unslowable_flag = 1
+								} }
+							} }
+						} }
+					} }
+				} })
+			end
+			if get_n(weapon, "special_type.drains") > 0 then
+				table.insert(specials, { "drains", {
+					id = "drains",
+					name = "drains",
+					description = "Drains:\nThis unit drains health from living units, healing itself for half the amount of damage it deals (rounded down).",
+					name_inactive = "drains",
+					description_inactive = "Drains:\nThis unit drains health from living units, healing itself for half the amount of damage it deals (rounded down).",
+					{ "filter_opponent", {
+						{ "not", {
+							{ "filter_wml", {
+								{ "variables", {
+									undrainable_flag = 1
 								} }
 							} }
 						} }

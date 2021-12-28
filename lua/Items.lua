@@ -1214,6 +1214,36 @@ local function createWeapon(wtype, rank, attr, var)
 				backstab = 1
 			} }
 		}
+	elseif wtype == "bite" then
+		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
+			undroppable = 1,
+			name = "bite",
+			user_name = "bite",
+			description = _ "bite",
+			icon = "bite",
+			ground_icon = "bite",
+			type = "blade",
+			class = "light_blade",
+			class_description = "Light Blade",
+			damage = 2,
+			number = 1,
+			evade_adjust = 0,
+			body_damage_rate = 10,
+			deft_damage_rate = 15,
+			body_number_rate = 0,
+			deft_number_rate = 15,
+			human_magic_adjust = 0,
+			dark_magic_adjust = 0,
+			faerie_magic_adjust = 0,
+			runic_magic_adjust = 0,
+			spirit_magic_adjust = 0,
+			material = "cloth",
+			{ "special_type", {
+				drains = 1
+			} }
+		}
 	elseif wtype == "lob" then
 		weapon = adjustStats {
 			category = "ranged_weapon",

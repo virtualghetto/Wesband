@@ -1490,10 +1490,10 @@ local function constructUnit(var, unstore)
 		} })
 		set_p(unit, "movement_costs.impassable", 2)
 	end
-	skill_level = 2 * get_n(unit, "variables.abilities.regen")
+	skill_level = 2 * get_n(unit, "variables.abilities.regenerate")
 	if skill_level > 0 then
 		local new_ability = {
-			id = "regenerate",
+			id = "regenerates",
 			name = string.format("regenerate +%d", skill_level),
 			value = skill_level
 		}

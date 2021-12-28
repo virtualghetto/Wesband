@@ -1157,6 +1157,89 @@ local function createWeapon(wtype, rank, attr, var)
 			deft_number_rate = 20,
 			material = "cloth"
 		}
+	elseif wtype == "fist" then
+		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
+			undroppable = 1,
+			name = "fist",
+			user_name = "fist",
+			description = _ "fist",
+			icon = "fist-human",
+			ground_icon = "fist",
+			type = "impact",
+			class = "bludgeon",
+			class_description = "Bludgeon",
+			damage = 1,
+			number = 1,
+			evade_adjust = 0,
+			body_damage_rate = 20,
+			deft_damage_rate = 10,
+			body_number_rate = 0,
+			deft_number_rate = 10,
+			human_magic_adjust = 0,
+			dark_magic_adjust = 0,
+			faerie_magic_adjust = 0,
+			runic_magic_adjust = 0,
+			spirit_magic_adjust = 0,
+			material = "cloth"
+		}
+	elseif wtype == "claws" then
+		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
+			undroppable = 1,
+			name = "claws",
+			user_name = "claws",
+			description = _ "claws",
+			icon = "claws",
+			ground_icon = "claws",
+			type = "blade",
+			class = "light_blade",
+			class_description = "Light Blade",
+			damage = 2,
+			number = 1,
+			evade_adjust = 0,
+			body_damage_rate = 10,
+			deft_damage_rate = 15,
+			body_number_rate = 0,
+			deft_number_rate = 15,
+			human_magic_adjust = 0,
+			dark_magic_adjust = 0,
+			faerie_magic_adjust = 0,
+			runic_magic_adjust = 0,
+			spirit_magic_adjust = 0,
+			material = "cloth",
+			{ "special_type", {
+				backstab = 1
+			} }
+		}
+	elseif wtype == "lob" then
+		weapon = adjustStats {
+			category = "ranged_weapon",
+			range = "ranged",
+			undroppable = 1,
+			name = "lob",
+			user_name = "lob",
+			description = _ "thrown rock",
+			icon = "rock_thrown",
+			ground_icon = "rock_thrown",
+			type = "impact",
+			class = "lob",
+			class_description = "Lob",
+			damage = 1,
+			number = 1,
+			body_damage_rate = 20,
+			body_number_rate = 0,
+			deft_damage_rate = 10,
+			deft_number_rate = 0,
+			human_magic_adjust = 0,
+			dark_magic_adjust = 0,
+			faerie_magic_adjust = 0,
+			runic_magic_adjust = 0,
+			spirit_magic_adjust = 0,
+			material = "cloth"
+		}
 	else
 		H.wml_error(string.format("invalid type= key in [create_weapon] (%s)", wtype))
 	end

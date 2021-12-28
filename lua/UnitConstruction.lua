@@ -1341,7 +1341,7 @@ local function constructUnit(var, unstore)
 					affect_self = "yes",
 					{ "filter_self", {
 						{ "filter_location", {
-							terrain = "Wo"
+							terrain = "Wo*^*"
 						} }
 					} }
 			} })
@@ -1464,6 +1464,23 @@ local function constructUnit(var, unstore)
 				} }
 			} })
 		end
+		if get_n(unit, "variables.abilities.concealment") > 0 then
+			table.insert(abilities, { "hides", {
+				id = "concealment",
+				name = "concealment",
+				female_name = "concealment",
+				name_inactive = "concealment",
+				female_name_inactive = "concealment",
+				affect_self = "yes",
+				description = "Concealment:\nThis unit can hide in villages (with the exception of water villages), and remain undetected by its enemies, except by those standing next to it.\n\nEnemy units cannot see this unit while it is in a village, except if they have units next to it. Any enemy unit that first discovers this unit immediately loses all its remaining movement.",
+				description_inactive = "Concealment:\nThis unit can hide in villages (with the exception of water villages), and remain undetected by its enemies, except by those standing next to it.\n\nEnemy units cannot see this unit while it is in a village, except if they have units next to it. Any enemy unit that first discovers this unit immediately loses all its remaining movement.",
+				{ "filter_self", {
+					{ "filter_location", {
+						terrain = "*^V*"
+					} }
+				} }
+			} })
+		end
 	end
 	if get_p(unit, "race") == "undead" and get_n(unit, "variables.abilities.wallpass") > 0 then
 		table.insert(abilities, { "dummy", {
@@ -1535,7 +1552,7 @@ local function constructUnit(var, unstore)
 						set_p(unit, string.format("variables.inventory.spells[%d].description", i - 1), string.format("Heal %d hitpoints.", heal_power))
 					end
 				elseif spell_name == "silver_teleport" then
-					table.insert(abilities, { "heals", {
+					table.insert(abilities, { "teleport", {
 						id = "rpg_teleport",
 						name = "teleport",
 						description = string.format("Teleport:\nThis unit may teleport %d hexes away granted it is an empty location that the unit can move to normally.", 2 * spell_power)
@@ -2195,7 +2212,7 @@ local function constructUnit(var, unstore)
 					description = "Deadly Grace:\nIf this unit avoids all defending strikes while using this attack, it can attack again.\n\nNOTE: The defending unit must have the chance to strike at least one time for special to trigger."
 				} })
 			end
-			if get_n(weapon, "special_type.magical_to_hit") > 0 then
+			if (get_n(weapon, "special_type.magical_to_hit") or get_n(weapon, "special_type.magical")) > 0 then
 				table.insert(specials, { "chance_to_hit", {
 					id = "magical",
 					name = "magical",

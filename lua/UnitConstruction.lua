@@ -2736,6 +2736,48 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 	local attack = cfg.attack or H.wml_error("[create_attack_weapon] requires a attack= key")
 	local at = parse_container(wml.variables[attack])
 	local s = {}
+
+	local droppable = {
+			"axe",
+			"battle axe",
+			"bow",
+			"chakram",
+			"cleaver",
+			"club",
+			"crossbow",
+			"dagger",
+			"epee",
+			"flail",
+			"glaive",
+			"greatsword",
+			"halberd",
+			"hammer",
+			"hatchet",
+			"javelin",
+			"kusarigama",
+			"lance",
+			"longbow",
+			"mace",
+			"mace-spiked",
+			"magestaff",
+			"pike",
+			"pitchfork",
+			"plague staff",
+			"saber",
+			"scimitar",
+			"scythe",
+			"short sword",
+			"sling",
+			"spear",
+			"staff",
+			"sword",
+			"throwing knives",
+			"thrown-light-blade",
+			"thunderstick",
+			"trident",
+			"whip",
+		}
+
 	local specials = get_p(at, "specials")
 	local function deepdive(t)
 		for i,k in pairs(t) do
@@ -2750,10 +2792,29 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 	deepdive(specials)
 	clear_p(at, "specials")
 	set_p(at, "special_type", s)
-	set_p(at, "user_name", get_p(at, "name"))
+
+	local name = get_p(at, "name")
+	set_p(at, "user_name", name)
+
+	set_p(at, "body_damage_rate", 0)
+	set_p(at, "body_number_rate", 0)
 	set_p(at, "class", "none")
 	set_p(at, "class_description", "none")
+	set_p(at, "dark_magic_adjust", 0)
+	set_p(at, "deft_damage_rate", 0)
+	set_p(at, "deft_number_rate", 0)
+	set_p(at, "evade_adjust", 0)
+	set_p(at, "faerie_magic_adjust", 0)
+	set_p(at, "human_magic_adjust", 0)
+	set_p(at, "runic_magic_adjust", 0)
+	set_p(at, "spirit_magic_adjust", 0)
 	set_p(at, "undroppable", 1)
+
+	for i,k in ipairs(droppable) do
+		if type(k) == "string" and k == name then
+			set_p(at, "undroppable", 0)
+		end
+	end
 	local icon = get_p(at, "icon")
 	icon = string.gsub(icon, "attacks/","")
 	icon = string.gsub(icon, ".png","")

@@ -440,7 +440,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "ranged_weapon",
 			range = "ranged",
-			name = "chakram",
+			name = "lob",
 			user_name = "chakram",
 			description = _ "chakram",
 			icon = "chakram",
@@ -458,7 +458,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "cleaver",
+			name = "axe",
 			user_name = "cleaver",
 			description = _ "cleaver",
 			icon = "cleaver",
@@ -482,7 +482,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "club",
+			name = "mace",
 			user_name = "club",
 			description = _ "club",
 			icon = "club-small",
@@ -572,7 +572,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "epee",
+			name = "sword",
 			user_name = "epee",
 			description = _ "epee",
 			icon = "saber-human",
@@ -618,7 +618,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "glaive",
+			name = "spear",
 			user_name = "glaive",
 			description = _ "glaive",
 			icon = "spear",
@@ -639,7 +639,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "hammer",
+			name = "mace",
 			user_name = "hammer",
 			description = _ "hammer",
 			icon = "hammer-dwarven",
@@ -661,7 +661,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "ranged_weapon",
 			range = "ranged",
-			name = "hatchet",
+			name = "lob",
 			user_name = "hatchet",
 			description = _ "thrown hatchet",
 			icon = "hatchet",
@@ -703,7 +703,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "kusarigama",
+			name = "axe",
 			user_name = "kusarigama",
 			description = _ "kusarigama",
 			icon = "scythe",
@@ -725,7 +725,7 @@ local function createWeapon(wtype, rank, attr, var)
 			{ "thrown", adjustCoreStats {
 				category = "ranged_weapon",
 				range = "ranged",
-				name = "kusarigama",
+				name = "lob",
 				user_name = "kusarigama",
 				description = _ "kusarigama",
 				icon = "scythe",
@@ -812,7 +812,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "pike",
+			name = "spear",
 			user_name = "pike",
 			description = _ "pike",
 			icon = "pike",
@@ -838,7 +838,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "pitchfork",
+			name = "spear",
 			user_name = "pitchfork",
 			description = _ "pitchfork",
 			icon = "pitchfork",
@@ -881,7 +881,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "hammer",
+			name = "magestaff",
 			user_name = "hammer",
 			description = _ "runic hammer",
 			icon = "hammer-dwarven-runic",
@@ -904,7 +904,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "saber",
+			name = "sword",
 			user_name = "saber",
 			description = _ "saber",
 			icon = "saber-human",
@@ -927,8 +927,8 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "scimitar",
-			user_name = "scimitar",
+			name = "sword",
+			user_name = "sword",
 			description = _ "scimitar",
 			icon = "sword-elven",
 			ground_icon = "sword",
@@ -951,7 +951,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "scythe",
+			name = "axe",
 			user_name = "scythe",
 			description = _ "scythe",
 			icon = "scythe",
@@ -1039,7 +1039,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "spiked gauntlet",
+			name = "fist",
 			user_name = "spiked gauntlet",
 			description = _ "spiked gauntlet",
 			icon = "pike",
@@ -1147,7 +1147,7 @@ local function createWeapon(wtype, rank, attr, var)
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",
-			name = "whip",
+			name = "fist",
 			user_name = "whip",
 			description = _ "whip",
 			icon = "whip",
@@ -1195,7 +1195,7 @@ local function createWeapon(wtype, rank, attr, var)
 			category = "melee_weapon",
 			range = "melee",
 			undroppable = 1,
-			name = "claws",
+			name = "fist",
 			user_name = "claws",
 			description = _ "claws",
 			icon = "claws",
@@ -1225,7 +1225,7 @@ local function createWeapon(wtype, rank, attr, var)
 			category = "melee_weapon",
 			range = "melee",
 			undroppable = 1,
-			name = "bite",
+			name = "fist",
 			user_name = "bite",
 			description = _ "bite",
 			icon = "bite",

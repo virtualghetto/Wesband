@@ -283,10 +283,32 @@ local function get_attack_basics(unit, equipment, weapon)
 	end
 	local unit_race = get_p(unit, "race")
 	if unit_race == "elf" then
+--                [weapon_skills]
+--                    [race_adjust]
+--                        [class]
+--                            [bow]
+--                                number_hard=1
+--                            [/bow]
+--                        [/class]
+--                    [/race_adjust]
+--                [/weapon_skills]
 		if weapon_class == "bow" then
 			skill_num = skill_num + 1
 		end
 	elseif unit_race == "dwarf" then
+--                [weapon_skills]
+--                    [race_adjust]
+--                        [user_name]
+--                            [axe]
+--                                number_hard=1
+--                                damage_percent=-20
+--                            [/axe]
+--                            [hammer]
+--                                damage_percent=20
+--                            [/hammer]
+--                        [/user_name]
+--                    [/race_adjust]
+--                [/weapon_skills]
 		local weapon_type = get_p(weapon, "user_name")
 		if weapon_type == "axe" then
 			skill_num = skill_num + 1
@@ -295,10 +317,57 @@ local function get_attack_basics(unit, equipment, weapon)
 			percent_mult = percent_mult * 1.2
 		end
 	elseif unit_race == "troll" then
+--                [weapon_skills]
+--                    [race_adjust]
+--                        [class]
+--                            [light_blade]
+--                                damage_percent=-25
+--                            [/light_blade]
+--                            [heavy_blade]
+--                                damage_percent=-25
+--                            [/heavy_blade]
+--                            [polearm]
+--                                damage_percent=-25
+--                            [/polearm]
+--                            [thrown_light_blade]
+--                                damage_percent=-25
+--                            [/thrown_light_blade]
+--                            [thrown_heavy_blade]
+--                                damage_percent=-25
+--                            [/thrown_heavy_blade]
+--                            [bow]
+--                                damage_percent=-25
+--                            [/bow]
+--                            [javelin]
+--                                damage_percent=-25
+--                            [/javelin]
+--                            [crossbow]
+--                                damage_percent=-25
+--                            [/crossbow]
+--                            [none]
+--                                damage_percent=-25
+--                            [/none]
+--                        [/class]
+--                    [/race_adjust]
+--                [/weapon_skills]
 		if weapon_class ~= "bludgeon" and weapon_class ~= "lob" then
 			percent_mult = percent_mult * 0.75
 		end
 	elseif unit_race == "lizard" then
+--                [weapon_skills]
+--                    [race_adjust]
+--                        [class]
+--                            [polearm]
+--                                number_hard=1
+--                                damage_percent=-20
+--                            [/polearm]
+--                            [javelin]
+--                                number_hard=1
+--                                damage_percent=-20
+--                            [/javelin]
+--                        [/class]
+--                    [/race_adjust]
+--                [/weapon_skills]
 		if weapon_class == "polearm" or weapon_class == "javelin" then
 			skill_num = skill_num + 1
 			percent_mult = percent_mult * 0.8

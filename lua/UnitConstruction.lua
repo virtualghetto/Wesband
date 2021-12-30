@@ -808,7 +808,7 @@ local function constructUnit(var, unstore)
 	end
 	set_p(unit, "moves", math.min(get_n(unit, "moves"), get_n(unit, "max_moves")))
 	local function set_resist(resist)
-		set_p(unit, "resistance." .. resist, math.max(100, get_n(unit, "variables.resistance." .. resist)) - get_n(equipment.head_armor, "resistance." .. resist) - get_n(equipment.torso_armor, "resistance." .. resist) - get_n(equipment.leg_armor, "resistance." .. resist))
+		set_p(unit, "resistance." .. resist, math.max(0, get_n(unit, "variables.resistance." .. resist, 100)) - get_n(equipment.head_armor, "resistance." .. resist) - get_n(equipment.torso_armor, "resistance." .. resist) - get_n(equipment.leg_armor, "resistance." .. resist))
 	end
 	set_resist("arcane")
 	set_resist("blade")

@@ -2373,7 +2373,7 @@ local function constructUnit(var, unstore)
 	if equipment.thrown then
 		add_attack(equipment.thrown)
 	end
-	if equipment.ranged then
+	if equipment.ranged and get_n(unit, "variables.no_ranged") == 0 then
 		add_attack(equipment.ranged)
 	end
 	if get_n(unit, "variables.abilities.net") > 0 then

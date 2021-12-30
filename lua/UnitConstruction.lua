@@ -249,7 +249,7 @@ local function get_attack_basics(unit, equipment, weapon)
 		if get_n(weapon, "number") < 2 then
 			skill_dam = 2
 		end
-		skill_dam = skill_dam * get_n(unit, string.format("variables.weapon_skills.%s.damage", weapon_class))
+		skill_dam = skill_dam * get_n(unit, string.format("variables.weapon_skills.%s.damage", weapon_class), 1)
 		skill_num = get_n(unit, string.format("variables.weapon_skills.%s.attack", weapon_class))
 	end
 	local function add_stat_adjusts(stat)

@@ -2865,7 +2865,7 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 			end
 		end
 	end
-	deepdive(specials)
+	deepdive(specials or {})
 	clear_p(at, "specials")
 	set_p(at, "special_type", s)
 

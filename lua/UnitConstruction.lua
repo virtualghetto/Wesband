@@ -987,14 +987,20 @@ local function constructUnit(var, unstore)
 		table.insert(new_traits, parse_container({
 			id = "healthy",
 			name = "healthy",
-			description = "Can rest while moving, halves poison damage."
+			description = "Can rest while moving, halves poison damage.",
+			{ "effect", {
+				apply_to = "healthy"
+			} },
 		}))
 	end
 	if get_n(unit, "variables.abilities.fearless") > 0 then
 		table.insert(new_traits, parse_container({
 			id = "fearless",
 			name = "fearless",
-			description = "Fight normally during unfavorable times of day/night."
+			description = "Fight normally during unfavorable times of day/night.",
+			{ "effect", {
+				apply_to = "fearless"
+			} },
 		}))
 	end
 	clear_p(unit, "modifications.trait")
@@ -2697,19 +2703,19 @@ local function constructUnit(var, unstore)
 	wml.variables[var] = unparse_container(unit)
 	if unstore then
 		W.unstore_unit { variable = var }
-		local unit_x, unit_y = get_p(unit, "x"), get_p(unit, "y")
-		-- in 1.9 it might be possible to replace this w/ a call to wesnoth.select_hex()?
-		W.object {
-			silent = "yes",
-			{ "filter", {
-				x = unit_x,
-				y = unit_y
-			} },
-			{ "effect", {
-				apply_to = "status",
-				remove = "aids"
-			} }
-		}
+-- 		local unit_x, unit_y = get_p(unit, "x"), get_p(unit, "y")
+-- 		-- in 1.9 it might be possible to replace this w/ a call to wesnoth.select_hex()?
+-- 		W.object {
+-- 			silent = "yes",
+-- 			{ "filter", {
+-- 				x = unit_x,
+-- 				y = unit_y
+-- 			} },
+-- 			{ "effect", {
+-- 				apply_to = "status",
+-- 				remove = "aids"
+-- 			} }
+-- 		}
 	end
 end
 function wesnoth.wml_actions.construct_unit(cfg)

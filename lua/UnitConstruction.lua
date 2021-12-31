@@ -798,7 +798,7 @@ end
 
 local function constructUnit(var, unstore)
 	local unit = parse_container(wml.variables[var])
-	std_print("constructUnit type= " .. (get_p(unit, "type") or "") .. " side= " .. get_n(unit, "side") .. " name= " .. (get_p(unit, "name") or ""))
+	--std_print("constructUnit type= " .. (get_p(unit, "type") or "") .. " side= " .. get_n(unit, "side") .. " name= " .. (get_p(unit, "name") or ""))
 	local player = get_n(unit, "side") <= wml.variables["const.max_player_count"] and get_p(unit, "canrecruit")
 
 	-- melee[0] is a valid field. Keep it. Replaces fists.

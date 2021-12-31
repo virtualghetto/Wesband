@@ -34,6 +34,18 @@ local function checkSafety(x, y)
 	return safety
 end
 
+local function on_board_path(u, x, y)
+	local path, cost = nil, 9e99
+	if type(x) ~= "number" or type(y) ~= "number" then
+		return path, cost
+	end
+	local w, h = wesnoth.get_map_size()
+	if x >= 1 and y >= 1 and x <= w and y <= h then
+		path, cost = wesnoth.find_path(u, x, y, { ignore_units = true, viewing_side = 0 })
+	end
+	return path, cost
+end
+
 function wesnoth.wml_actions.rouse_units(cfg)
 	local x, y = cfg.x or H.wml_error("[rouse_units] expects an x= attribute"), cfg.y or H.wml_error("[rouse_units] expects a y= attribute")
 	local min_index = -1
@@ -128,24 +140,24 @@ function wesnoth.wml_actions.rouse_units(cfg)
 					-- find_path gives unhelpful results if you're standing where the enemy can't be moved to
 					-- so have to check each adjacent hex individually in that case
 					target_cost = u.max_moves
-					path, cost = wesnoth.find_path(u, x, y + 1, { ignore_units = true, viewing_side = 0 })
+					path, cost = on_board_path(u, x, y + 1)
 					if cost > target_cost then
-						path, cost = wesnoth.find_path(u, x, y - 1, { ignore_units = true, viewing_side = 0 })
+						path, cost = on_board_path(u, x, y - 1)
 						if cost > target_cost then
-							path, cost = wesnoth.find_path(u, x + 1, y - x % 2, { ignore_units = true, viewing_side = 0 })
+							path, cost = on_board_path(u, x + 1, y - x % 2)
 							if cost > target_cost then
-								path, cost = wesnoth.find_path(u, x - 1, y - x % 2, { ignore_units = true, viewing_side = 0 })
+								path, cost = on_board_path(u, x - 1, y - x % 2)
 								if cost > target_cost then
-									path, cost = wesnoth.find_path(u, x + 1, y + 1 - x % 2, { ignore_units = true, viewing_side = 0 })
+									path, cost = on_board_path(u, x + 1, y + 1 - x % 2)
 									if cost > target_cost then
-										path, cost = wesnoth.find_path(u, x - 1, y + 1 - x % 2, { ignore_units = true, viewing_side = 0 })
+										path, cost = on_board_path(u, x - 1, y + 1 - x % 2)
 									end
 								end
 							end
 						end
 					end
 				else
-					path, cost = wesnoth.find_path(u, x, y, { ignore_units = true, viewing_side = 0 })
+					path, cost = on_board_path(u, x, y)
 				end
 				if cost <= target_cost then
 					if rouse_list then

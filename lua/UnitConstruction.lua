@@ -2814,7 +2814,24 @@ function wesnoth.wml_actions.unit_npc_init(cfg)
 	--std_print("unit_npc_init = " .. var .. " Type = " .. get_p(unit, "type"))
 	local tcfg = wesnoth.unit_types[string.format("%s", get_p(unit, "type"))].__cfg or {}
 	--w_pt(tcfg)
-	local npc_init = wml.get_child(tcfg, "npc_init") or {}
+	local hitpoints = tcfg.hitpoints
+	local experience = tcfg.experience
+	local level = tcfg.level
+	local moves = tcfg.movement
+	local body = 2 * (tcfg.level + 1)
+	local deft = 2 * (tcfg.level + 1)
+	local mind = 2 * (tcfg.level + 1)
+	local npc_init = wml.get_child(tcfg, "npc_init") or { wesband = 0,
+							likes_gold = 1,
+							is_rpg_npc = 1,
+							body = body,
+							deft = deft,
+							mind = mind,
+							experience = experience,
+							hitpoints = hitpoints,
+							level = level,
+							max_moves = moves,
+								}
 	wml.variables[string.format("%s.variables.npc_init", var)] = nil -- clear it
 	wml.variables[string.format("%s.variables.npc_init", var)] = npc_init
 end

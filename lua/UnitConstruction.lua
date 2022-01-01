@@ -1867,8 +1867,8 @@ local function constructUnit(var, unstore)
 					table.insert(specials, { "damage", {
 						id = "goliath_bane",
 						name = "goliath bane",
-						description = string.format("Goliath Bane Level %d:\n%d%% damage bonus for each level of the enemy. Offense only.", parsed.skills.goliath_bane, 10 * parsed.skills.goliath_bane),
-						multiply = 1 + 0.1 * parsed.skills.goliath_bane,
+						description = string.format("Goliath Bane Level %d:\n%d%% damage bonus for each level of the enemy. Offense only.", special_level, 10 * special_level),
+						multiply = 1 + 0.1 * special_level,
 						active_on = "offense",
 						{ "filter_opponent", {
 							level = 1

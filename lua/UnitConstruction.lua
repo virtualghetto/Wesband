@@ -1090,6 +1090,17 @@ local function constructUnit(var, unstore)
 			description = "Illuminates:\nThis unit illuminates the surrounding area, making lawful units fight better, and chaotic units fight worse.\n\nAny units adjacent to this unit will fight as if it were dusk when it is night, and as if it were day when it is dusk.",
 			affect_self = "yes"
 		} })
+	elseif get_n(unit, "variables.abilities.darkens") == 1 and get_p(unit, "chaotic") == "lawful" then
+		set_p(unit, "halo", "halo/darkens-aura.png")
+		table.insert(abilities, { "illuminates", {
+			id = "darkens",
+			value = -25,
+			min_value = -25,
+			cumulative = "no",
+			name = "darkens",
+			description = "Darkens:\nThis unit darkens the surrounding area, making chaotic units fight better, and lawful units fight worse.\n\nAny units adjacent to this unit will fight as if it were dusk when it is day, and as if it were night when it is dusk.",
+			affect_self = "yes"
+		} })
 	elseif not player then
 		local halo_level = get_n(unit, "variables.abilities.witch_magic")
 		if halo_level == 2 then

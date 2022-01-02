@@ -2780,6 +2780,7 @@ local function constructUnit(var, unstore)
 	end
 
 	set_p(unit, "status.construct_unit", "yes")
+	set_p(unit, "upkeep", 0)
 	wml.variables[var] = unparse_container(unit)
 	if unstore then
 		W.unstore_unit { variable = var }

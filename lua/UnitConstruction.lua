@@ -210,16 +210,16 @@ end
 
 local function get_unit_equipment(unit)
 	local equipment = {}
-	equipment.head_armor = get_p(unit, string.format("variables.inventory.armor.head[%d]", get_n(unit, "variables.equipment_slots.head_armor")))
-	equipment.torso_armor = get_p(unit, string.format("variables.inventory.armor.torso[%d]", get_n(unit, "variables.equipment_slots.torso_armor")))
-	equipment.leg_armor = get_p(unit, string.format("variables.inventory.armor.legs[%d]", get_n(unit, "variables.equipment_slots.leg_armor")))
-	equipment.shield = get_p(unit, string.format("variables.inventory.armor.shield[%d]", get_n(unit, "variables.equipment_slots.shield")))
-	equipment.melee_1 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_1")))
+	equipment.head_armor = get_p(unit, string.format("variables.inventory.armor.head[%d]", math.max(0, get_n(unit, "variables.equipment_slots.head_armor"))))
+	equipment.torso_armor = get_p(unit, string.format("variables.inventory.armor.torso[%d]", math.max(0, get_n(unit, "variables.equipment_slots.torso_armor"))))
+	equipment.leg_armor = get_p(unit, string.format("variables.inventory.armor.legs[%d]", math.max(0, get_n(unit, "variables.equipment_slots.leg_armor"))))
+	equipment.shield = get_p(unit, string.format("variables.inventory.armor.shield[%d]", math.max(0, get_n(unit, "variables.equipment_slots.shield"))))
+	equipment.melee_1 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", math.max(0, get_n(unit, "variables.equipment_slots.melee_1"))))
 	local wield_skill, block_wield = get_n(unit, "variables.abilities.wield"), get_n(equipment.shield, "block_wield")
 	if wield_skill > 0 and block_wield < 2 then
-		equipment.melee_2 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_2")))
+		equipment.melee_2 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", math.max(0, get_n(unit, "variables.equipment_slots.melee_2"))))
 		if wield_skill == 2 and block_wield == 0 then
-			equipment.melee_3 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", get_n(unit, "variables.equipment_slots.melee_3")))
+			equipment.melee_3 = get_p(unit, string.format("variables.inventory.weapons.melee[%d]", math.max(0, get_n(unit, "variables.equipment_slots.melee_3"))))
 		end
 	end
 	-- thrown[0] is a valid field. Keep it.

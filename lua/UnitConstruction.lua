@@ -224,7 +224,7 @@ local function get_unit_equipment(unit)
 	end
 	-- thrown[0] is a valid field. Keep it.
 	equipment.thrown = get_p(equipment.melee_1, "thrown[0]")
-	if get_n(equipment.shield, "block_ranged") == 0 and get_n(unit, "variables.no_ranged") == 0 then
+	if get_n(equipment.shield, "block_ranged") == 0 and get_n(unit, "variables.no_ranged") == 0 and get_n(unit, "variables.npc_init.no_ranged") == 0 then
 		equipment.ranged = get_p(unit, string.format("variables.inventory.weapons.ranged[%d]", math.max(0, get_n(unit, "variables.equipment_slots.ranged"))))
 	end
 	return equipment
@@ -2384,7 +2384,10 @@ local function constructUnit(var, unstore)
 	if equipment.thrown then
 		add_attack(equipment.thrown)
 	end
-	if equipment.ranged and get_n(unit, "variables.no_ranged") == 0 then
+	--if equipment.ranged and ((get_n(unit, "variables.no_ranged") > 0) or (get_n(unit, "variables.npc_init.no_ranged") > 0)) then
+	--	set_p(equipment.ranged, "number", 0)
+	--end
+	if equipment.ranged then
 		add_attack(equipment.ranged)
 	end
 	if get_n(unit, "variables.abilities.net") > 0 then

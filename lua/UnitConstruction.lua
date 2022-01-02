@@ -2927,6 +2927,6 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 	icon = string.gsub(icon, "attacks/","")
 	icon = string.gsub(icon, ".png","")
 	set_p(at, "icon", icon)
-	set_p(at, "ground_icon", icon)
+	set_p(at, "ground_icon", "dummy")
 	wml.variables[var] = unparse_container(at)
 end

@@ -4,6 +4,27 @@
 -increased max_hench per side. Tied to the number of side players.
 -decreased rousing movement restrictions from radius 12 to 7
 -carve dungeon paths from all units to both exits
+-unit with battle tutor gives XP to adjacent units after it attacks
+-allow drop item by category
+-allow drop all items
+-support non-wesband unit creation and 3rd part add-ons units
+-fix infinite when npc units advance
+-fix building bridges over chasms
+-fix lua error when rousing unit is near the map border
+-fix paperdoll report
+-fix ellipse/variation object not getting applied because of id
+-make summons and minions work with unit constructor
+-fix summons and minions options
+-limit the number of items that an enemy npc can pickup and try
+-fix equipment_slots and negative indices
+-added darkens illumination
+-fix no_ranged flag
+-fix goliath_bane in unit constructor
+-make all game units have 0 upkeep
+-show equipped weapons in the weapons shop
+-renamed regen, skirm etc.
+-fixes to unit definitions
+
 
 0.8.2
 -converted several variable operations in spellcasting setup to formulas (fixes rounding problems)

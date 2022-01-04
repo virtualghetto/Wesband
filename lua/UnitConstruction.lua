@@ -2255,6 +2255,14 @@ local function constructUnit(var, unstore)
 					type = "Walking Corpse_MODRPG"
 				} })
 			end
+			if get_n(weapon, "special_type.plague_wbd") > 0 and get_n(unit, "variables.abilities.plague") > 0 then
+				table.insert(specials, { "plague", {
+					id = "plague_wbd",
+					name = "plague",
+					description = "Plague:\nWhen a unit is killed by a Plague attack, that unit is replaced with a Walking Corpse on the same side as the unit with the Plague attack. This doesn't work on Undead.",
+					type = "WBD Walking Corpse"
+				} })
+			end
 			if get_n(weapon, "special_type.soultrap") > 0 and get_n(unit, "variables.abilities.soultrap") > 0 then
 				table.insert(specials, { "plague", {
 					id = "soultrap",

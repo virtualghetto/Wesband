@@ -636,6 +636,9 @@ local function find_npc_value(unit, params)
 					if ability_id == "plague" then
 						attack_eval.value = attack_eval.value * modifiers.plague
 						attack_eval.specials = true
+					elseif ability_id == "plague_wbd" then
+						attack_eval.value = attack_eval.value * modifiers.plague
+						attack_eval.specials = true
 					elseif ability_id == "soultrap" then
 						attack_eval.value = attack_eval.value * modifiers.soultrap
 						attack_eval.specials = true

@@ -784,7 +784,31 @@ local function createWeapon(wtype, rank, attr, var)
 			} }
 		}
 		weapon = addMagicAdjust("human_magic_adjust", 20, weapon)
-	elseif wtype == "necrostaff" or wtype == "plague staff" then
+	elseif wtype == "necrostaff" then
+		weapon = adjustStats {
+			category = "melee_weapon",
+			range = "melee",
+			name = "magestaff",
+			user_name = "necrostaff",
+			description = _ "necromancer staff",
+			icon = "staff-necromantic",
+			ground_icon = "magestaff",
+			type = "impact",
+			class = "bludgeon",
+			class_description = "Bludgeon",
+			damage = 7,
+			evade_adjust = -2,
+			body_damage_rate = 30,
+			deft_damage_rate = 10,
+			body_number_rate = 5,
+			material = "wood",
+			{ "special_type", {
+				plague_wbd = 1,
+				storm = 1
+			} }
+		}
+		weapon = addMagicAdjust("dark_magic_adjust", 15, weapon)
+	elseif wtype == "plague staff" then
 		weapon = adjustStats {
 			category = "melee_weapon",
 			range = "melee",

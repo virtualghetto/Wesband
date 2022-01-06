@@ -720,6 +720,7 @@ local function createWeapon(wtype, rank, attr, var)
 			deft_number_rate = 5,
 			material = "metal",
 			{ "special_type", {
+				allow_poison = 1,
 				throwable = 1
 			} },
 			{ "thrown", adjustCoreStats {
@@ -737,7 +738,10 @@ local function createWeapon(wtype, rank, attr, var)
 				body_damage_rate = 30,
 				deft_damage_rate = 10,
 				body_number_rate = 5,
-				deft_number_rate = 0
+				deft_number_rate = 0,
+				{ "special_type", {
+					slow = 1
+				} }
 			} }
 		}
 	elseif wtype == "mace" or wtype == "mace-spiked" or wtype == "flail" then

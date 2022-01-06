@@ -1737,6 +1737,21 @@ local function constructUnit(var, unstore)
 		} })
 	end
 
+	local is_wesband = get_n(unit, "variables.npc_init.wesband", 1)
+	if is_wesband == 0 then
+		--clear_p(unit, "abilities")
+		--abilities = {}
+		local base_abilities = get_p(unit, "variables.base_abilities")
+		if base_abilities then
+			for i = 1, #base_abilities do
+				local ba = unparse_container(base_abilities[i])
+				for _,f in pairs(ba) do
+					table.insert(abilities, f)
+				end
+			end
+		end
+	end
+
 	set_p(unit, "abilities", abilities)
 
 	clear_p(unit, "attack")
@@ -2830,9 +2845,9 @@ function wesnoth.wml_actions.unit_npc_init(cfg)
 	local experience = tcfg.experience
 	local level = tcfg.level
 	local moves = tcfg.movement
-	local body = 2 * (tcfg.level + 1)
-	local deft = 2 * (tcfg.level + 1)
-	local mind = 2 * (tcfg.level + 1)
+	local body = 1 * (tcfg.level + 1)
+	local deft = 1 * (tcfg.level + 1)
+	local mind = 1 * (tcfg.level + 1)
 	local npc_init = wml.get_child(tcfg, "npc_init") or { wesband = 0,
 							likes_gold = 1,
 							is_rpg_npc = 1,
@@ -2941,4 +2956,25 @@ function wesnoth.wml_actions.create_attack_weapon(cfg)
 	set_p(at, "icon", icon)
 	set_p(at, "ground_icon", "dummy")
 	wml.variables[var] = unparse_container(at)
+end
+function wesnoth.wml_actions.set_default_abilities(cfg)
+	local var = cfg.variable or H.wml_error("[set_default_abilities] requires a variable= key")
+	local ability = cfg.ability or H.wml_error("[set_default_abilities] requires a attack= key")
+	local ab = parse_container(wml.variables[ability])
+	local v = parse_container(wml.variables[var])
+
+	local abtype = nil
+	for i,k in pairs(ab['c']) do
+		if type(i) == "string" then
+			abtype = i
+		end
+	end
+	if abtype then
+		local id = get_p(ab, abtype .. ".id")
+		local old_id = get_p(v, "variables.abilities." .. id)
+		if not old_id then
+			set_p(v, "variables.abilities." .. id, -1)
+		end
+		wml.variables[var] = unparse_container(v)
+	end
 end

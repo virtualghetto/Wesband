@@ -2805,8 +2805,9 @@ local function constructUnit(var, unstore)
 		set_p(unit, "variables.equipment_value", find_equipment_value(unit))
 	end
 
-	set_p(unit, "status.construct_unit", "yes")
 	set_p(unit, "upkeep", 0)
+	set_p(unit, "variables.dont_make_me_quick", "yes")
+	set_p(unit, "status.construct_unit", "yes")
 	wml.variables[var] = unparse_container(unit)
 	if unstore then
 		W.unstore_unit { variable = var }

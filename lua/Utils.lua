@@ -1,7 +1,6 @@
 H = wesnoth.require "lua/helper.lua"
 W = H.set_wml_action_metatable {}
-_ = wesnoth.textdomain "wesband"
-unit = setmetatable({}, { __newindex = function(t, k, v) modu(k, v) end })
+-- _ = wesnoth.textdomain "wesband"
 -- Define your global constants here.
 
 
@@ -38,6 +37,7 @@ end
 --   local x, y = wesnoth.get_selected_tile()
 --   H.modify_unit({ x = x, y = y }, { ["variables."..var] = val })
 -- end
+-- unit = setmetatable({}, { __newindex = function(t, k, v) modu(k, v) end })
 
 --! [store_shroud]
 --! melinath

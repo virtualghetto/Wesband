@@ -1,16 +1,16 @@
-author="Ken Oh,Exasperation,Dovolente,TL"
-description="Wesnoth hack and slash MP.
+author="vghetto"
+description="Wesnoth hack and slash SP campaign.
 
-Ported by vghetto to BfW 1.14 & 1.16.
+Weshack is a fork from Wesband by Ken Oh,Exasperation,Dovolente,TL
 "
 email=
 icon="scenery/dwarven-doors-closed.png"
 passphrase=
 tags="WBD,WHK"
-title="Wesband"
+title="Weshack"
 translate=true
-type="campaign_mp"
+type="campaign"
 version="0.8.3"
 [feedback]
-	topic_id=21234
+	topic_id=55272
 [/feedback]

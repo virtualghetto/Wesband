@@ -2,7 +2,7 @@
 --      name=preload
 --      first_time_only=no
 --      [lua]
---          code = << wesnoth.dofile "~add-ons/Wesband/lua/Debug.lua" >>
+--          code = << wesnoth.dofile "~add-ons/Weshack/lua/Debug.lua" >>
 --      [/lua]
 --  [/event]
 

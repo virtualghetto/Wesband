@@ -91,27 +91,27 @@ wml.variables["dungeon_down.y"] = trapdoor_data.down.y
 
 local mapData
 if wml.variables['dungeon_creation.temp.flow_type'] == 1 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_1.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_1.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 2 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_2.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_2.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 3 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_3.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_3.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 4 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_4.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_4.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 5 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_5.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_5.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 6 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_6.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_6.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 7 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_7.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_7.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 8 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_8.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_8.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 9 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_9.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_9.lua")
 elseif wml.variables['dungeon_creation.temp.flow_type'] == 10 then
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_10.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_10.lua")
 else
-	mapData = wesnoth.dofile("~add-ons/Wesband/masks/cross_none.lua")
+	mapData = wesnoth.dofile("~add-ons/Weshack/masks/cross_none.lua")
 end
 
 W.terrain_mask {

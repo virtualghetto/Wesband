@@ -131,49 +131,49 @@ function wesnoth.wml_actions.rouse_units(cfg)
 		end
 		local dist = 14
 		local min_dist = 13
-		for i, u in ipairs(rouse_enemies) do
-			dist = wesnoth.map.distance_between(x, y, u.x, u.y)
-			if dist <= (u.max_moves + 1) then
-				local target_cost = u.max_moves + wesnoth.unit_movement_cost(u, wesnoth.get_terrain(x, y))
+		for i, uu in ipairs(rouse_enemies) do
+			dist = wesnoth.map.distance_between(x, y, uu.x, uu.y)
+			if dist <= (uu.max_moves + 1) then
+				local target_cost = uu.max_moves + wesnoth.unit_movement_cost(uu, wesnoth.get_terrain(x, y))
 				local path, cost
 				if target_cost > 99 then
 					-- find_path gives unhelpful results if you're standing where the enemy can't be moved to
 					-- so have to check each adjacent hex individually in that case
-					target_cost = u.max_moves
-					path, cost = on_board_path(u, x, y + 1)
+					target_cost = uu.max_moves
+					path, cost = on_board_path(uu, x, y + 1)
 					if cost > target_cost then
-						path, cost = on_board_path(u, x, y - 1)
+						path, cost = on_board_path(uu, x, y - 1)
 						if cost > target_cost then
-							path, cost = on_board_path(u, x + 1, y - x % 2)
+							path, cost = on_board_path(uu, x + 1, y - x % 2)
 							if cost > target_cost then
-								path, cost = on_board_path(u, x - 1, y - x % 2)
+								path, cost = on_board_path(uu, x - 1, y - x % 2)
 								if cost > target_cost then
-									path, cost = on_board_path(u, x + 1, y + 1 - x % 2)
+									path, cost = on_board_path(uu, x + 1, y + 1 - x % 2)
 									if cost > target_cost then
-										path, cost = on_board_path(u, x - 1, y + 1 - x % 2)
+										path, cost = on_board_path(uu, x - 1, y + 1 - x % 2)
 									end
 								end
 							end
 						end
 					end
 				else
-					path, cost = on_board_path(u, x, y)
+					path, cost = on_board_path(uu, x, y)
 				end
 				if cost <= target_cost then
 					if rouse_list then
-						rouse_list = string.format("%s,%s", rouse_list, u.id)
+						rouse_list = string.format("%s,%s", rouse_list, uu.id)
 					else
-						rouse_list = u.id
+						rouse_list = uu.id
 					end
 					wesnoth.wml_actions.store_locations {
 						variable = "rouse_temp_locs",
-						x = u.x,
-						y = u.y,
-						radius = u.max_moves,
+						x = uu.x,
+						y = uu.y,
+						radius = uu.max_moves,
 						{ "filter", {} }
 					}
 					local rouse_enemies_near = wesnoth.get_units( {
-							side = u.side,
+							side = uu.side,
 							{ "filter_location", { find_in = "rouse_temp_locs" } },
 							{ "filter_wml", {
 								{ "status", { guardian = "yes" } }

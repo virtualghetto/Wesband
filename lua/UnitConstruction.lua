@@ -611,8 +611,8 @@ local function find_npc_value(unit, params)
 			attack_eval.value = get_n(attack_array[i], "damage") * get_n(attack_array[i], "number") * modifiers[attack_eval.type]
 			ability_array = get_p(attack_array[i], "specials.backstab")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "backstab" then
 						attack_eval.value = attack_eval.value * math.max(1.05, values.moves)
 						attack_eval.specials = true
@@ -621,8 +621,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.charge")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "charge" then
 						attack_eval.value = attack_eval.value * modifiers.charge
 						attack_eval.specials = true
@@ -631,8 +631,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.plague")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "plague" then
 						attack_eval.value = attack_eval.value * modifiers.plague
 						attack_eval.specials = true
@@ -647,8 +647,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.drains")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "drains" then
 						attack_eval.value = attack_eval.value * modifiers.drains
 						attack_eval.specials = true
@@ -657,8 +657,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.slow")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "slow" then
 						attack_eval.value = attack_eval.value * modifiers.slow
 						attack_eval.specials = true
@@ -667,8 +667,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.berserk")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "rage" then
 						attack_eval.value = attack_eval.value * modifiers.rage
 						attack_eval.specials = true
@@ -680,8 +680,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.damage")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "evasion" then
 						attack_eval.value = attack_eval.value * modifiers.evasion
 						attack_eval.specials = true
@@ -696,8 +696,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.attacks")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "storm" then
 						attack_eval.value = attack_eval.value * modifiers.storm
 						attack_eval.specials = true
@@ -709,8 +709,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.firststrike")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "firststrike" then
 						attack_eval.value = attack_eval.value * modifiers.firststrike
 						attack_eval.specials = true
@@ -719,8 +719,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.dummy")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "slashdash" then
 						attack_eval.value = attack_eval.value * modifiers.slashdash
 						attack_eval.specials = true
@@ -741,8 +741,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.poison")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "poison" then
 						attack_eval.value = attack_eval.value + modifiers.poison + get_n(attack_array[i], "number")
 						attack_eval.specials = true
@@ -751,8 +751,8 @@ local function find_npc_value(unit, params)
 			end
 			ability_array = get_p(attack_array[i], "specials.chance_to_hit")
 			if type(ability_array) == "table" then
-				for i = 1, #ability_array do
-					local ability_id = get_p(ability_array[i], "id") or "none"
+				for ii = 1, #ability_array do
+					local ability_id = get_p(ability_array[ii], "id") or "none"
 					if ability_id == "magical" then
 						attack_eval.value = attack_eval.value * modifiers.magical
 						attack_eval.specials = true
@@ -1694,7 +1694,7 @@ local function constructUnit(var, unstore)
 			description = string.format("This unit is protected from damage by an extra %d%%. This value degrades by 5%% every round.", spell_status)
 		} })
 	end
-	local spell_status = 10 * get_n(unit, "variables.status.protection_from_fire")
+	spell_status = 10 * get_n(unit, "variables.status.protection_from_fire")
 	if spell_status > 0 then
 		table.insert(abilities, { "resistance", {
 			id = "protection_from_fire",
@@ -2004,7 +2004,7 @@ local function constructUnit(var, unstore)
 					} })
 				end
 				storm_limit = storm_limit + 2 - special_level
-				local new_special = {
+				new_special = {
 					id = "storm",
 					name = "storm",
 					name_inactive = "storm",

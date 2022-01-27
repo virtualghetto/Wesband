@@ -1,3 +1,5 @@
+local _ = wesnoth.textdomain "wesnoth-Wesband"
+
 W.set_variable { name = "dungeon_creation.temp.flow_type", rand = "1..25" }
 wml.variables['dungeon_creation.temp.pool_flavor'] = "Ww"
 W.set_variable { name = "r_temp", rand = "0..6" }

@@ -1,6 +1,5 @@
 H = wesnoth.require "lua/helper.lua"
 W = H.set_wml_action_metatable {}
--- _ = wesnoth.textdomain "wesband"
 -- Define your global constants here.
 
 

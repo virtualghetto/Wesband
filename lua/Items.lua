@@ -1,3 +1,5 @@
+local _ = wesnoth.textdomain "wesnoth-Wesband"
+
 local function lappend(l, st)
 	local res = ""
 	if #st > 0 then

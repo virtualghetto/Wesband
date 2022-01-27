@@ -1,6 +1,6 @@
 local mask_table = {}
-mask_table.ne_sw_hall = wesnoth.dofile("~add-ons/Wesband/masks/ne_sw_hall.lua")
-mask_table.nw_se_hall = wesnoth.dofile("~add-ons/Wesband/masks/nw_se_hall.lua")
+mask_table.ne_sw_hall = wesnoth.dofile("~add-ons/Weshack/masks/ne_sw_hall.lua")
+mask_table.nw_se_hall = wesnoth.dofile("~add-ons/Weshack/masks/nw_se_hall.lua")
 
 local function place_hall(x, y, dir)
 	if dir == "SW" then
@@ -115,7 +115,7 @@ local function place_random_chamber(x, y)
 		end
 	end
 	if not mask_table[mask_name] then
-		mask_table[mask_name] = wesnoth.dofile(string.format("~add-ons/Wesband/masks/%s.lua", mask_name))
+		mask_table[mask_name] = wesnoth.dofile(string.format("~add-ons/Weshack/masks/%s.lua", mask_name))
 	end
 	W.terrain_mask {
 		x = x,

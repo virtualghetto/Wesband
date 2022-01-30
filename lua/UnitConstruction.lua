@@ -2082,7 +2082,7 @@ local function constructUnit(var, unstore)
 					} }
 				} })
 			end
-			if get_n(weapon, "special_type.poison") > 0 or get_n(weapon, "special_type.natural_poison") > 0 or (weapon_class == "thrown_light_blade" and get_n(weapon, "special_type.allow_poison") > 0 and (get_n(unit, "special_type.variables.abilities.poison_thrown_light_blade") > 0 or get_n(unit, "variables.abilities.poison_thrown_light_blade_orc") > 0)) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.poison_light_blade") == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and get_n(unit, "variables.abilities.kusarigama_poison") > 0) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0))) then
+			if get_n(weapon, "special_type.poison") > 0 or get_n(weapon, "special_type.natural_poison") > 0 or (weapon_class == "thrown_light_blade" and get_n(weapon, "special_type.allow_poison") > 0 and (get_n(unit, "variables.abilities.poison_thrown_light_blade") > 0 or get_n(unit, "variables.abilities.poison_thrown_light_blade_orc") > 0)) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.poison_light_blade") == 1) or ((not player) and ((attack.user_name == "kusarigama" and attack.range == "melee" and get_n(unit, "variables.abilities.kusarigama_poison") > 0) or (weapon_class == "light_blade" and get_n(unit, "variables.abilities.witchcraft") == 1 and get_n(unit, "variables.abilities.magic_casting.power") > 0))) then
 				table.insert(specials, { "poison", {
 					id = "poison",
 					name = "poison",
